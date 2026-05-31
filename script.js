@@ -1,4 +1,4 @@
-// Função para verificar respostas das questões de múltipla escolha
+// Função para verificar se a resposta está correta
 function verificarResposta(nomeQuestao, respostaCorreta) {
     // Pega todas as opções da questão
     const opcoes = document.getElementsByName(nomeQuestao);
@@ -12,42 +12,30 @@ function verificarResposta(nomeQuestao, respostaCorreta) {
         }
     }
 
-    // Mostra o resultado para o aluno
+    // Se não escolheu nenhuma opção
     const mensagem = document.getElementById("resposta-" + nomeQuestao);
     
     if (respostaEscolhida === "") {
         mensagem.textContent = "⚠️ Escolha uma opção antes de verificar!";
-        mensagem.className = "resposta-correta errada";
-    } else if (respostaEscolhida === respostaCorreta) {
+        mensagem.style.color = "#e74c3c";
+    } 
+    // Se acertou
+    else if (respostaEscolhida === respostaCorreta) {
         mensagem.textContent = "✅ Resposta correta!";
-        mensagem.className = "resposta-correta correta";
-    } else {
-        mensagem.textContent = "❌ Resposta errada. Tente novamente!";
-        mensagem.className = "resposta-correta errada";
+        mensagem.style.color = "#27ae60";
+    } 
+    // Se errou
+    else {
+        mensagem.textContent = "❌ Resposta errada. A resposta correta é a letra " + respostaCorreta.toUpperCase();
+        mensagem.style.color = "#e74c3c";
     }
 }
 
-// Função para mostrar resultado das respostas abertas
-function mostrarResultado(idResposta, idMensagem) {
-    const campoResposta = document.getElementById(idResposta);
-    const mensagem = document.getElementById(idMensagem);
-
-    if (campoResposta.value.trim() === "") {
-        mensagem.textContent = "⚠️ Escreva sua resposta antes de enviar!";
-        mensagem.className = "resultado errada";
-    } else {
-        mensagem.textContent = "📝 Resposta enviada com sucesso! Continue praticando.";
-        mensagem.className = "resultado correta";
-        // Limpa o campo depois de enviar
-        campoResposta.value = "";
-    }
-}
-
-// Função para limpar mensagens quando a página carregar
+// Limpa as mensagens quando abrir a página
 window.onload = function() {
-    const todasMensagens = document.querySelectorAll('.resposta-correta, .resultado');
+    const todasMensagens = document.querySelectorAll('.resposta-correta');
     todasMensagens.forEach(mensagem => {
         mensagem.textContent = "";
-        mensagem.className = "";
+        mensagem.style.color = "";
     });
 };

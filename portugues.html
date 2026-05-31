@@ -4,8 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Português - Questões de Escolha</title>
-    <!-- Caminho ajustado para encontrar o arquivo fora da pasta materias -->
     <link rel="stylesheet" href="../estilo.css">
+    <style>
+        .botao-voltar {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .botao-voltar:hover {
+            background-color: #2980b9;
+        }
+        .caixa-questao {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .botao-resposta {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .botao-resposta:hover {
+            background-color: #27ae60;
+        }
+        .resposta-correta {
+            font-weight: bold;
+            margin-top: 8px;
+            font-size: 15px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -14,7 +52,6 @@
     </header>
 
     <nav>
-        <!-- Botão de voltar ajustado -->
         <a href="../materias.html" class="botao-voltar">⬅ Voltar para Matérias</a>
     </nav>
 
@@ -138,24 +175,6 @@
         <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
     </footer>
 
-    <!-- Caminho ajustado para encontrar o arquivo fora da pasta materias -->
     <script src="../script.js"></script>
-
-    <!-- Estilo do botão de voltar -->
-    <style>
-        .botao-voltar {
-            display: inline-block;
-            background-color: #3498db;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        .botao-voltar:hover {
-            background-color: #2980b9;
-        }
-    </style>
 </body>
 </html>
