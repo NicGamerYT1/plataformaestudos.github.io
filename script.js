@@ -1,15 +1,19 @@
+// Função para voltar para a página anterior
+function voltarPagina() {
+    // Apaga os dados do cadastro para permitir novo acesso
+    localStorage.removeItem('dadosCadastro');
+    // Volta para a página de cadastro
+    window.location.href = 'index.html';
+}
+
 // Função para verificar se já tem cadastro
 function verificarCadastro() {
-    // Verifica se já tem dados salvos no computador
     const dadosCadastro = localStorage.getItem('dadosCadastro');
     
-    // Se não tiver cadastro, mostra a página de cadastro
     if (!dadosCadastro) {
-        // Mostra o formulário e esconde qualquer outra coisa
         document.getElementById('formCadastro').style.display = 'block';
         document.getElementById('mensagemSucesso').style.display = 'none';
     } 
-    // Se já tiver cadastro, redireciona para a página principal
     else {
         window.location.href = 'materias.html';
     }
@@ -17,9 +21,8 @@ function verificarCadastro() {
 
 // Função para fazer o cadastro
 function realizarCadastro(event) {
-    event.preventDefault(); // Impede o envio do formulário
+    event.preventDefault();
 
-    // Pega os dados que a pessoa digitou
     const dados = {
         tipoUsuario: document.getElementById('tipoUsuario').value,
         nome: document.getElementById('nome').value,
@@ -28,20 +31,17 @@ function realizarCadastro(event) {
         dataCadastro: new Date().toLocaleString('pt-BR')
     };
 
-    // Salva os dados no computador da pessoa
     localStorage.setItem('dadosCadastro', JSON.stringify(dados));
 
-    // Mostra a mensagem de sucesso e esconde o formulário
     document.getElementById('formCadastro').style.display = 'none';
     document.getElementById('mensagemSucesso').style.display = 'block';
 
-    // Depois de 2 segundos, redireciona para o site de verdade
     setTimeout(function() {
         window.location.href = 'materias.html';
     }, 2000);
 }
 
-// Função para verificar resposta das questões (a mesma que já funcionava)
+// Função para verificar respostas das questões
 function verificarResposta(nomeQuestao, respostaCorreta) {
     const opcoes = document.getElementsByName(nomeQuestao);
     let respostaEscolhida = "";
@@ -69,7 +69,7 @@ function verificarResposta(nomeQuestao, respostaCorreta) {
     }
 }
 
-// Quando abrir a página, verifica se já tem cadastro
+// Quando abrir a página
 window.onload = function() {
     verificarCadastro();
     

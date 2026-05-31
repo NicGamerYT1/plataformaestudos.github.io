@@ -52,11 +52,31 @@
             font-weight: bold;
             display: none;
         }
+        /* Estilo do botão de voltar */
+        .botao-voltar {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 0;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .botao-voltar:hover {
+            background-color: #2980b9;
+        }
     </style>
 </head>
 <body>
     <main>
         <div class="caixa-cadastro">
+            <!-- Botão de voltar que funciona -->
+            <button class="botao-voltar" onclick="voltarPagina()">⬅ Voltar</button>
+
             <h1 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Cadastre-se para acessar</h1>
             
             <div class="mensagem-sucesso" id="mensagemSucesso">

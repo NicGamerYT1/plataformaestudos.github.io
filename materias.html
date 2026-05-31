@@ -5,30 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matérias - Plataforma de Estudos</title>
     <link rel="stylesheet" href="estilo.css">
+    <style>
+        .aviso-cadastro {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .aviso-cadastro a {
+            color: #856404;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .botao-voltar {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 0;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .botao-voltar:hover {
+            background-color: #2980b9;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Matérias</h1>
+        <h1>Plataforma de Estudos</h1>
         <p>Escolha a matéria que quer estudar</p>
     </header>
 
     <nav>
-        <a href="index.html">Início</a>
-        <a href="materias.html">Matérias</a>
-        <a href="cadastro.html">Cadastre-se</a>
-        <a href="pais.html">Área dos Pais</a>
+        <!-- Botão de voltar que funciona -->
+        <button class="botao-voltar" onclick="voltarPagina()">⬅ Sair / Trocar Cadastro</button>
     </nav>
 
     <main>
+        <div class="aviso-cadastro">
+            Você está logado! Para sair ou alterar seus dados, clique no botão acima.
+        </div>
+
         <div class="lista-materias">
-            <a href="portugues.html" class="materia-link">📖 Português</a>
-            <a href="matematica.html" class="materia-link">➕ Matemática</a>
-            <a href="historia.html" class="materia-link">🏛️ História</a>
-            <a href="geografia.html" class="materia-link">🌎 Geografia</a>
-            <a href="ciencias.html" class="materia-link">🔬 Ciências</a>
-            <a href="artes.html" class="materia-link">🎨 Artes</a>
-            <a href="educacao_fisica.html" class="materia-link">⚽ Educação Física</a>
-            <a href="ciencias_naturais.html" class="materia-link">🌿 Ciências Naturais</a>
+            <a href="materias/portugues.html" class="materia-link">📖 Português</a>
+            <a href="materias/matematica.html" class="materia-link">➗ Matemática</a>
+            <a href="materias/historia.html" class="materia-link">🏛️ História</a>
+            <a href="materias/geografia.html" class="materia-link">🌎 Geografia</a>
+            <a href="materias/ciencias.html" class="materia-link">🔬 Ciências</a>
+            <a href="materias/artes.html" class="materia-link">🎨 Artes</a>
+            <a href="materias/educacao_fisica.html" class="materia-link">⚽ Educação Física</a>
+            <a href="materias/ciencias_naturais.html" class="materia-link">🌿 Ciências Naturais</a>
         </div>
     </main>
 
