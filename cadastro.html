@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Plataforma de Estudos</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <header>
+        <h1>Cadastro</h1>
+        <p>Faça seu cadastro e comece a estudar</p>
+    </header>
+
+    <nav>
+        <a href="index.html">Início</a>
+        <a href="materias.html">Matérias</a>
+        <a href="cadastro.html">Cadastre-se</a>
+        <a href="pais.html">Área dos Pais</a>
+    </nav>
+
+    <main>
+        <section class="formulario">
+            <h2>Dados do Usuário</h2>
+            <form>
+                <label>Tipo de usuário:</label><br>
+                <select>
+                    <option>Aluno</option>
+                    <option>Pai/Mãe/Responsável</option>
+                </select><br><br>
+
+                <label>Nome completo:</label><br>
+                <input type="text" required><br><br>
+
+                <label>Nome da escola:</label><br>
+                <input type="text" value="Escola Exemplo" readonly><br><br>
+
+                <label>Série/Ano:</label><br>
+                <input type="text" value="8º Ano" readonly><br><br>
+
+                <label>E-mail:</label><br>
+                <input type="email" required><br><br>
+
+                <label>Telefone para contato:</label><br>
+                <input type="tel"><br><br>
+
+                <label>Valor do acesso: R$ 10,00 por ano</label><br><br>
+
+                <button type="submit" class="botao">Concluir Cadastro</button>
+            </form>
+
+            <div class="aviso-gratis">
+                <p>✅ Os primeiros 10 dias são grátis! Depois disso, o valor é de R$ 10,00 por ano.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
