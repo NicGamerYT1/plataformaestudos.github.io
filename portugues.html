@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Português - Conteúdo e Questões</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <header>
+        <h1>Português</h1>
+        <p>Conteúdo do dia e exercícios para praticar</p>
+    </header>
+
+    <nav>
+        <!-- BOTÃO DE VOLTAR -->
+        <a href="materias.html" class="botao-voltar">⬅ Voltar para Matérias</a>
+    </nav>
+
+    <main>
+        <!-- CONTEÚDO DO DIA -->
+        <section class="conteudo">
+            <h2>Conteúdo de Hoje</h2>
+            <div class="caixa-conteudo">
+                <h3>Interpretação de Textos</h3>
+                <p>A interpretação de textos é a habilidade de entender o que está escrito, identificar ideias principais e entender o sentido que o autor quer passar. Para interpretar bem, leia com calma, identifique o tema principal e os detalhes que ajudam a entender a mensagem.</p>
+                <p>Outro ponto importante é reconhecer os tipos de texto: narrativo, descritivo, dissertativo e outros. Cada um tem uma finalidade diferente e características próprias.</p>
+                
+                <h3>Tipos de Texto</h3>
+                <ul>
+                    <li><strong>Texto Narrativo:</strong> Conta uma história, tem personagens, tempo e espaço.</li>
+                    <li><strong>Texto Descritivo:</strong> Descreve características de pessoas, lugares ou objetos.</li>
+                    <li><strong>Texto Dissertativo:</strong> Apresenta ideias, opiniões e argumentos.</li>
+                    <li><strong>Texto Informativo:</strong> Transmite informações de forma clara e objetiva.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- QUESTÕES DE ESCOLHA -->
+        <section class="questoes">
+            <h2>Exercícios de Múltipla Escolha</h2>
+
+            <!-- Questão 1 -->
+            <div class="caixa-questao">
+                <p><strong>1. Qual é o objetivo principal da interpretação de textos?</strong></p>
+                <label><input type="radio" name="q1" value="a"> A) Escrever textos bonitos</label><br>
+                <label><input type="radio" name="q1" value="b"> B) Entender o que o texto quer dizer</label><br>
+                <label><input type="radio" name="q1" value="c"> C) Aprender novas palavras</label><br>
+                <label><input type="radio" name="q1" value="d"> D) Decorar o conteúdo</label><br>
+                <button class="botao-resposta" onclick="verificarResposta('q1', 'b')">Verificar Resposta</button>
+                <p class="resposta-correta" id="resposta-q1"></p>
+            </div>
+
+            <!-- Questão 2 -->
+            <div class="caixa-questao">
+                <p><strong>2. Qual desses é um exemplo de texto narrativo?</strong></p>
+                <label><input type="radio" name="q2" value="a"> A) Uma notícia no jornal</label><br>
+                <label><input type="radio" name="q2" value="b"> B) Uma história de aventura</label><br>
+                <label><input type="radio" name="q2" value="c"> C) Uma receita de bolo</label><br>
+                <label><input type="radio" name="q2" value="d"> D) Uma carta de reclamação</label><br>
+                <button class="botao-resposta" onclick="verificarResposta('q2', 'b')">Verificar Resposta</button>
+                <p class="resposta-correta" id="resposta-q2"></p>
+            </div>
+
+            <!-- Questão 3 -->
+            <div class="caixa-questao">
+                <p><strong>3. Qual característica define um texto descritivo?</strong></p>
+                <label><input type="radio" name="q3" value="a"> A) Contar uma história com personagens</label><br>
+                <label><input type="radio" name="q3" value="b"> B) Apresentar informações objetivas</label><br>
+                <label><input type="radio" name="q3" value="c"> C) Descrever características de algo ou alguém</label><br>
+                <label><input type="radio" name="q3" value="d"> D) Defender uma opinião</label><br>
+                <button class="botao-resposta" onclick="verificarResposta('q3', 'c')">Verificar Resposta</button>
+                <p class="resposta-correta" id="resposta-q3"></p>
+            </div>
+
+            <!-- Questão 4 -->
+            <div class="caixa-questao">
+                <p><strong>4. Qual é o objetivo de um texto dissertativo?</strong></p>
+                <label><input type="radio" name="q4" value="a"> A) Apenas entreter o leitor</label><br>
+                <label><input type="radio" name="q4" value="b"> B) Transmitir notícias e fatos</label><br>
+                <label><input type="radio" name="q4" value="c"> C) Apresentar ideias, opiniões e argumentos</label><br>
+                <label><input type="radio" name="q4" value="d"> D) Dar instruções de como fazer algo</label><br>
+                <button class="botao-resposta" onclick="verificarResposta('q4', 'c')">Verificar Resposta</button>
+                <p class="resposta-correta" id="resposta-q4"></p>
+            </div>
+
+            <!-- Questão 5 -->
+            <div class="caixa-questao">
+                <p><strong>5. Qual dessas frases é um exemplo de texto informativo?</strong></p>
+                <label><input type="radio" name="q5" value="a"> A) "Ontem foi um dia muito feliz para mim."</label><br>
+                <label><input type="radio" name="q5" value="b"> B) "O Brasil é o país com a maior floresta tropical do mundo."</label><br>
+                <label><input type="radio" name="q5" value="c"> C) "O sol brilhava forte e o vento soprava devagar."</label><br>
+                <label><input type="radio" name="q5" value="d"> D) "Eu acho que devemos cuidar melhor da natureza."</label><br>
+                <button class="botao-resposta" onclick="verificarResposta('q5', 'b')">Verificar Resposta</button>
+                <p class="resposta-correta" id="resposta-q5"></p>
+            </div>
+        </section>
+
+        <!-- QUESTÕES ABERTAS -->
+        <section class="questoes-abertas">
+            <h2>Exercícios de Resposta Aberta</h2>
+
+            <!-- Questão 6 -->
+            <div class="caixa-questao">
+                <p><strong>6. Explique por que a interpretação de textos é importante para os estudos.</strong></p>
+                <textarea id="resposta6" rows="4" cols="50" placeholder="Escreva sua resposta aqui..."></textarea>
+                <br>
+                <button class="botao-resposta" onclick="mostrarResultado('resposta6', 'resultado6')">Enviar Resposta</button>
+                <p class="resultado" id="resultado6"></p>
+            </div>
+
+            <!-- Questão 7 -->
+            <div class="caixa-questao">
+                <p><strong>7. Dê um exemplo de texto narrativo e explique o porquê ele se encaixa nesse tipo.</strong></p>
+                <textarea id="resposta7" rows="4" cols="50" placeholder="Escreva sua resposta aqui..."></textarea>
+                <br>
+                <button class="botao-resposta" onclick="mostrarResultado('resposta7', 'resultado7')">Enviar Resposta</button>
+                <p class="resultado" id="resultado7"></p>
+            </div>
+
+            <!-- Questão 8 -->
+            <div class="caixa-questao">
+                <p><strong>8. Qual a diferença entre um texto descritivo e um texto dissertativo? Explique com suas palavras.</strong></p>
+                <textarea id="resposta8" rows="4" cols="50" placeholder="Escreva sua resposta aqui..."></textarea>
+                <br>
+                <button class="botao-resposta" onclick="mostrarResultado('resposta8', 'resultado8')">Enviar Resposta</button>
+                <p class="resultado" id="resultado8"></p>
+            </div>
+
+            <!-- Questão 9 -->
+            <div class="caixa-questao">
+                <p><strong>9. Escreva um pequeno texto informativo sobre o que você gosta de fazer no seu tempo livre.</strong></p>
+                <textarea id="resposta9" rows="4" cols="50" placeholder="Escreva sua resposta aqui..."></textarea>
+                <br>
+                <button class="botao-resposta" onclick="mostrarResultado('resposta9', 'resultado9')">Enviar Resposta</button>
+                <p class="resultado" id="resultado9"></p>
+            </div>
+
+            <!-- Questão 10 -->
+            <div class="caixa-questao">
+                <p><strong>10. Escolha um tema e crie um texto dissertativo com pelo menos duas ideias principais sobre ele.</strong></p>
+                <textarea id="resposta10" rows="6" cols="50" placeholder="Escreva sua resposta aqui..."></textarea>
+                <br>
+                <button class="botao-resposta" onclick="mostrarResultado('resposta10', 'resultado10')">Enviar Resposta</button>
+                <p class="resultado" id="resultado10"></p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+    <!-- ESTILO DO BOTÃO DE VOLTAR -->
+    <style>
+        .botao-voltar {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .botao-voltar:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</body>
+</html>
