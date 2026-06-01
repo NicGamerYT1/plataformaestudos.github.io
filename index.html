@@ -43,18 +43,25 @@
                 box-shadow: 0 0 0 3px rgba(22, 93, 255, 0.15);
                 outline: none;
             }
+            .plano-card {
+                transition: all 0.3s ease;
+            }
+            .plano-card.selecionado {
+                border-color: #165DFF;
+                background-color: rgba(22, 93, 255, 0.05);
+            }
+            .plano-card:hover {
+                transform: translateY(-3px);
+            }
         }
     </style>
 </head>
 <body class="bg-claro min-h-screen font-sans text-escuro">
     <!-- Cabeçalho -->
     <header class="bg-primario text-white py-6 px-4">
-        <div class="max-w-5xl mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <i class="fa fa-graduation-cap text-3xl"></i>
-                <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
-            </div>
-            <p class="hidden md:block text-secundario/90">Aprender é o primeiro passo para o sucesso!</p>
+        <div class="max-w-5xl mx-auto flex items-center gap-3">
+            <i class="fa fa-graduation-cap text-3xl"></i>
+            <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
         </div>
     </header>
 
@@ -67,16 +74,20 @@
                     Acesse o melhor conteúdo educacional
                 </h2>
                 <p class="text-gray-600 text-lg mb-6">
-                    Cadastre-se agora e tenha acesso a milhares de questões, exercícios e materiais para estudar de forma simples e eficaz.
+                    Cadastre-se agora e tenha acesso ilimitado a todas as matérias, exercícios e materiais para estudar de forma simples e eficaz.
                 </p>
-                <div class="flex gap-4 justify-center md:justify-start">
+                <div class="space-y-3 mb-8">
                     <div class="flex items-center gap-2 text-sucesso font-medium">
                         <i class="fa fa-check-circle text-xl"></i>
-                        <span>Conteúdo atualizado</span>
+                        <span>Acesso a todos os anos do ensino fundamental</span>
                     </div>
                     <div class="flex items-center gap-2 text-sucesso font-medium">
                         <i class="fa fa-check-circle text-xl"></i>
-                        <span>Fácil de usar</span>
+                        <span>Conteúdo atualizado e organizado</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-sucesso font-medium">
+                        <i class="fa fa-check-circle text-xl"></i>
+                        <span>Suporte e materiais complementares</span>
                     </div>
                 </div>
             </div>
@@ -88,10 +99,10 @@
                     <div id="mensagemSucesso" class="hidden bg-sucesso/10 border border-sucesso/20 text-sucesso rounded-xl p-5 mb-6 text-center">
                         <i class="fa fa-check-circle text-2xl mb-2"></i>
                         <h3 class="font-bold text-xl mb-1">Cadastro realizado com sucesso!</h3>
-                        <p>Você já pode acessar todo o conteúdo da plataforma.</p>
+                        <p>Agora escolha o plano e finalize a sua assinatura.</p>
                     </div>
 
-                    <!-- Formulário -->
+                    <!-- Formulário de Dados Pessoais -->
                     <form id="formCadastro" onsubmit="realizarCadastro(event)">
                         <h3 class="text-xl font-bold mb-6 text-center text-escuro">Preencha seus dados</h3>
 
@@ -140,15 +151,101 @@
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl campo-foco transition-all">
                         </div>
 
-                        <!-- Valor -->
-                        <div class="mb-6 bg-primario/5 border border-primario/10 rounded-xl p-4 text-center">
-                            <p class="text-escuro font-medium">Valor do acesso: <span class="text-primario font-bold text-xl">R$ 10,00</span> por ano</p>
-                            <p class="text-gray-500 text-sm mt-1">Acesso ilimitado a todas as matérias e exercícios</p>
+                        <!-- Seção de Planos e Pagamento -->
+                        <div class="border-t border-gray-200 pt-8 mb-8">
+                            <h3 class="text-xl font-bold mb-6 text-center text-escuro">Escolha o seu plano</h3>
+                            
+                            <!-- Opções de Planos -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                                <!-- Plano Mensal -->
+                                <div class="plano-card bg-white border-2 border-gray-200 rounded-xl p-6 text-center cursor-pointer" onclick="selecionarPlano('mensal')">
+                                    <h4 class="text-lg font-bold mb-2">Plano Mensal</h4>
+                                    <p class="text-gray-600 text-sm mb-4">Acesso por 30 dias</p>
+                                    <p class="text-2xl font-bold text-escuro mb-4">R$ 15,00</p>
+                                    <span class="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-medium">
+                                        Ilimitado
+                                    </span>
+                                    <input type="radio" name="plano" value="mensal" class="hidden" checked>
+                                </div>
+
+                                <!-- Plano Anual -->
+                                <div class="plano-card bg-white border-2 border-primario rounded-xl p-6 text-center cursor-pointer selecionado" onclick="selecionarPlano('anual')">
+                                    <div class="inline-block bg-primario text-white text-xs font-bold px-3 py-1 rounded-full mb-2">
+                                        MAIS POPULAR
+                                    </div>
+                                    <h4 class="text-lg font-bold mb-2">Plano Anual</h4>
+                                    <p class="text-gray-600 text-sm mb-4">Acesso por 12 meses</p>
+                                    <p class="text-2xl font-bold text-escuro mb-4">R$ 10,00 <span class="text-gray-500 text-sm line-through">R$ 180,00</span></p>
+                                    <span class="inline-block bg-primario/10 text-primario px-3 py-1 rounded-full text-xs font-medium">
+                                        Economia de 44%
+                                    </span>
+                                    <input type="radio" name="plano" value="anual" class="hidden">
+                                </div>
+                            </div>
+
+                            <!-- Seção de Cupom de Desconto -->
+                            <div class="bg-gray-50 rounded-xl p-6 mb-6">
+                                <h4 class="text-lg font-bold mb-4 flex items-center gap-2">
+                                    <i class="fa fa-ticket text-primario"></i>
+                                    Tem um cupom de desconto?
+                                </h4>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <input type="text" id="campoCupom" placeholder="Digite o código do cupom" 
+                                        class="flex-1 px-4 py-3 border border-gray-300 rounded-xl campo-foco">
+                                    <button type="button" onclick="aplicarCupom()" 
+                                        class="bg-primario hover:bg-primario/90 text-white font-medium px-6 py-3 rounded-xl botao-efeito whitespace-nowrap">
+                                        Aplicar
+                                    </button>
+                                </div>
+                                <p id="mensagemCupom" class="mt-3 text-sm hidden"></p>
+                            </div>
+
+                            <!-- Resumo do Pagamento -->
+                            <div class="bg-primario/5 rounded-xl p-6 mb-6">
+                                <h4 class="text-lg font-bold mb-4 font-bold">Resumo do Pagamento</h4>
+                                <div class="space-y-3 mb-4">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Plano selecionado:</span>
+                                        <span id="textoPlano" class="font-medium">Plano Anual</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Valor original:</span>
+                                        <span id="valorOriginal" class="font-medium">R$ 10,00</span>
+                                    </div>
+                                    <div id="linhaDesconto" class="flex justify-between text-sucesso hidden">
+                                        <span>Desconto aplicado:</span>
+                                        <span id="valorDesconto" class="font-medium">- R$ 0,00</span>
+                                    </div>
+                                    <div class="border-t border-gray-200 pt-3 flex justify-between">
+                                        <span class="text-lg font-bold">Valor total:</span>
+                                        <span id="valorTotal" class="text-xl font-bold text-primario">R$ 10,00</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Formas de Pagamento -->
+                            <div class="mb-6">
+                                <h4 class="text-lg font-bold mb-4">Formas de pagamento</h4>
+                                <div class="flex flex-wrap gap-4 items-center">
+                                    <div class="bg-white border border-gray-200 rounded-lg px-4 py-2">
+                                        <i class="fa fa-credit-card text-2xl text-gray-700"></i>
+                                        <span class="ml-2 font-medium">Cartão de Crédito</span>
+                                    </div>
+                                    <div class="bg-white border border-gray-200 rounded-lg px-4 py-2">
+                                        <i class="fa fa-barcode text-2xl text-gray-700"></i>
+                                        <span class="ml-2 font-medium">Boleto Bancário</span>
+                                    </div>
+                                    <div class="bg-white border border-gray-200 rounded-lg px-4 py-2">
+                                        <i class="fa fa-pix text-2xl text-green-600"></i>
+                                        <span class="ml-2 font-medium">Pix</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Botão de Cadastrar -->
+                        <!-- Botão de Finalizar -->
                         <button type="submit" class="w-full bg-primario hover:bg-primario/90 text-white font-bold py-4 px-6 rounded-xl botao-efeito">
-                            <i class="fa fa-sign-in mr-2"></i> Concluir Cadastro e Acessar
+                            <i class="fa fa-credit-card mr-2"></i> Finalizar Cadastro e Pagamento
                         </button>
                     </form>
                 </div>
@@ -165,5 +262,34 @@
     </footer>
 
     <script src="script.js"></script>
-</body>
-</html>
+    <script>
+        // Dados dos cupons de desconto
+        const cuponsDisponiveis = {
+            'BEMVINDO10': { desconto: 10, tipo: 'porcentagem' },
+            'PROMO20': { desconto: 20, tipo: 'porcentagem' },
+            'PAGUE12': { desconto: 2, tipo: 'fixo' },
+            'TESTE5': { desconto: 5, tipo: 'fixo' }
+        };
+
+        let planoSelecionado = 'anual';
+        let valorBase = {
+            mensal: 15.00,
+            anual: 10.00
+        };
+        let descontoAplicado = 0;
+
+        // Função para selecionar o plano
+        function selecionarPlano(tipo) {
+            planoSelecionado = tipo;
+            
+            // Remove a seleção de todos os planos
+            document.querySelectorAll('.plano-card').forEach(card => {
+                card.classList.remove('selecionado');
+                card.classList.remove('border-primario');
+                card.classList.add('border-gray-200');
+                card.querySelector('input[type="radio"]').checked = false;
+            });
+
+            // Adiciona seleção ao plano clicado
+            event.currentTarget.classList.add('selecionado');
+            event.currentTarget.classList.remove('border-gray-
