@@ -46,7 +46,7 @@ function realizarCadastro(event) {
 
     // Depois de 2 segundos, vai para matérias
     setTimeout(function() {
-        window.location.href = 'materias.html';
+        window.location.href = 'inicio.html';
     }, 2000);
 }
 
