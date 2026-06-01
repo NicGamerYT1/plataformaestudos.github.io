@@ -3,61 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Área dos Pais - Plataforma de Estudos</title>
-    <link rel="stylesheet" href="estilo.css">
+    <title>Pais / Responsáveis - Plataforma de Estudos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primario: '#165DFF',
+                        secundario: '#36BFFA',
+                        sucesso: '#00B42A',
+                        aviso: '#FF7D00',
+                        erro: '#F53F3F',
+                        claro: '#F7F8FA',
+                        escuro: '#1D2129',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .conteudo-sombra {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            }
+            .botao-efeito {
+                transition: all 0.3s ease;
+            }
+            .botao-efeito:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
+            }
+            .card-conteudo {
+                transition: all 0.2s ease;
+            }
+            .card-conteudo:hover {
+                transform: translateY(-3px);
+            }
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <h1>Área dos Pais</h1>
-        <p>Acompanhe os estudos do seu filho</p>
+<body class="bg-claro min-h-screen font-sans text-escuro">
+    <!-- Cabeçalho -->
+    <header class="bg-primario text-white py-6 px-4">
+        <div class="max-w-6xl mx-auto flex items-center gap-3">
+            <i class="fa fa-users text-3xl"></i>
+            <h1 class="text-2xl font-bold">Pais e Responsáveis</h1>
+        </div>
     </header>
 
-    <nav>
-        <a href="index.html">Início</a>
-        <a href="materias.html">Matérias</a>
-        <a href="cadastro.html">Cadastre-se</a>
-        <a href="pais.html">Área dos Pais</a>
+    <!-- Menu de Navegação -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-wrap">
+                <a href="inicio.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-home"></i> Início
+                </a>
+                <a href="materias.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-book"></i> Matérias
+                </a>
+                <a href="perfil.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-user"></i> Perfil
+                </a>
+                <a href="pais.html" class="py-4 px-6 flex items-center gap-2 border-b-2 border-primario text-primario font-medium">
+                    <i class="fa fa-users"></i> Pais / Responsáveis
+                </a>
+                <button onclick="voltarParaInicio()" class="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg bg-escuro text-white botao-efeito font-medium">
+                    <i class="fa fa-arrow-left"></i> Voltar para Início
+                </button>
+            </div>
+        </div>
     </nav>
 
-    <main>
-        <section class="desempenho">
-            <h2>Desempenho do Aluno</h2>
-            <div class="dados">
-                <p><strong>Nome do Aluno:</strong> João da Silva</p>
-                <p><strong>Matérias estudadas:</strong> 8</p>
-                <p><strong>Questões respondidas:</strong> 45</p>
-                <p><strong>Questões acertadas:</strong> 38</p>
-                <p><strong>Percentual de acertos:</strong> 84%</p>
+    <!-- Conteúdo Principal -->
+    <main class="max-w-6xl mx-auto py-10 px-4">
+        <!-- Apresentação -->
+        <div class="bg-white rounded-2xl p-8 conteudo-sombra mb-10 text-center">
+            <div class="w-20 h-20 bg-primario/10 text-primario rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fa fa-child text-4xl"></i>
             </div>
-        </section>
+            <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">Acompanhamento dos Estudos</h2>
+            <p class="text-gray-600 text-lg max-w-3xl mx-auto">
+                Aqui você encontra informações, dicas e ferramentas para acompanhar o desenvolvimento dos seus filhos nos estudos, 
+                entender os conteúdos e ajudar no aprendizado de forma prática e divertida.
+            </p>
+        </div>
 
-        <section class="avisos">
-            <h2>Avisos e Atividades</h2>
-            <div class="caixa-aviso">
-                <p><strong>📅 Aviso:</strong> Prova de Matemática no dia 15 de outubro. Incentive seu filho a estudar os conteúdos disponíveis na plataforma.</p>
-            </div>
-            <div class="caixa-aviso">
-                <p><strong>📝 Atividade:</strong> Tarefa de Português para entregar dia 10 de outubro. Está disponível na aba de Português.</p>
-            </div>
-        </section>
+        <!-- Seção de Dicas e Orientações -->
+        <h3 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-center mb-8">Orientações e Dicas</h3>
 
-        <section class="metas">
-            <h2>Metas de Estudo</h2>
-            <div class="caixa-meta">
-                <p>Meta: Estudar pelo menos 2 vezes por semana</p>
-                <p>Status: 🟢 Concluído</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <!-- Card 1: Como ajudar nos estudos -->
+            <div class="card-conteudo bg-white rounded-2xl p-6 conteudo-sombra">
+                <div class="w-14 h-14 bg-secundario/10 text-secundario rounded-full flex items-center justify-center mb-4">
+                    <i class="fa fa-lightbulb-o text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Como Ajudar nos Estudos</h4>
+                <p class="text-gray-600 mb-4">
+                    Dicas práticas para criar um ambiente adequado, organizar horários e motivar a criança ou adolescente a estudar com prazer e responsabilidade.
+                </p>
+                <a href="#" class="text-primario font-medium flex items-center gap-2 hover:underline">
+                    Ver dicas <i class="fa fa-arrow-right"></i>
+                </a>
             </div>
-            <div class="caixa-meta">
-                <p>Meta: Responder 10 questões por dia</p>
-                <p>Status: 🟡 Em andamento</p>
+
+            <!-- Card 2: Entendendo os conteúdos -->
+            <div class="card-conteudo bg-white rounded-2xl p-6 conteudo-sombra">
+                <div class="w-14 h-14 bg-aviso/10 text-aviso rounded-full flex items-center justify-center mb-4">
+                    <i class="fa fa-book text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Entendendo os Conteúdos</h4>
+                <p class="text-gray-600 mb-4">
+                    Explicações simples sobre os temas de cada série, com exemplos e formas de explicar para a criança de forma clara e fácil de entender.
+                </p>
+                <a href="#" class="text-primario font-medium flex items-center gap-2 hover:underline">
+                    Ver explicações <i class="fa fa-arrow-right"></i>
+                </a>
             </div>
-        </section>
+
+            <!-- Card 3: Rotina e organização -->
+            <div class="card-conteudo bg-white rounded-2xl p-6 conteudo-sombra">
+                <div class="w-14 h-14 bg-sucesso/10 text-sucesso rounded-full flex items-center justify-center mb-4">
+                    <i class="fa fa-calendar text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Rotina e Organização</h4>
+                <p class="text-gray-600 mb-4">
+                    Dicas para montar horários de estudo, organizar materiais e equilibrar o tempo entre estudos, descanso e atividades de lazer.
+                </p>
+                <a href="#" class="text-primario font-medium flex items-center gap-2 hover:underline">
+                    Ver dicas <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Seção de Acompanhamento por Série -->
+        <h3 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-center mb-8">Conteúdos por Série</h3>
+        <p class="text-gray-600 text-center max-w-3xl mx-auto mb-10">
+            Veja quais são os temas estudados em cada ano e como você pode acompanhar o aprendizado passo a passo.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mb-12">
+            <!-- 5º Ano -->
+            <div class="card-conteudo bg-white rounded-xl p-5 conteudo-sombra text-center">
+                <h4 class="text-lg font-bold mb-2">5º Ano</h4>
+                <p class="text-gray-600 text-sm mb-4">Conteúdos iniciais de gramática, interpretação de textos e matemática básica</p>
+                <a href="portugues_5ano.html" class="text-primario font-medium text-sm hover:underline">Ver detalhes</a>
+            </div>
+
+            <!-- 6º Ano -->
+            <div class="card-conteudo bg-white rounded-xl p-5 conteudo-sombra text-center">
+                <h4 class="text-lg font-bold mb-2">6º Ano</h4>
+                <p class="text-gray-600 text-sm mb-4">Classes gramaticais, estrutura de palavras, interpretação de textos e mais</p>
+                <a href="portugues_6ano.html" class="text-primario font-medium text-sm hover:underline">Ver detalhes</a>
+            </div>
+
+            <!-- 7º Ano -->
+            <div class="card-conteudo bg-white rounded-xl p-5 conteudo-sombra text-center">
+                <h4 class="text-lg font-bold mb-2">7º Ano</h4>
+                <p class="text-gray-600 text-sm mb-4">Sintaxe, gêneros textuais, figuras de linguagem e conteúdos avançados</p>
+                <a href="portugues_7ano.html" class="text-primario font-medium text-sm hover:underline">Ver detalhes</a>
+            </div>
+
+            <!-- 8º Ano -->
+            <div class="card-conteudo bg-white rounded-xl p-5 conteudo-sombra text-center">
+                <h4 class="text-lg font-bold mb-2">8º Ano</h4>
+                <p class="text-gray-600 text-sm mb-4">Análise de textos, interpretação crítica, gramática avançada e produção de textos</p>
+                <a href="portugues_8ano.html" class="text-primario font-medium text-sm hover:underline">Ver detalhes</a>
+            </div>
+
+            <!-- 9º Ano -->
+            <div class="card-conteudo bg-white rounded-xl p-5 conteudo-sombra text-center">
+                <h4 class="text-lg font-bold mb-2">9º Ano</h4>
+                <p class="text-gray-600 text-sm mb-4">Preparação para o ensino médio, revisão geral e análise crítica de conteúdos</p>
+                <a href="portugues_9ano.html" class="text-primario font-medium text-sm hover:underline">Ver detalhes</a>
+            </div>
+        </div>
+
+        <!-- Seção de Contato e Suporte -->
+        <div class="bg-white rounded-2xl p-8 conteudo-sombra text-center">
+            <h3 class="text-xl font-bold mb-4">Precisa de Ajuda?</h3>
+            <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
+                Se tiver dúvidas sobre os conteúdos ou precisar de mais informações, entre em contato conosco que iremos ajudar!
+            </p>
+            <div class="flex flex-wrap justify-center gap-6">
+                <div class="flex items-center gap-2">
+                    <i class="fa fa-envelope text-primario text-xl"></i>
+                    <span class="text-gray-700">suporte@plataformaestudos.com.br</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fa fa-phone text-primario text-xl"></i>
+                    <span class="text-gray-700">(88) 99999-9999</span>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <footer>
-        <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
+    <!-- Rodapé -->
+    <footer class="bg-escuro text-white py-6 px-4 mt-16">
+        <div class="max-w-6xl mx-auto text-center">
+            <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
+        </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        function voltarParaInicio() {
+            window.location.href = 'inicio.html';
+        }
+    </script>
 </body>
 </html>
