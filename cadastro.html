@@ -4,59 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - Plataforma de Estudos</title>
-    <link rel="stylesheet" href="estilo.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primario: '#165DFF',
+                        secundario: '#36BFFA',
+                        sucesso: '#00B42A',
+                        aviso: '#FF7D00',
+                        erro: '#F53F3F',
+                        claro: '#F7F8FA',
+                        escuro: '#1D2129',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .conteudo-sombra {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            }
+            .botao-efeito {
+                transition: all 0.3s ease;
+            }
+            .botao-efeito:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
+            }
+            .input-estilo {
+                transition: all 0.2s ease;
+            }
+            .input-estilo:focus {
+                border-color: #165DFF;
+                outline: none;
+                box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.2);
+            }
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <h1>Cadastro</h1>
-        <p>Faça seu cadastro e comece a estudar</p>
+<body class="bg-claro min-h-screen font-sans text-escuro">
+    <!-- Cabeçalho -->
+    <header class="bg-primario text-white py-6 px-4">
+        <div class="max-w-6xl mx-auto flex items-center gap-3">
+            <i class="fa fa-graduation-cap text-3xl"></i>
+            <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
+        </div>
     </header>
 
-    <nav>
-        <a href="index.html">Início</a>
-        <a href="materias.html">Matérias</a>
-        <a href="cadastro.html">Cadastre-se</a>
-        <a href="pais.html">Área dos Pais</a>
-    </nav>
+    <!-- Conteúdo Principal -->
+    <main class="max-w-2xl mx-auto py-16 px-4">
+        <div class="bg-white rounded-2xl p-8 conteudo-sombra">
+            <div class="text-center mb-8">
+                <h2 class="text-[clamp(1.8rem,4vw,2.2rem)] font-bold mb-2">Criar Conta</h2>
+                <p class="text-gray-600">Preencha os dados abaixo para se cadastrar e começar a estudar</p>
+            </div>
 
-    <main>
-        <section class="formulario">
-            <h2>Dados do Usuário</h2>
-            <form>
-                <label>Tipo de usuário:</label><br>
-                <select>
-                    <option>Aluno</option>
-                    <option>Pai/Mãe/Responsável</option>
-                </select><br><br>
+            <!-- Formulário de Cadastro -->
+            <form id="formCadastro" class="space-y-6">
+                <!-- Nome Completo -->
+                <div>
+                    <label for="nome" class="block text-gray-700 font-medium mb-2">Nome Completo</label>
+                    <input 
+                        type="text" 
+                        id="nome" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
+                        placeholder="Digite seu nome completo"
+                        required
+                    >
+                </div>
 
-                <label>Nome completo:</label><br>
-                <input type="text" required><br><br>
+                <!-- E-mail -->
+                <div>
+                    <label for="email" class="block text-gray-700 font-medium mb-2">E-mail</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
+                        placeholder="seuemail@exemplo.com"
+                        required
+                    >
+                </div>
 
-                <label>Nome da escola:</label><br>
-                <input type="text" value="Escola Municipal Jornalista João Emilio Falcão" readonly><br><br>
+                <!-- Senha -->
+                <div>
+                    <label for="senha" class="block text-gray-700 font-medium mb-2">Senha</label>
+                    <input 
+                        type="password" 
+                        id="senha" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
+                        placeholder="Digite sua senha (mínimo 6 caracteres)"
+                        minlength="6"
+                        required
+                    >
+                </div>
 
-                <label>Série/Ano:</label><br>
-                <input type="text" value="8º Ano" readonly><br><br>
+                <!-- Tipo de Usuário -->
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Tipo de Usuário</label>
+                    <div class="flex gap-4 flex-wrap">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="tipoUsuario" value="aluno" class="w-4 h-4 text-primario" checked>
+                            <span>Aluno</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="tipoUsuario" value="responsavel" class="w-4 h-4 text-primario">
+                            <span>Responsável / Pai</span>
+                        </label>
+                    </div>
+                </div>
 
-                <label>E-mail:</label><br>
-                <input type="email" required><br><br>
-
-                <label>Telefone para contato:</label><br>
-                <input type="tel"><br><br>
-
-                <label>Valor do acesso: R$ 40,00 por ano</label><br><br>
-
-                <button type="submit" class="botao">Concluir Cadastro</button>
+                <!-- Botão de Cadastro -->
+                <button 
+                    type="submit"
+                    class="w-full bg-primario text-white py-3 px-4 rounded-lg font-medium botao-efeito hover:bg-primario/90"
+                >
+                    Cadastrar e Acessar
+                </button>
             </form>
 
-            <div class="aviso-gratis">
-                <p>✅ Os primeiros 5ias são grátis! Depois disso, o valor é de R$ 40,00 por ano.</p>
+            <!-- Link para login -->
+            <div class="text-center mt-6 pt-6 border-t border-gray-200">
+                <p class="text-gray-600">Já tem uma conta? 
+                    <a href="login.html" class="text-primario font-medium hover:underline">Fazer login</a>
+                </p>
             </div>
-        </section>
+        </div>
     </main>
 
-    <footer>
-        <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
+    <!-- Rodapé -->
+    <footer class="bg-escuro text-white py-6 px-4 mt-16">
+        <div class="max-w-6xl mx-auto text-center">
+            <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
+        </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // Quando o formulário for enviado
+        document.getElementById('formCadastro').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Pegar os dados do formulário
+            const dadosUsuario = {
+                nome: document.getElementById('nome').value,
+                email: document.getElementById('email').value,
+                senha: document.getElementById('senha').value,
+                tipo: document.querySelector('input[name="tipoUsuario"]:checked').value,
+                logado: true // Marca que o usuário está logado
+            };
+
+            // Salvar os dados no armazenamento do navegador
+            localStorage.setItem('usuarioLogado', JSON.stringify(dadosUsuario));
+
+            // Redirecionar para a página inicial
+            window.location.href = 'inicio.html';
+        });
+    </script>
+</body>
+</html>
