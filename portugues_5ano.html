@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Português - 5º Ano</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primario: '#165DFF',
+                        secundario: '#36BFFA',
+                        sucesso: '#00B42A',
+                        aviso: '#FF7D00',
+                        erro: '#F53F3F',
+                        claro: '#F7F8FA',
+                        escuro: '#1D2129',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .conteudo-sombra {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            }
+            .botao-efeito {
+                transition: all 0.3s ease;
+            }
+            .botao-efeito:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
+            }
+            .topico-card {
+                transition: all 0.2s ease;
+            }
+            .topico-card:hover {
+                transform: scale(1.02);
+            }
+            .aba-ativa {
+                border-bottom: 3px solid #165DFF;
+                color: #165DFF;
+                font-weight: 600;
+            }
+        }
+    </style>
+</head>
+<body class="bg-claro min-h-screen font-sans text-escuro">
+    <!-- Cabeçalho -->
+    <header class="bg-primario text-white py-6 px-4">
+        <div class="max-w-6xl mx-auto flex items-center gap-3">
+            <i class="fa fa-book text-3xl"></i>
+            <h1 class="text-2xl font-bold">Português - 5º Ano</h1>
+        </div>
+    </header>
+
+    <!-- Menu de Navegação -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-wrap">
+                <a href="inicio.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-home"></i> Início
+                </a>
+                <a href="materias.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-book"></i> Matérias
+                </a>
+                <a href="perfil.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-user"></i> Perfil
+                </a>
+                <a href="pais.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-users"></i> Pais
+                </a>
+                <button onclick="voltarParaMaterias()" class="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg bg-escuro text-white botao-efeito font-medium">
+                    <i class="fa fa-arrow-left"></i> Voltar para Matérias
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-6xl mx-auto py-10 px-4">
+        <!-- Apresentação -->
+        <div class="bg-white rounded-2xl p-8 conteudo-sombra mb-10 text-center">
+            <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-4">Conteúdos de Português - 5º Ano</h2>
+            <p class="text-gray-600 text-lg max-w-3xl mx-auto">
+                Aqui você encontra todos os temas estudados no 5º ano do ensino fundamental, organizados por assuntos para você estudar de forma clara e divertida!
+            </p>
+        </div>
+
+        <!-- Lista de Conteúdos -->
+        <h3 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-center mb-8">Temas Principais</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Tópico 1: Estrutura da Palavra -->
+            <div class="topico-card bg-white rounded-2xl p-6 conteudo-sombra">
+                <div class="w-14 h-14 bg-primario/10 text-primario rounded-full flex items-center justify-center mb-4">
+                    <i class="fa fa-font text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Estrutura das Palavras</h4>
+                <ul class="text-gray-600 space-y-2 mb-4">
+                    <li>• Classificação das palavras</li>
+                    <li>• Sílabas: simples e compostas</li>
+                    <li>• Separação de sílabas</li>
+                    <li>• Ortografia básica</li>
+                </ul>
+                <a href="#" class="text-primario font-medium flex items-center gap-2 hover:underline">
+                    Ver materiais <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Tópico 2: Classes Gramaticais -->
+            <div class="topico-card bg-white rounded-2xl p-6 conteudo-sombra">
+                <div class="w-14 h-14 bg-secundario/10 text-secundario rounded-full flex items-center justify-center mb-4">
+                    <i class="fa fa-users text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Classes Gramaticais</h4>
+                <ul class="text-gray-600 space-y-2 mb-4">
+                    <li>• Substantivos: próprios e comuns</li>
+                    <li>• Adjetivos e seus tipos</li>
+                    <li>• Verbos e suas classificações</li>
+                    <li>• Artigos, pronomes e preposições</li>
+                </ul>
+                <a href="#" class="text-secundario font-medium flex items-center gap-2 hover:underline">
+                    Ver materiais <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Tópico 3: Fonética e Fonologia -->
+            <div class="topico-card bg-white rounded-2xl p-6 conteudo-sombra">
+                <div class="w-14 h-14 bg-aviso/10 text-aviso rounded-full flex items-center justify-center mb-4">
+                    <i class="fa fa-microphone text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Fonética e Fonologia</h4>
+                <ul class="text-gray-600 space-y-2 mb-4">
+                    <li>• Vogais e consoantes</li>
+                    <li>• Sons e letras</li>
+                    <li>• Dígrafos e encontros vocálicos</li>
+                    <li>• Divisão silábica</li>
+                </ul>
+                <a href="#" class="text-aviso font-medium flex items-center gap-2 hover:underline">
+                    Ver materiais <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Tópico 4: Interpretação de Textos -->
+            <div class="topico-card bg-white rounded-2xl p-6 conteudo-sombra">
+                <div class="w-14 h-14 bg-sucesso/10 text-sucesso rounded-full flex items-center justify-center mb-4">
+                    <i class="fa fa-book-open text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Interpretação de Textos</h4>
+                <ul class="text-gray-600 space-y-2 mb-4">
+                    <li>• Tipos de textos: narrativo, descritivo, dissertativo</li>
+                    <li>• Identificação de ideias principais</li>
+                    <li>• Compreensão de informações</li>
+                    <li>• Produção de textos curtos</li>
+                </ul>
+                <a href="#" class="text-sucesso font-medium flex items-center gap-2 hover:underline">
+                    Ver materiais <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Tópico 5: Pontuação -->
+            <div class="topico-card bg-white rounded-2xl p-6 conteudo-sombra">
+                <div class="w-14 h-14 bg-erro/10 text-erro rounded-full flex items-center justify-center mb-4">
+                    <i class="fa fa-pencil text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Pontuação</h4>
+                <ul class="text-gray-600 space-y-2 mb-4">
+                    <li>• Uso do ponto final, ponto e vírgula</li>
+                    <li>• Vírgula: regras básicas</li>
+                    <li>• Interrogação e exclamação</li>
+                    <li>• Dois pontos e reticências</li>
+                </ul>
+                <a href="#" class="text-erro font-medium flex items-center gap-2 hover:underline">
+                    Ver materiais <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Tópico 6: Ortografia -->
+            <div class="topico-card bg-white rounded-2xl p-6 conteudo-sombra">
+                <div class="w-14 h-14 bg-purple-500/10 text-purple-500 rounded-full flex items-center justify-center mb-4">
+                    <i class="fa fa-check text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Ortografia</h4>
+                <ul class="text-gray-600 space-y-2 mb-4">
+                    <li>• Uso de letras: C, D, G, R, S</li>
+                    <li>• Regras básicas de escrita</li>
+                    <li>• Palavras com mesma pronúncia, escrita diferente</li>
+                    <li>• Uso de acentuação gráfica</li>
+                </ul>
+                <a href="#" class="text-purple-500 font-medium flex items-center gap-2 hover:underline">
+                    Ver materiais <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Navegação entre anos -->
+        <div class="mt-12 bg-white rounded-2xl p-6 conteudo-sombra text-center">
+            <h4 class="text-lg font-bold mb-4">Escolha outro ano</h4>
+            <div class="flex flex-wrap gap-3 justify-center">
+                <a href="portugues_5ano.html" class="bg-primario text-white px-4 py-2 rounded-lg font-medium">5º Ano</a>
+                <a href="portugues_6ano.html" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-primario hover:text-white transition-all">6º Ano</a>
+                <a href="portugues_7ano.html" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-primario hover:text-white transition-all">7º Ano</a>
+                <a href="portugues_8ano.html" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-primario hover:text-white transition-all">8º Ano</a>
+                <a href="portugues_9ano.html" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-primario hover:text-white transition-all">9º Ano</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-escuro text-white py-6 px-4 mt-16">
+        <div class="max-w-6xl mx-auto text-center">
+            <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        function voltarParaMaterias() {
+            window.location.href = 'materias.html';
+        }
+    </script>
+</body>
+</html>
