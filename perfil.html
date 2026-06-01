@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - Plataforma de Estudos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primario: '#165DFF',
+                        secundario: '#36BFFA',
+                        sucesso: '#00B42A',
+                        aviso: '#FF7D00',
+                        erro: '#F53F3F',
+                        claro: '#F7F8FA',
+                        escuro: '#1D2129',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .conteudo-sombra {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            }
+            .botao-efeito {
+                transition: all 0.3s ease;
+            }
+            .botao-efeito:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
+            }
+            .item-dado {
+                transition: all 0.2s ease;
+            }
+            .item-dado:hover {
+                background-color: rgba(22, 93, 255, 0.05);
+            }
+        }
+    </style>
+</head>
+<body class="bg-claro min-h-screen font-sans text-escuro">
+    <!-- Cabeçalho -->
+    <header class="bg-primario text-white py-6 px-4">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <i class="fa fa-graduation-cap text-3xl"></i>
+                <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
+            </div>
+            <p class="text-secundario/90 text-lg">Meu Perfil</p>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="bg-white border-b border-gray-200 py-4 px-4">
+        <div class="max-w-6xl mx-auto flex flex-wrap gap-2">
+            <a href="materias.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 hover:bg-primario/10 hover:text-primario font-medium transition-all">
+                <i class="fa fa-book"></i> Matérias
+            </a>
+            <a href="perfil.html" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primario text-white font-medium">
+                <i class="fa fa-user"></i> Meu Perfil
+            </a>
+            <button onclick="voltarParaMatérias()" class="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg bg-escuro text-white botao-efeito font-medium">
+                <i class="fa fa-arrow-left"></i> Voltar
+            </button>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-4xl mx-auto py-10 px-4">
+        <!-- Título -->
+        <div class="text-center mb-10">
+            <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold mb-3">Dados do Usuário</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Abaixo estão os seus dados cadastrados na plataforma. Você pode visualizar suas informações a qualquer momento.
+            </p>
+        </div>
+
+        <!-- Card do Perfil -->
+        <div class="bg-white rounded-2xl p-8 conteudo-sombra mb-8">
+            <!-- Cabeçalho do Perfil -->
+            <div class="flex flex-col md:flex-row items-center gap-6 mb-10 pb-8 border-b border-gray-100">
+                <div class="w-28 h-28 bg-primario/10 text-primario rounded-full flex items-center justify-center text-5xl">
+                    <i class="fa fa-user-circle"></i>
+                </div>
+                <div class="text-center md:text-left">
+                    <h3 id="nomeCompleto" class="text-2xl font-bold mb-2"></h3>
+                    <span id="tipoUsuario" class="inline-block bg-primario/10 text-primario px-4 py-2 rounded-full text-sm font-medium"></span>
+                    <p class="text-gray-500 mt-2">Membro da Plataforma de Estudos</p>
+                </div>
+            </div>
+
+            <!-- Dados Cadastrais -->
+            <h4 class="text-xl font-bold mb-6 flex items-center">
+                <i class="fa fa-id-card text-primario mr-3"></i>
+                Informações Pessoais
+            </h4>
+
+            <div class="space-y-4">
+                <div class="item-dado flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100">
+                    <span class="text-gray-600 font-medium mb-1 sm:mb-0">
+                        <i class="fa fa-envelope text-primario mr-2"></i> E-mail
+                    </span>
+                    <span id="email" class="text-escuro font-medium"></span>
+                </div>
+
+                <div class="item-dado flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100">
+                    <span class="text-gray-600 font-medium mb-1 sm:mb-0">
+                        <i class="fa fa-phone text-primario mr-2"></i> Telefone
+                    </span>
+                    <span id="telefone" class="text-escuro font-medium"></span>
+                </div>
+
+                <div class="item-dado flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100">
+                    <span class="text-gray-600 font-medium mb-1 sm:mb-0">
+                        <i class="fa fa-calendar text-primario mr-2"></i> Data do Cadastro
+                    </span>
+                    <span id="dataCadastro" class="text-escuro font-medium"></span>
+                </div>
+
+                <div class="item-dado flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100">
+                    <span class="text-gray-600 font-medium mb-1 sm:mb-0">
+                        <i class="fa fa-school text-primario mr-2"></i> Escola
+                    </span>
+                    <span class="text-escuro font-medium">Escola Estadual Exemplo</span>
+                </div>
+
+                <div class="item-dado flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100">
+                    <span class="text-gray-600 font-medium mb-1 sm:mb-0">
+                        <i class="fa fa-graduation-cap text-primario mr-2"></i> Série / Ano
+                    </span>
+                    <span class="text-escuro font-medium">8º Ano - Ensino Fundamental</span>
+                </div>
+
+                <div class="item-dado flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100">
+                    <span class="text-gray-600 font-medium mb-1 sm:mb-0">
+                        <i class="fa fa-money text-primario mr-2"></i> Plano de Acesso
+                    </span>
+                    <span class="text-sucesso font-medium font-semibold">Anual - R$ 10,00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button onclick="limparDadosESair()" class="bg-erro text-white px-6 py-3 rounded-xl botao-efeito font-medium">
+                <i class="fa fa-sign-out mr-2"></i> Sair da Conta
+            </button>
+            <a href="materias.html" class="bg-primario text-white px-6 py-3 rounded-xl botao-efeito font-medium text-center">
+                <i class="fa fa-book mr-2"></i> Acessar Matérias
+            </a>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-escuro text-white py-8 px-4 mt-16">
+        <div class="max-w-4xl mx-auto text-center">
+            <p class="mb-2">&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
+            <p class="text-gray-400 text-sm">Mantenha seus dados sempre atualizados para melhorar sua experiência</p>
+        </div>
+    </footer>
+
+    <script>
+        // Carrega os dados do perfil quando a página abrir
+        window.onload = function() {
+            carregarDadosPerfil();
+        }
+
+        // Função para buscar e exibir os dados do cadastro
+        function carregarDadosPerfil() {
+            const dadosSalvos = localStorage.getItem('dadosCadastro');
+            
+            if (!dadosSalvos) {
+                // Se não tiver dados salvos, volta para o cadastro
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const dados = JSON.parse(dadosSalvos);
+
+            // Preenche os dados na tela
+            document.getElementById('nomeCompleto').textContent = dados.nome;
+            document.getElementById('tipoUsuario').textContent = dados.tipoUsuario === 'aluno' ? 'Aluno' : 'Responsável';
+            document.getElementById('email').textContent = dados.email || 'Não informado';
+            document.getElementById('telefone').textContent = dados.telefone || 'Não informado';
+            document.getElementById('dataCadastro').textContent = dados.dataCadastro;
+        }
+
+        // Função para voltar para a página de matérias
+        function voltarParaMatérias() {
+            window.location.href = 'materias.html';
+        }
+
+        // Função para sair da conta e apagar os dados
+        function limparDadosESair() {
+            if (confirm('Tem certeza que deseja sair da sua conta? Você precisará fazer o cadastro novamente para acessar o conteúdo.')) {
+                localStorage.removeItem('dadosCadastro');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
