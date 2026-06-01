@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Português - Questões de Escolha</title>
-    <link rel="stylesheet" href="../estilo.css">
+    <title>Português - Questões</title>
+    <!-- Caminho correto, pois está na mesma pasta -->
+    <link rel="stylesheet" href="estilo.css">
     <style>
         .botao-voltar {
             display: inline-block;
@@ -15,6 +16,9 @@
             text-decoration: none;
             font-weight: bold;
             margin: 10px 0;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
         }
         .botao-voltar:hover {
             background-color: #2980b9;
@@ -34,6 +38,7 @@
             border-radius: 4px;
             cursor: pointer;
             margin-top: 10px;
+            font-size: 15px;
         }
         .botao-resposta:hover {
             background-color: #27ae60;
@@ -48,11 +53,12 @@
 <body>
     <header>
         <h1>Português</h1>
-        <p>Marque a alternativa correta para cada questão</p>
+        <p>Marque a alternativa correta e verifique sua resposta</p>
     </header>
 
     <nav>
-        <a href="../materias.html" class="botao-voltar">⬅ Voltar para Matérias</a>
+        <!-- Botão de voltar para a página de matérias -->
+        <button class="botao-voltar" onclick="voltarPagina()">⬅ Voltar para Matérias</button>
     </nav>
 
     <main>
@@ -66,6 +72,7 @@
                 <label><input type="radio" name="q1" value="b"> B) Entender o que o texto quer dizer</label><br>
                 <label><input type="radio" name="q1" value="c"> C) Decorar as palavras do texto</label><br>
                 <label><input type="radio" name="q1" value="d"> D) Imprimir o texto</label><br>
+                
                 <button class="botao-resposta" onclick="verificarResposta('q1', 'b')">Verificar Resposta</button>
                 <p class="resposta-correta" id="resposta-q1"></p>
             </div>
@@ -77,6 +84,7 @@
                 <label><input type="radio" name="q2" value="b"> B) Narrativo</label><br>
                 <label><input type="radio" name="q2" value="c"> C) Rápido</label><br>
                 <label><input type="radio" name="q2" value="d"> D) Alto</label><br>
+                
                 <button class="botao-resposta" onclick="verificarResposta('q2', 'b')">Verificar Resposta</button>
                 <p class="resposta-correta" id="resposta-q2"></p>
             </div>
@@ -88,6 +96,7 @@
                 <label><input type="radio" name="q3" value="b"> B) Narrativo</label><br>
                 <label><input type="radio" name="q3" value="c"> C) Informativo</label><br>
                 <label><input type="radio" name="q3" value="d"> D) Dissertativo</label><br>
+                
                 <button class="botao-resposta" onclick="verificarResposta('q3', 'b')">Verificar Resposta</button>
                 <p class="resposta-correta" id="resposta-q3"></p>
             </div>
@@ -99,6 +108,7 @@
                 <label><input type="radio" name="q4" value="b"> B) Contar uma história</label><br>
                 <label><input type="radio" name="q4" value="c"> C) Mostrar opiniões</label><br>
                 <label><input type="radio" name="q4" value="d"> D) Descrever algo</label><br>
+                
                 <button class="botao-resposta" onclick="verificarResposta('q4', 'a')">Verificar Resposta</button>
                 <p class="resposta-correta" id="resposta-q4"></p>
             </div>
@@ -110,6 +120,7 @@
                 <label><input type="radio" name="q5" value="b"> B) Mostrar como fazer algo</label><br>
                 <label><input type="radio" name="q5" value="c"> C) Descrever pessoas, lugares ou objetos</label><br>
                 <label><input type="radio" name="q5" value="d"> D) Apresentar notícias</label><br>
+                
                 <button class="botao-resposta" onclick="verificarResposta('q5', 'c')">Verificar Resposta</button>
                 <p class="resposta-correta" id="resposta-q5"></p>
             </div>
@@ -121,6 +132,7 @@
                 <label><input type="radio" name="q6" value="b"> B) Apresentar ideias e argumentos</label><br>
                 <label><input type="radio" name="q6" value="c"> C) Dar instruções</label><br>
                 <label><input type="radio" name="q6" value="d"> D) Mostrar fatos</label><br>
+                
                 <button class="botao-resposta" onclick="verificarResposta('q6', 'b')">Verificar Resposta</button>
                 <p class="resposta-correta" id="resposta-q6"></p>
             </div>
@@ -132,6 +144,7 @@
                 <label><input type="radio" name="q7" value="b"> B) "O sol é uma estrela muito grande."</label><br>
                 <label><input type="radio" name="q7" value="c"> C) "A festa foi muito animada e colorida."</label><br>
                 <label><input type="radio" name="q7" value="d"> D) "Você deve estudar todos os dias."</label><br>
+                
                 <button class="botao-resposta" onclick="verificarResposta('q7', 'a')">Verificar Resposta</button>
                 <p class="resposta-correta" id="resposta-q7"></p>
             </div>
@@ -143,6 +156,7 @@
                 <label><input type="radio" name="q8" value="b"> B) O tema principal que o texto fala</label><br>
                 <label><input type="radio" name="q8" value="c"> C) O número de parágrafos</label><br>
                 <label><input type="radio" name="q8" value="d"> D) O tamanho da letra</label><br>
+                
                 <button class="botao-resposta" onclick="verificarResposta('q8', 'b')">Verificar Resposta</button>
                 <p class="resposta-correta" id="resposta-q8"></p>
             </div>
@@ -154,6 +168,7 @@
                 <label><input type="radio" name="q9" value="b"> B) Ser claro e objetivo</label><br>
                 <label><input type="radio" name="q9" value="c"> C) Contar histórias de fantasia</label><br>
                 <label><input type="radio" name="q9" value="d"> D) Usar palavras difíceis</label><br>
+                
                 <button class="botao-resposta" onclick="verificarResposta('q9', 'b')">Verificar Resposta</button>
                 <p class="resposta-correta" id="resposta-q9"></p>
             </div>
@@ -165,6 +180,7 @@
                 <label><input type="radio" name="q10" value="b"> B) Para ajudar a entender melhor o que é dito</label><br>
                 <label><input type="radio" name="q10" value="c"> C) Para confundir o leitor</label><br>
                 <label><input type="radio" name="q10" value="d"> D) Para usar mais papel</label><br>
+                
                 <button class="botao-resposta" onclick="verificarResposta('q10', 'b')">Verificar Resposta</button>
                 <p class="resposta-correta" id="resposta-q10"></p>
             </div>
@@ -175,6 +191,7 @@
         <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
     </footer>
 
-    <script src="../script.js"></script>
+    <!-- Caminho correto, pois está na mesma pasta -->
+    <script src="script.js"></script>
 </body>
 </html>

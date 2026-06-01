@@ -14,14 +14,23 @@
             text-align: center;
             margin-bottom: 20px;
         }
-        .aviso-cadastro a {
-            color: #856404;
-            font-weight: bold;
+        .materia-link {
+            display: block;
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #3498db;
+            color: white;
             text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .materia-link:hover {
+            background-color: #2980b9;
         }
         .botao-voltar {
             display: inline-block;
-            background-color: #3498db;
+            background-color: #e74c3c;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
@@ -33,7 +42,7 @@
             font-size: 16px;
         }
         .botao-voltar:hover {
-            background-color: #2980b9;
+            background-color: #c0392b;
         }
     </style>
 </head>
@@ -44,7 +53,7 @@
     </header>
 
     <nav>
-        <!-- Botão de voltar que funciona -->
+        <!-- Botão de voltar -->
         <button class="botao-voltar" onclick="voltarPagina()">⬅ Sair / Trocar Cadastro</button>
     </nav>
 
@@ -54,14 +63,15 @@
         </div>
 
         <div class="lista-materias">
-            <a href="materias/portugues.html" class="materia-link">📖 Português</a>
-            <a href="materias/matematica.html" class="materia-link">➗ Matemática</a>
-            <a href="materias/historia.html" class="materia-link">🏛️ História</a>
-            <a href="materias/geografia.html" class="materia-link">🌎 Geografia</a>
-            <a href="materias/ciencias.html" class="materia-link">🔬 Ciências</a>
-            <a href="materias/artes.html" class="materia-link">🎨 Artes</a>
-            <a href="materias/educacao_fisica.html" class="materia-link">⚽ Educação Física</a>
-            <a href="materias/ciencias_naturais.html" class="materia-link">🌿 Ciências Naturais</a>
+            <!-- Link correto, pois está na mesma pasta -->
+            <a href="portugues.html" class="materia-link">📖 Português</a>
+            <a href="matematica.html" class="materia-link">➗ Matemática</a>
+            <a href="historia.html" class="materia-link">🏛️ História</a>
+            <a href="geografia.html" class="materia-link">🌎 Geografia</a>
+            <a href="ciencias.html" class="materia-link">🔬 Ciências</a>
+            <a href="artes.html" class="materia-link">🎨 Artes</a>
+            <a href="educacao_fisica.html" class="materia-link">⚽ Educação Física</a>
+            <a href="ciencias_naturais.html" class="materia-link">🌿 Ciências Naturais</a>
         </div>
     </main>
 
