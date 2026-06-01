@@ -4,128 +4,165 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - Plataforma de Estudos</title>
-    <link rel="stylesheet" href="estilo.css">
-    <style>
-        .caixa-cadastro {
-            max-width: 500px;
-            margin: 50px auto;
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primario: '#165DFF',
+                        secundario: '#36BFFA',
+                        sucesso: '#00B42A',
+                        aviso: '#FF7D00',
+                        erro: '#F53F3F',
+                        claro: '#F7F8FA',
+                        escuro: '#1D2129',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
         }
-        .campo-formulario {
-            margin-bottom: 20px;
-        }
-        .campo-formulario label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        .campo-formulario input, .campo-formulario select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .botao-cadastrar {
-            width: 100%;
-            padding: 15px;
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .botao-cadastrar:hover {
-            background-color: #219653;
-        }
-        .mensagem-sucesso {
-            text-align: center;
-            padding: 20px;
-            color: #27ae60;
-            font-size: 18px;
-            font-weight: bold;
-            display: none;
-        }
-        /* Estilo do botão de voltar */
-        .botao-voltar {
-            display: inline-block;
-            background-color: #3498db;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            margin: 10px 0;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .botao-voltar:hover {
-            background-color: #2980b9;
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .conteudo-sombra {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            }
+            .botao-efeito {
+                transition: all 0.3s ease;
+            }
+            .botao-efeito:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
+            }
+            .campo-foco:focus {
+                border-color: #165DFF;
+                box-shadow: 0 0 0 3px rgba(22, 93, 255, 0.15);
+                outline: none;
+            }
         }
     </style>
 </head>
-<body>
-    <main>
-        <div class="caixa-cadastro">
-            <!-- Botão de voltar que funciona -->
-            <button class="botao-voltar" onclick="voltarPagina()">⬅ Voltar</button>
+<body class="bg-claro min-h-screen font-sans text-escuro">
+    <!-- Cabeçalho -->
+    <header class="bg-primario text-white py-6 px-4">
+        <div class="max-w-5xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <i class="fa fa-graduation-cap text-3xl"></i>
+                <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
+            </div>
+            <p class="hidden md:block text-secundario/90">Aprender é o primeiro passo para o sucesso!</p>
+        </div>
+    </header>
 
-            <h1 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Cadastre-se para acessar</h1>
-            
-            <div class="mensagem-sucesso" id="mensagemSucesso">
-                ✅ Cadastro realizado com sucesso! Você já pode acessar o conteúdo.
+    <!-- Conteúdo Principal -->
+    <main class="max-w-5xl mx-auto py-10 px-4">
+        <div class="flex flex-col md:flex-row gap-8 items-center">
+            <!-- Lado Esquerdo: Texto -->
+            <div class="md:w-1/2 text-center md:text-left">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-escuro mb-4">
+                    Acesse o melhor conteúdo educacional
+                </h2>
+                <p class="text-gray-600 text-lg mb-6">
+                    Cadastre-se agora e tenha acesso a milhares de questões, exercícios e materiais para estudar de forma simples e eficaz.
+                </p>
+                <div class="flex gap-4 justify-center md:justify-start">
+                    <div class="flex items-center gap-2 text-sucesso font-medium">
+                        <i class="fa fa-check-circle text-xl"></i>
+                        <span>Conteúdo atualizado</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-sucesso font-medium">
+                        <i class="fa fa-check-circle text-xl"></i>
+                        <span>Fácil de usar</span>
+                    </div>
+                </div>
             </div>
 
-            <form id="formCadastro" onsubmit="realizarCadastro(event)">
-                <div class="campo-formulario">
-                    <label>Tipo de usuário:</label>
-                    <select id="tipoUsuario" required>
-                        <option value="">Escolha uma opção</option>
-                        <option value="aluno">Aluno</option>
-                        <option value="responsavel">Pai/Mãe/Responsável</option>
-                    </select>
-                </div>
+            <!-- Lado Direito: Formulário de Cadastro -->
+            <div class="md:w-1/2 w-full">
+                <div class="bg-white rounded-2xl p-8 conteudo-sombra">
+                    <!-- Mensagem de Sucesso -->
+                    <div id="mensagemSucesso" class="hidden bg-sucesso/10 border border-sucesso/20 text-sucesso rounded-xl p-5 mb-6 text-center">
+                        <i class="fa fa-check-circle text-2xl mb-2"></i>
+                        <h3 class="font-bold text-xl mb-1">Cadastro realizado com sucesso!</h3>
+                        <p>Você já pode acessar todo o conteúdo da plataforma.</p>
+                    </div>
 
-                <div class="campo-formulario">
-                    <label>Nome completo:</label>
-                    <input type="text" id="nome" placeholder="Digite seu nome completo" required>
-                </div>
+                    <!-- Formulário -->
+                    <form id="formCadastro" onsubmit="realizarCadastro(event)">
+                        <h3 class="text-xl font-bold mb-6 text-center text-escuro">Preencha seus dados</h3>
 
-                <div class="campo-formulario">
-                    <label>Nome da escola:</label>
-                    <input type="text" value="Escola Exemplo" readonly>
-                </div>
+                        <!-- Tipo de Usuário -->
+                        <div class="mb-5">
+                            <label class="block text-gray-700 font-medium mb-2">Tipo de usuário <span class="text-erro">*</span></label>
+                            <select id="tipoUsuario" required class="w-full px-4 py-3 border border-gray-300 rounded-xl campo-foco transition-all">
+                                <option value="">Selecione uma opção</option>
+                                <option value="aluno">Aluno</option>
+                                <option value="responsavel">Responsável / Pai / Mãe</option>
+                            </select>
+                        </div>
 
-                <div class="campo-formulario">
-                    <label>Série/Ano:</label>
-                    <input type="text" value="8º Ano" readonly>
-                </div>
+                        <!-- Nome Completo -->
+                        <div class="mb-5">
+                            <label class="block text-gray-700 font-medium mb-2">Nome completo <span class="text-erro">*</span></label>
+                            <input type="text" id="nome" placeholder="Digite seu nome completo" required 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl campo-foco transition-all">
+                        </div>
 
-                <div class="campo-formulario">
-                    <label>E-mail:</label>
-                    <input type="email" id="email" placeholder="seuemail@exemplo.com" required>
-                </div>
+                        <!-- Escola e Série -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Nome da escola</label>
+                                <input type="text" value="Escola Estadual Exemplo" readonly 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-600">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">Série / Ano</label>
+                                <input type="text" value="8º Ano - Ensino Fundamental" readonly 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-600">
+                            </div>
+                        </div>
 
-                <div class="campo-formulario">
-                    <label>Telefone para contato:</label>
-                    <input type="tel" id="telefone" placeholder="(00) 00000-0000">
-                </div>
+                        <!-- E-mail -->
+                        <div class="mb-5">
+                            <label class="block text-gray-700 font-medium mb-2">E-mail <span class="text-erro">*</span></label>
+                            <input type="email" id="email" placeholder="seuemail@exemplo.com" required 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl campo-foco transition-all">
+                        </div>
 
-                <div class="campo-formulario">
-                    <label>Valor do acesso: R$ 10,00 por ano</label>
-                </div>
+                        <!-- Telefone -->
+                        <div class="mb-6">
+                            <label class="block text-gray-700 font-medium mb-2">Telefone para contato</label>
+                            <input type="tel" id="telefone" placeholder="(00) 00000-0000" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl campo-foco transition-all">
+                        </div>
 
-                <button type="submit" class="botao-cadastrar">Concluir Cadastro e Acessar</button>
-            </form>
+                        <!-- Valor -->
+                        <div class="mb-6 bg-primario/5 border border-primario/10 rounded-xl p-4 text-center">
+                            <p class="text-escuro font-medium">Valor do acesso: <span class="text-primario font-bold text-xl">R$ 10,00</span> por ano</p>
+                            <p class="text-gray-500 text-sm mt-1">Acesso ilimitado a todas as matérias e exercícios</p>
+                        </div>
+
+                        <!-- Botão de Cadastrar -->
+                        <button type="submit" class="w-full bg-primario hover:bg-primario/90 text-white font-bold py-4 px-6 rounded-xl botao-efeito">
+                            <i class="fa fa-sign-in mr-2"></i> Concluir Cadastro e Acessar
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-escuro text-white py-6 px-4 mt-16">
+        <div class="max-w-5xl mx-auto text-center">
+            <p class="mb-2">&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
+            <p class="text-gray-400 text-sm">Desenvolvido para ajudar no seu aprendizado</p>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
