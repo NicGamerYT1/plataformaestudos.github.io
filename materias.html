@@ -51,37 +51,62 @@
             .ano-botao:hover {
                 transform: scale(1.05);
             }
+            .aba-ativa {
+                border-bottom: 3px solid #165DFF;
+                color: #165DFF;
+                font-weight: 600;
+            }
         }
     </style>
 </head>
 <body class="bg-claro min-h-screen font-sans text-escuro">
     <!-- Cabeçalho -->
     <header class="bg-primario text-white py-6 px-4">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div class="flex items-center gap-3">
-                <i class="fa fa-graduation-cap text-3xl"></i>
-                <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
-            </div>
-            <p class="text-secundario/90 text-lg">Escolha a matéria e o ano de estudo</p>
+        <div class="max-w-6xl mx-auto flex items-center gap-3">
+            <i class="fa fa-graduation-cap text-3xl"></i>
+            <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
         </div>
     </header>
 
+    <!-- Menu de Abas -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-wrap">
+                <!-- Aba: Início -->
+                <a href="inicio.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-home"></i> Início
+                </a>
+
+                <!-- Aba: Matérias -->
+                <a href="materias.html" class="aba-ativa py-4 px-6 flex items-center gap-2">
+                    <i class="fa fa-book"></i> Matérias
+                </a>
+
+                <!-- Aba: Perfil -->
+                <a href="perfil.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-user"></i> Meu Perfil
+                </a>
+
+                <!-- Aba: Pais / Responsáveis -->
+                <a href="pais.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-users"></i> Pais / Responsáveis
+                </a>
+
+                <!-- Botão Voltar para Início - NO LUGAR DO DESLOGAR -->
+                <button onclick="voltarParaInicio()" class="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg bg-escuro text-white botao-efeito font-medium">
+                    <i class="fa fa-arrow-left"></i> Voltar para Início
+                </button>
+            </div>
+        </div>
+    </nav>
+
     <!-- Conteúdo Principal -->
     <main class="max-w-6xl mx-auto py-10 px-4">
-        <!-- Aviso -->
-        <div class="bg-sucesso/10 border border-sucesso/20 text-sucesso rounded-xl p-5 mb-10 text-center">
-            <i class="fa fa-user-circle text-xl mr-2"></i>
-            Você está logado e pode acessar todo o conteúdo!
-            <button onclick="voltarPagina()" class="ml-4 bg-escuro text-white px-4 py-2 rounded-lg botao-efeito text-sm font-medium">
-                <i class="fa fa-sign-out mr-1"></i> Sair / Trocar Cadastro
-            </button>
-        </div>
-
-        <!-- Grade de Matérias -->
+        <!-- Título -->
         <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-center mb-8">Nossas Matérias</h2>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Card: Português - AGORA SEM QUESTÕES, APENAS OPÇÕES DE ANOS -->
+            <!-- Card: Português - SEM QUESTÕES, APENAS ANOS -->
             <div class="materia-card bg-white rounded-2xl p-6 conteudo-sombra text-center">
                 <div class="w-16 h-16 bg-primario/10 text-primario rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fa fa-book text-2xl"></i>
@@ -195,10 +220,4 @@
                     <i class="fa fa-futbol-o text-2xl"></i>
                 </div>
                 <h3 class="text-xl font-bold mb-3">Educação Física</h3>
-                <p class="text-gray-600 text-sm mb-5">Esportes, jogos e saúde do corpo</p>
-                
-                <!-- Opções de Anos -->
-                <div class="flex flex-wrap gap-2 justify-center mb-5">
-                    <a href="educacao_fisica_5ano.html" class="ano-botao bg-green-500/10 text-green-500 px-3 py-1 rounded-full text-sm font-medium">5º Ano</a>
-                    <a href="educacao_fisica_6ano.html" class="ano-botao bg-green-500/10 text-green-500 px-3 py-1 rounded-full text-sm font-medium">6º Ano</a>
-                    <a href="educacao_fisica_7ano.html" class="ano-botao bg-green-500/10 text-green-500 px-
+                <p class="text-gray-6
