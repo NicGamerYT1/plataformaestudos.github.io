@@ -125,7 +125,7 @@
             const emailDigitado = document.getElementById('email').value;
             const senhaDigitada = document.getElementById('senha').value;
 
-            // Pegar os dados salvos no navegador
+            // Pegar os dados salvos
             const usuarioSalvo = localStorage.getItem('usuarioLogado');
 
             if (usuarioSalvo) {
@@ -133,11 +133,8 @@
 
                 // Verificar se os dados estão corretos
                 if (dadosUsuario.email === emailDigitado && dadosUsuario.senha === senhaDigitada) {
-                    // Atualiza o status de logado
                     dadosUsuario.logado = true;
                     localStorage.setItem('usuarioLogado', JSON.stringify(dadosUsuario));
-                    
-                    // Redireciona para a página inicial
                     window.location.href = 'inicio.html';
                 } else {
                     alert('E-mail ou senha incorretos!');

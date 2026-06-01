@@ -62,8 +62,8 @@
     <main class="max-w-2xl mx-auto py-16 px-4">
         <div class="bg-white rounded-2xl p-8 conteudo-sombra">
             <div class="text-center mb-8">
-                <h2 class="text-[clamp(1.8rem,4vw,2.2rem)] font-bold mb-2">Criar Conta</h2>
-                <p class="text-gray-600">Preencha os dados abaixo para se cadastrar e começar a estudar</p>
+                <h2 class="text-[clamp(1.8rem,4vw,2.2rem)] font-bold mb-2">Criar Nova Conta</h2>
+                <p class="text-gray-600">Preencha os dados abaixo para começar a estudar</p>
             </div>
 
             <!-- Formulário de Cadastro -->
@@ -156,10 +156,10 @@
                 email: document.getElementById('email').value,
                 senha: document.getElementById('senha').value,
                 tipo: document.querySelector('input[name="tipoUsuario"]:checked').value,
-                logado: true // Marca que o usuário está logado
+                logado: true
             };
 
-            // Salvar os dados no armazenamento do navegador
+            // Salvar os dados no navegador
             localStorage.setItem('usuarioLogado', JSON.stringify(dadosUsuario));
 
             // Redirecionar para a página inicial
