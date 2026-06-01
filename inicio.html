@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início - Plataforma de Estudos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primario: '#165DFF',
+                        secundario: '#36BFFA',
+                        sucesso: '#00B42A',
+                        aviso: '#FF7D00',
+                        erro: '#F53F3F',
+                        claro: '#F7F8FA',
+                        escuro: '#1D2129',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .conteudo-sombra {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            }
+            .botao-efeito {
+                transition: all 0.3s ease;
+            }
+            .botao-efeito:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
+            }
+            .aba-ativa {
+                border-bottom: 3px solid #165DFF;
+                color: #165DFF;
+                font-weight: 600;
+            }
+            .card-destaque {
+                transition: all 0.3s ease;
+            }
+            .card-destaque:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+            }
+        }
+    </style>
+</head>
+<body class="bg-claro min-h-screen font-sans text-escuro">
+    <!-- Cabeçalho -->
+    <header class="bg-primario text-white py-6 px-4">
+        <div class="max-w-6xl mx-auto flex items-center gap-3">
+            <i class="fa fa-graduation-cap text-3xl"></i>
+            <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
+        </div>
+    </header>
+
+    <!-- Menu de Abas -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-wrap">
+                <!-- Aba: Início -->
+                <a href="inicio.html" class="aba-ativa py-4 px-6 flex items-center gap-2">
+                    <i class="fa fa-home"></i> Início
+                </a>
+
+                <!-- Aba: Matérias -->
+                <a href="materias.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-book"></i> Matérias
+                </a>
+
+                <!-- Aba: Perfil -->
+                <a href="perfil.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-user"></i> Meu Perfil
+                </a>
+
+                <!-- Aba: Pais / Responsáveis -->
+                <a href="pais.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-users"></i> Pais / Responsáveis
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-6xl mx-auto py-10 px-4">
+        <!-- Mensagem de Boas-Vindas -->
+        <div class="bg-white rounded-2xl p-8 conteudo-sombra mb-10">
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <div class="w-24 h-24 bg-primario/10 text-primario rounded-full flex items-center justify-center text-5xl">
+                    <i class="fa fa-graduation-cap"></i>
+                </div>
+                <div class="text-center md:text-left">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.2rem)] font-bold mb-3">
+                        Seja bem-vindo, <span id="nomeUsuario" class="text-primario"></span>!
+                    </h2>
+                    <p class="text-gray-600 text-lg mb-4 max-w-2xl">
+                        Aqui você encontra todo o conteúdo educacional organizado para você estudar de forma simples e eficaz. Escolha uma das opções abaixo para começar!
+                    </p>
+                    <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+                        <span class="bg-sucesso/10 text-sucesso px-4 py-2 rounded-full text-sm font-medium">
+                            <i class="fa fa-check-circle mr-1"></i> Acesso ilimitado
+                        </span>
+                        <span class="bg-primario/10 text-primario px-4 py-2 rounded-full text-sm font-medium">
+                            <i class="fa fa-book mr-1"></i> 8 matérias disponíveis
+                        </span>
+                        <span class="bg-secundario/10 text-secundario px-4 py-2 rounded-full text-sm font-medium">
+                            <i class="fa fa-star mr-1"></i> Conteúdo atualizado
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Opções -->
+        <h3 class="text-[clamp(1.3rem,2vw,1.8rem)] font-bold text-center mb-8">O que você quer fazer hoje?</h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <!-- Card: Matérias -->
+            <a href="materias.html" class="card-destaque bg-white rounded-2xl p-6 conteudo-sombra text-center">
+                <div class="w-16 h-16 bg-primario/10 text-primario rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa fa-book text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-2">Estudar</h4>
+                <p class="text-gray-600 text-sm mb-4">Acesse as questões e exercícios de todas as matérias</p>
+                <span class="inline-block bg-primario text-white px-4 py-2 rounded-lg text-sm font-medium">
+                    Ver matérias <i class="fa fa-arrow-right ml-1"></i>
+                </span>
+            </a>
+
+            <!-- Card: Meu Perfil -->
+            <a href="perfil.html" class="card-destaque bg-white rounded-2xl p-6 conteudo-sombra text-center">
+                <div class="w-16 h-16 bg-secundario/10 text-secundario rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa fa-user text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-2">Meu Perfil</h4>
+                <p class="text-gray-600 text-sm mb-4">Veja e edite os seus dados cadastrados na plataforma</p>
+                <span class="inline-block bg-secundario text-white px-4 py-2 rounded-lg text-sm font-medium">
+                    Acessar perfil <i class="fa fa-arrow-right ml-1"></i>
+                </span>
+            </a>
+
+            <!-- Card: Pais / Responsáveis -->
+            <a href="pais.html" class="card-destaque bg-white rounded-2xl p-6 conteudo-sombra text-center">
+                <div class="w-16 h-16 bg-aviso/10 text-aviso rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa fa-users text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-2">Pais e Responsáveis</h4>
+                <p class="text-gray-600 text-sm mb-4">Informações e orientações para acompanhar os estudos</p>
+                <span class="inline-block bg-aviso text-white px-4 py-2 rounded-lg text-sm font-medium">
+                    Ver orientações <i class="fa fa-arrow-right ml-1"></i>
+                </span>
+            </a>
+
+            <!-- Card: Sair -->
+            <button onclick="sairDaConta()" class="card-destaque bg-white rounded-2xl p-6 conteudo-sombra text-center cursor-pointer">
+                <div class="w-16 h-16 bg-erro/10 text-erro rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa fa-sign-out text-2xl"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-2">Sair da Conta</h4>
+                <p class="text-gray-600 text-sm mb-4">Encerrar a sessão e voltar para a página de cadastro</p>
+                <span class="inline-block bg-erro text-white px-4 py-2 rounded-lg text-sm font-medium">
+                    Sair <i class="fa fa-arrow-right ml-1"></i>
+                </span>
+            </button>
+        </div>
+
+        <!-- Seção de Destaques -->
+        <h3 class="text-[clamp(1.3rem,2vw,1.8rem)] font-bold text-center mb-8">Conteúdos em Destaque</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            <!-- Destaque 1 -->
+            <div class="bg-white rounded-2xl p-6 conteudo-sombra">
+                <h4 class="text-xl font-bold mb-3 flex items-center">
+                    <i class="fa fa-lightbulb-o text-primario mr-2"></i>
+                    Dicas de Estudo
+                </h4>
+                <p class="text-gray-600 mb-4">
+                    Aprenda técnicas para estudar melhor, memorizar conteúdos e se preparar para provas com facilidade.
+                </p>
+                <a href="#" class="text-primario font-medium flex items-center gap-2 hover:underline">
+                    Ver dicas <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Destaque 2 -->
+            <div class="bg-white rounded-2xl p-6 conteudo-sombra">
+                <h4 class="text-xl font-bold mb-3 flex items-center">
+                    <i class="fa fa-calendar text-primario mr-2"></i>
+                    Calendário de Estudos
+                </h4>
+                <p class="text-gray-600 mb-4">
+                    Organize seus horários e planeje quais matérias estudar cada dia para não perder nada.
+                </p>
+                <a href="#" class="text-primario font-medium flex items-center gap-2 hover:underline">
+                    Ver calendário <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-escuro text-white py-8 px-4 mt-16">
+        <div class="max-w-6xl mx-auto text-center">
+            <p class="mb-2">&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
+            <p class="text-gray-400 text-sm">Aprender é o caminho para o sucesso!</p>
+        </div>
+    </footer>
+
+    <script>
+        // Carrega os dados do usuário e verifica se está logado
+        window.onload = function() {
+            const dadosSalvos = localStorage.getItem('dadosCadastro');
+            
+            // Se não tiver cadastro, volta para a página inicial
+            if (!dadosSalvos) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Preenche o nome do usuário na mensagem de boas-vindas
+            const dados = JSON.parse(dadosSalvos);
+            document.getElementById('nomeUsuario').textContent = dados.nome;
+        }
+
+        // Função para sair da conta
+        function sairDaConta() {
+            if (confirm('Tem certeza que deseja sair da sua conta? Você precisará fazer o cadastro novamente para acessar o conteúdo.')) {
+                localStorage.removeItem('dadosCadastro');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
