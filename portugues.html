@@ -4,194 +4,278 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Português - Questões</title>
-    <!-- Caminho correto, pois está na mesma pasta -->
-    <link rel="stylesheet" href="estilo.css">
-    <style>
-        .botao-voltar {
-            display: inline-block;
-            background-color: #3498db;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            margin: 10px 0;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primario: '#165DFF',
+                        secundario: '#36BFFA',
+                        sucesso: '#00B42A',
+                        aviso: '#FF7D00',
+                        erro: '#F53F3F',
+                        claro: '#F7F8FA',
+                        escuro: '#1D2129',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
         }
-        .botao-voltar:hover {
-            background-color: #2980b9;
-        }
-        .caixa-questao {
-            background-color: #f9f9f9;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-        .botao-resposta {
-            background-color: #2ecc71;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-            font-size: 15px;
-        }
-        .botao-resposta:hover {
-            background-color: #27ae60;
-        }
-        .resposta-correta {
-            font-weight: bold;
-            margin-top: 8px;
-            font-size: 15px;
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .conteudo-sombra {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            }
+            .botao-efeito {
+                transition: all 0.3s ease;
+            }
+            .botao-efeito:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
+            }
+            .questao-card {
+                transition: all 0.2s ease;
+            }
+            .questao-card:hover {
+                transform: translateX(3px);
+            }
         }
     </style>
 </head>
-<body>
-    <header>
-        <h1>Português</h1>
-        <p>Marque a alternativa correta e verifique sua resposta</p>
+<body class="bg-claro min-h-screen font-sans text-escuro">
+    <!-- Cabeçalho -->
+    <header class="bg-primario text-white py-6 px-4">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <i class="fa fa-book text-3xl"></i>
+                <h1 class="text-2xl font-bold">Português</h1>
+            </div>
+            <p class="text-secundario/90 text-lg">Gramática, interpretação de textos e regras da língua</p>
+        </div>
     </header>
 
-    <nav>
-        <!-- Botão de voltar para a página de matérias -->
-        <button class="botao-voltar" onclick="voltarPagina()">⬅ Voltar para Matérias</button>
-    </nav>
+    <!-- Conteúdo Principal -->
+    <main class="max-w-4xl mx-auto py-10 px-4">
+        <!-- Botão de Voltar -->
+        <div class="mb-8">
+            <button onclick="voltarPagina()" class="bg-escuro text-white px-5 py-3 rounded-xl botao-efeito font-medium">
+                <i class="fa fa-arrow-left mr-2"></i> Voltar para as Matérias
+            </button>
+        </div>
 
-    <main>
-        <section class="questoes">
-            <h2>Questões de Múltipla Escolha</h2>
+        <!-- Título da Seção -->
+        <div class="text-center mb-10">
+            <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold mb-3">Questões de Português</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Teste seus conhecimentos com exercícios sobre interpretação de textos, gramática e regras da língua portuguesa.
+            </p>
+        </div>
 
+        <!-- Lista de Questões -->
+        <div class="space-y-6">
             <!-- Questão 1 -->
-            <div class="caixa-questao">
-                <p><strong>1. O que é interpretação de textos?</strong></p>
-                <label><input type="radio" name="q1" value="a"> A) Copiar o texto para a folha</label><br>
-                <label><input type="radio" name="q1" value="b"> B) Entender o que o texto quer dizer</label><br>
-                <label><input type="radio" name="q1" value="c"> C) Decorar as palavras do texto</label><br>
-                <label><input type="radio" name="q1" value="d"> D) Imprimir o texto</label><br>
-                
-                <button class="botao-resposta" onclick="verificarResposta('q1', 'b')">Verificar Resposta</button>
-                <p class="resposta-correta" id="resposta-q1"></p>
+            <div class="questao-card bg-white rounded-2xl p-6 conteudo-sombra">
+                <h3 class="text-lg font-bold mb-4 flex items-center">
+                    <span class="w-8 h-8 bg-primario text-white rounded-full flex items-center justify-center text-sm mr-3">1</span>
+                    O que é interpretação de textos?
+                </h3>
+                <div class="space-y-2 mb-5">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q1" value="a" class="mt-1 w-4 h-4 text-primario">
+                        <span>A) Copiar o texto para a folha</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q1" value="b" class="mt-1 w-4 h-4 text-primario">
+                        <span>B) Entender o que o texto quer dizer</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q1" value="c" class="mt-1 w-4 h-4 text-primario">
+                        <span>C) Decorar as palavras do texto</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q1" value="d" class="mt-1 w-4 h-4 text-primario">
+                        <span>D) Imprimir o texto</span>
+                    </label>
+                </div>
+                <button class="bg-primario text-white px-5 py-2 rounded-lg botao-efeito font-medium" onclick="verificarResposta('q1', 'b')">
+                    Verificar Resposta
+                </button>
+                <p class="resposta-correta mt-4 text-base font-medium"></p>
             </div>
 
             <!-- Questão 2 -->
-            <div class="caixa-questao">
-                <p><strong>2. Qual desses é um tipo de texto?</strong></p>
-                <label><input type="radio" name="q2" value="a"> A) Colorido</label><br>
-                <label><input type="radio" name="q2" value="b"> B) Narrativo</label><br>
-                <label><input type="radio" name="q2" value="c"> C) Rápido</label><br>
-                <label><input type="radio" name="q2" value="d"> D) Alto</label><br>
-                
-                <button class="botao-resposta" onclick="verificarResposta('q2', 'b')">Verificar Resposta</button>
-                <p class="resposta-correta" id="resposta-q2"></p>
+            <div class="questao-card bg-white rounded-2xl p-6 conteudo-sombra">
+                <h3 class="text-lg font-bold mb-4 flex items-center">
+                    <span class="w-8 h-8 bg-primario text-white rounded-full flex items-center justify-center text-sm mr-3">2</span>
+                    Qual desses é um tipo de texto?
+                </h3>
+                <div class="space-y-2 mb-5">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q2" value="a" class="mt-1 w-4 h-4 text-primario">
+                        <span>A) Colorido</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q2" value="b" class="mt-1 w-4 h-4 text-primario">
+                        <span>B) Narrativo</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q2" value="c" class="mt-1 w-4 h-4 text-primario">
+                        <span>C) Rápido</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q2" value="d" class="mt-1 w-4 h-4 text-primario">
+                        <span>D) Alto</span>
+                    </label>
+                </div>
+                <button class="bg-primario text-white px-5 py-2 rounded-lg botao-efeito font-medium" onclick="verificarResposta('q2', 'b')">
+                    Verificar Resposta
+                </button>
+                <p class="resposta-correta mt-4 text-base font-medium"></p>
             </div>
 
             <!-- Questão 3 -->
-            <div class="caixa-questao">
-                <p><strong>3. Um texto que conta uma história tem qual nome?</strong></p>
-                <label><input type="radio" name="q3" value="a"> A) Descritivo</label><br>
-                <label><input type="radio" name="q3" value="b"> B) Narrativo</label><br>
-                <label><input type="radio" name="q3" value="c"> C) Informativo</label><br>
-                <label><input type="radio" name="q3" value="d"> D) Dissertativo</label><br>
-                
-                <button class="botao-resposta" onclick="verificarResposta('q3', 'b')">Verificar Resposta</button>
-                <p class="resposta-correta" id="resposta-q3"></p>
+            <div class="questao-card bg-white rounded-2xl p-6 conteudo-sombra">
+                <h3 class="text-lg font-bold mb-4 flex items-center">
+                    <span class="w-8 h-8 bg-primario text-white rounded-full flex items-center justify-center text-sm mr-3">3</span>
+                    Um texto que conta uma história tem qual nome?
+                </h3>
+                <div class="space-y-2 mb-5">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q3" value="a" class="mt-1 w-4 h-4 text-primario">
+                        <span>A) Descritivo</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q3" value="b" class="mt-1 w-4 h-4 text-primario">
+                        <span>B) Narrativo</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q3" value="c" class="mt-1 w-4 h-4 text-primario">
+                        <span>C) Informativo</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q3" value="d" class="mt-1 w-4 h-4 text-primario">
+                        <span>D) Dissertativo</span>
+                    </label>
+                </div>
+                <button class="bg-primario text-white px-5 py-2 rounded-lg botao-efeito font-medium" onclick="verificarResposta('q3', 'b')">
+                    Verificar Resposta
+                </button>
+                <p class="resposta-correta mt-4 text-base font-medium"></p>
             </div>
 
             <!-- Questão 4 -->
-            <div class="caixa-questao">
-                <p><strong>4. Qual é o objetivo de um texto informativo?</strong></p>
-                <label><input type="radio" name="q4" value="a"> A) Dar informações e fatos</label><br>
-                <label><input type="radio" name="q4" value="b"> B) Contar uma história</label><br>
-                <label><input type="radio" name="q4" value="c"> C) Mostrar opiniões</label><br>
-                <label><input type="radio" name="q4" value="d"> D) Descrever algo</label><br>
-                
-                <button class="botao-resposta" onclick="verificarResposta('q4', 'a')">Verificar Resposta</button>
-                <p class="resposta-correta" id="resposta-q4"></p>
+            <div class="questao-card bg-white rounded-2xl p-6 conteudo-sombra">
+                <h3 class="text-lg font-bold mb-4 flex items-center">
+                    <span class="w-8 h-8 bg-primario text-white rounded-full flex items-center justify-center text-sm mr-3">4</span>
+                    Qual é o objetivo de um texto informativo?
+                </h3>
+                <div class="space-y-2 mb-5">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q4" value="a" class="mt-1 w-4 h-4 text-primario">
+                        <span>A) Dar informações e fatos</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q4" value="b" class="mt-1 w-4 h-4 text-primario">
+                        <span>B) Contar uma história</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q4" value="c" class="mt-1 w-4 h-4 text-primario">
+                        <span>C) Mostrar opiniões</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q4" value="d" class="mt-1 w-4 h-4 text-primario">
+                        <span>D) Descrever algo</span>
+                    </label>
+                </div>
+                <button class="bg-primario text-white px-5 py-2 rounded-lg botao-efeito font-medium" onclick="verificarResposta('q4', 'a')">
+                    Verificar Resposta
+                </button>
+                <p class="resposta-correta mt-4 text-base font-medium"></p>
             </div>
 
             <!-- Questão 5 -->
-            <div class="caixa-questao">
-                <p><strong>5. Qual característica tem um texto descritivo?</strong></p>
-                <label><input type="radio" name="q5" value="a"> A) Contar uma aventura</label><br>
-                <label><input type="radio" name="q5" value="b"> B) Mostrar como fazer algo</label><br>
-                <label><input type="radio" name="q5" value="c"> C) Descrever pessoas, lugares ou objetos</label><br>
-                <label><input type="radio" name="q5" value="d"> D) Apresentar notícias</label><br>
-                
-                <button class="botao-resposta" onclick="verificarResposta('q5', 'c')">Verificar Resposta</button>
-                <p class="resposta-correta" id="resposta-q5"></p>
+            <div class="questao-card bg-white rounded-2xl p-6 conteudo-sombra">
+                <h3 class="text-lg font-bold mb-4 flex items-center">
+                    <span class="w-8 h-8 bg-primario text-white rounded-full flex items-center justify-center text-sm mr-3">5</span>
+                    Qual característica tem um texto descritivo?
+                </h3>
+                <div class="space-y-2 mb-5">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q5" value="a" class="mt-1 w-4 h-4 text-primario">
+                        <span>A) Contar uma aventura</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q5" value="b" class="mt-1 w-4 h-4 text-primario">
+                        <span>B) Mostrar como fazer algo</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q5" value="c" class="mt-1 w-4 h-4 text-primario">
+                        <span>C) Descrever pessoas, lugares ou objetos</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q5" value="d" class="mt-1 w-4 h-4 text-primario">
+                        <span>D) Apresentar notícias</span>
+                    </label>
+                </div>
+                <button class="bg-primario text-white px-5 py-2 rounded-lg botao-efeito font-medium" onclick="verificarResposta('q5', 'c')">
+                    Verificar Resposta
+                </button>
+                <p class="resposta-correta mt-4 text-base font-medium"></p>
             </div>
 
             <!-- Questão 6 -->
-            <div class="caixa-questao">
-                <p><strong>6. O que faz um texto dissertativo?</strong></p>
-                <label><input type="radio" name="q6" value="a"> A) Apenas entreter</label><br>
-                <label><input type="radio" name="q6" value="b"> B) Apresentar ideias e argumentos</label><br>
-                <label><input type="radio" name="q6" value="c"> C) Dar instruções</label><br>
-                <label><input type="radio" name="q6" value="d"> D) Mostrar fatos</label><br>
-                
-                <button class="botao-resposta" onclick="verificarResposta('q6', 'b')">Verificar Resposta</button>
-                <p class="resposta-correta" id="resposta-q6"></p>
+            <div class="questao-card bg-white rounded-2xl p-6 conteudo-sombra">
+                <h3 class="text-lg font-bold mb-4 flex items-center">
+                    <span class="w-8 h-8 bg-primario text-white rounded-full flex items-center justify-center text-sm mr-3">6</span>
+                    O que faz um texto dissertativo?
+                </h3>
+                <div class="space-y-2 mb-5">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q6" value="a" class="mt-1 w-4 h-4 text-primario">
+                        <span>A) Apenas entreter</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q6" value="b" class="mt-1 w-4 h-4 text-primario">
+                        <span>B) Apresentar ideias e argumentos</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q6" value="c" class="mt-1 w-4 h-4 text-primario">
+                        <span>C) Dar instruções</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q6" value="d" class="mt-1 w-4 h-4 text-primario">
+                        <span>D) Mostrar fatos</span>
+                    </label>
+                </div>
+                <button class="bg-primario text-white px-5 py-2 rounded-lg botao-efeito font-medium" onclick="verificarResposta('q6', 'b')">
+                    Verificar Resposta
+                </button>
+                <p class="resposta-correta mt-4 text-base font-medium"></p>
             </div>
 
             <!-- Questão 7 -->
-            <div class="caixa-questao">
-                <p><strong>7. Qual dessas frases é um exemplo de texto narrativo?</strong></p>
-                <label><input type="radio" name="q7" value="a"> A) "Hoje eu acordei cedo e fui ao parque."</label><br>
-                <label><input type="radio" name="q7" value="b"> B) "O sol é uma estrela muito grande."</label><br>
-                <label><input type="radio" name="q7" value="c"> C) "A festa foi muito animada e colorida."</label><br>
-                <label><input type="radio" name="q7" value="d"> D) "Você deve estudar todos os dias."</label><br>
-                
-                <button class="botao-resposta" onclick="verificarResposta('q7', 'a')">Verificar Resposta</button>
-                <p class="resposta-correta" id="resposta-q7"></p>
-            </div>
-
-            <!-- Questão 8 -->
-            <div class="caixa-questao">
-                <p><strong>8. Qual é a principal ideia de um texto?</strong></p>
-                <label><input type="radio" name="q8" value="a"> A) A palavra mais longa</label><br>
-                <label><input type="radio" name="q8" value="b"> B) O tema principal que o texto fala</label><br>
-                <label><input type="radio" name="q8" value="c"> C) O número de parágrafos</label><br>
-                <label><input type="radio" name="q8" value="d"> D) O tamanho da letra</label><br>
-                
-                <button class="botao-resposta" onclick="verificarResposta('q8', 'b')">Verificar Resposta</button>
-                <p class="resposta-correta" id="resposta-q8"></p>
-            </div>
-
-            <!-- Questão 9 -->
-            <div class="caixa-questao">
-                <p><strong>9. Qual dessas é uma característica de um texto informativo?</strong></p>
-                <label><input type="radio" name="q9" value="a"> A) Usar muitas opiniões</label><br>
-                <label><input type="radio" name="q9" value="b"> B) Ser claro e objetivo</label><br>
-                <label><input type="radio" name="q9" value="c"> C) Contar histórias de fantasia</label><br>
-                <label><input type="radio" name="q9" value="d"> D) Usar palavras difíceis</label><br>
-                
-                <button class="botao-resposta" onclick="verificarResposta('q9', 'b')">Verificar Resposta</button>
-                <p class="resposta-correta" id="resposta-q9"></p>
-            </div>
-
-            <!-- Questão 10 -->
-            <div class="caixa-questao">
-                <p><strong>10. Para que servem os detalhes em um texto?</strong></p>
-                <label><input type="radio" name="q10" value="a"> A) Para deixar o texto mais longo</label><br>
-                <label><input type="radio" name="q10" value="b"> B) Para ajudar a entender melhor o que é dito</label><br>
-                <label><input type="radio" name="q10" value="c"> C) Para confundir o leitor</label><br>
-                <label><input type="radio" name="q10" value="d"> D) Para usar mais papel</label><br>
-                
-                <button class="botao-resposta" onclick="verificarResposta('q10', 'b')">Verificar Resposta</button>
-                <p class="resposta-correta" id="resposta-q10"></p>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
-    </footer>
-
-    <!-- Caminho correto, pois está na mesma pasta -->
-    <script src="script.js"></script>
-</body>
-</html>
+            <div class="questao-card bg-white rounded-2xl p-6 conteudo-sombra">
+                <h3 class="text-lg font-bold mb-4 flex items-center">
+                    <span class="w-8 h-8 bg-primario text-white rounded-full flex items-center justify-center text-sm mr-3">7</span>
+                    Qual dessas frases é um exemplo de texto narrativo?
+                </h3>
+                <div class="space-y-2 mb-5">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q7" value="a" class="mt-1 w-4 h-4 text-primario">
+                        <span>A) "Hoje eu acordei cedo e fui ao parque."</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q7" value="b" class="mt-1 w-4 h-4 text-primario">
+                        <span>B) "O sol é uma estrela muito grande."</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q7" value="c" class="mt-1 w-4 h-4 text-primario">
+                        <span>C) "A festa foi muito animada e colorida."</span>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="radio" name="q7" value="d" class="
