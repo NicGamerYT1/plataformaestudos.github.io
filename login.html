@@ -64,6 +64,10 @@
             <div class="text-center mb-8">
                 <h2 class="text-[clamp(1.8rem,4vw,2.2rem)] font-bold mb-2">Entrar na Conta</h2>
                 <p class="text-gray-600">Digite seus dados para acessar sua conta</p>
+                <!-- Mensagem de erro -->
+                <div id="mensagemErro" class="mt-4 hidden bg-erro/10 text-erro p-3 rounded-lg text-center">
+                    E-mail ou senha incorretos! Ou você ainda não se cadastrou.
+                </div>
             </div>
 
             <!-- Formulário de Login -->
@@ -92,7 +96,7 @@
                     >
                 </div>
 
-                <!-- Botão de Login -->
+                <!-- Botão de Entrar -->
                 <button 
                     type="submit"
                     class="w-full bg-primario text-white py-3 px-4 rounded-lg font-medium botao-efeito hover:bg-primario/90"
@@ -103,8 +107,8 @@
 
             <!-- Link para cadastro -->
             <div class="text-center mt-6 pt-6 border-t border-gray-200">
-                <p class="text-gray-600">Não tem uma conta? 
-                    <a href="cadastro.html" class="text-primario font-medium hover:underline">Cadastre-se agora</a>
+                <p class="text-gray-600">Ainda não tem uma conta? 
+                    <a href="cadastro.html" class="text-primario font-medium hover:underline">Criar conta</a>
                 </p>
             </div>
         </div>
@@ -122,26 +126,27 @@
         document.getElementById('formLogin').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const emailDigitado = document.getElementById('email').value;
+            // Pegar os dados digitados
+            const emailDigitado = document.getElementById('email').value.toLowerCase();
             const senhaDigitada = document.getElementById('senha').value;
 
-            // Pegar os dados salvos
-            const usuarioSalvo = localStorage.getItem('usuarioLogado');
+            // Pegar todos os usuários cadastrados
+            const listaUsuarios = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
 
-            if (usuarioSalvo) {
-                const dadosUsuario = JSON.parse(usuarioSalvo);
+            // Procurar se existe um usuário com esse e-mail e senha
+            const usuarioEncontrado = listaUsuarios.find(function(usuario) {
+                return usuario.email === emailDigitado && usuario.senha === senhaDigitada;
+            });
 
-                // Verificar se os dados estão corretos
-                if (dadosUsuario.email === emailDigitado && dadosUsuario.senha === senhaDigitada) {
-                    dadosUsuario.logado = true;
-                    localStorage.setItem('usuarioLogado', JSON.stringify(dadosUsuario));
-                    window.location.href = 'inicio.html';
-                } else {
-                    alert('E-mail ou senha incorretos!');
-                }
+            // Verificar se o usuário foi encontrado
+            if (usuarioEncontrado) {
+                // Salvar o usuário como logado
+                localStorage.setItem('usuarioLogado', JSON.stringify(usuarioEncontrado));
+                // Redirecionar para a página inicial
+                window.location.href = 'inicio.html';
             } else {
-                alert('Nenhum usuário cadastrado. Faça o cadastro primeiro!');
-                window.location.href = 'cadastro.html';
+                // Mostrar mensagem de erro
+                document.getElementById('mensagemErro').classList.remove('hidden');
             }
         });
     </script>

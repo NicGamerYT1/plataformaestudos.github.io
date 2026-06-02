@@ -66,6 +66,15 @@
                 <p class="text-gray-600">Preencha todos os dados abaixo para começar a usar a plataforma</p>
             </div>
 
+            <!-- Aviso do Teste Grátis -->
+            <div class="bg-primario/10 p-4 rounded-lg mb-6">
+                <p class="text-primario font-medium flex items-center gap-2">
+                    <i class="fa fa-gift"></i>
+                    Você ganha 3 dias grátis para testar todos os recursos!
+                </p>
+                <p class="text-gray-600 text-sm mt-1">Após esse período, será necessário ativar a assinatura para continuar usando.</p>
+            </div>
+
             <!-- Formulário de Cadastro -->
             <form id="formCadastro" class="space-y-6">
                 <!-- Nome Completo -->
@@ -103,7 +112,7 @@
                     >
                 </div>
 
-                <!-- Telefone -->
+                <!-- Telefone para Contato -->
                 <div>
                     <label for="telefone" class="block text-gray-700 font-medium mb-2">Telefone para Contato</label>
                     <input 
@@ -230,20 +239,40 @@
                 document.getElementById('erroSenha').classList.add('hidden');
             }
 
-            // Pegar os dados do formulário
+            // Dados para o teste gratuito de 3 dias
+            const dataAtual = new Date();
+            const dataFimTeste = new Date(dataAtual.getTime() + 3 * 24 * 60 * 60 * 1000);
+
+            // Pegar todos os dados do formulário
             const dadosUsuario = {
                 nome: document.getElementById('nome').value,
                 nascimento: document.getElementById('nascimento').value,
-                email: document.getElementById('email').value,
+                email: document.getElementById('email').value.toLowerCase(), // Converter para minúsculo para não ter erro
                 telefone: document.getElementById('telefone').value,
                 serie: document.getElementById('serie').value,
                 escola: document.getElementById('escola').value,
                 senha: senha,
                 tipo: document.querySelector('input[name="tipoUsuario"]:checked').value,
-                logado: true
+                logado: true,
+                statusAssinatura: 'teste',
+                dataInicioTeste: dataAtual.toISOString(),
+                dataFimTeste: dataFimTeste.toISOString(),
+                dataAssinatura: null,
+                planoAssinatura: null,
+                valorAssinatura: null
             };
 
-            // Salvar os dados no navegador
+            // 👇 Correção: Salvar corretamente no armazenamento
+            // Primeiro pegamos todos os usuários já cadastrados, se existirem
+            let todosUsuarios = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+            
+            // Adicionamos o novo usuário na lista
+            todosUsuarios.push(dadosUsuario);
+            
+            // Salvamos a lista atualizada
+            localStorage.setItem('listaUsuarios', JSON.stringify(todosUsuarios));
+
+            // Salvar também o usuário atual para login
             localStorage.setItem('usuarioLogado', JSON.stringify(dadosUsuario));
 
             // Redirecionar para a página inicial
