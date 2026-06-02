@@ -63,7 +63,7 @@
         <div class="bg-white rounded-2xl p-8 conteudo-sombra">
             <div class="text-center mb-8">
                 <h2 class="text-[clamp(1.8rem,4vw,2.2rem)] font-bold mb-2">Criar Nova Conta</h2>
-                <p class="text-gray-600">Preencha os dados abaixo para começar a estudar</p>
+                <p class="text-gray-600">Preencha todos os dados abaixo para começar a usar a plataforma</p>
             </div>
 
             <!-- Formulário de Cadastro -->
@@ -80,6 +80,17 @@
                     >
                 </div>
 
+                <!-- Data de Nascimento -->
+                <div>
+                    <label for="nascimento" class="block text-gray-700 font-medium mb-2">Data de Nascimento</label>
+                    <input 
+                        type="date" 
+                        id="nascimento" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
+                        required
+                    >
+                </div>
+
                 <!-- E-mail -->
                 <div>
                     <label for="email" class="block text-gray-700 font-medium mb-2">E-mail</label>
@@ -88,6 +99,50 @@
                         id="email" 
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
                         placeholder="seuemail@exemplo.com"
+                        required
+                    >
+                </div>
+
+                <!-- Telefone -->
+                <div>
+                    <label for="telefone" class="block text-gray-700 font-medium mb-2">Telefone para Contato</label>
+                    <input 
+                        type="tel" 
+                        id="telefone" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
+                        placeholder="(00) 00000-0000"
+                        required
+                    >
+                </div>
+
+                <!-- Série / Ano -->
+                <div>
+                    <label for="serie" class="block text-gray-700 font-medium mb-2">Série / Ano que estuda</label>
+                    <select 
+                        id="serie" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
+                        required
+                    >
+                        <option value="">Selecione a série</option>
+                        <option value="5ano">5º Ano do Ensino Fundamental</option>
+                        <option value="6ano">6º Ano do Ensino Fundamental</option>
+                        <option value="7ano">7º Ano do Ensino Fundamental</option>
+                        <option value="8ano">8º Ano do Ensino Fundamental</option>
+                        <option value="9ano">9º Ano do Ensino Fundamental</option>
+                        <option value="1medio">1º Ano do Ensino Médio</option>
+                        <option value="2medio">2º Ano do Ensino Médio</option>
+                        <option value="3medio">3º Ano do Ensino Médio</option>
+                    </select>
+                </div>
+
+                <!-- Escola -->
+                <div>
+                    <label for="escola" class="block text-gray-700 font-medium mb-2">Nome da Escola</label>
+                    <input 
+                        type="text" 
+                        id="escola" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
+                        placeholder="Digite o nome da sua escola"
                         required
                     >
                 </div>
@@ -103,6 +158,20 @@
                         minlength="6"
                         required
                     >
+                </div>
+
+                <!-- Confirmar Senha -->
+                <div>
+                    <label for="confirmarSenha" class="block text-gray-700 font-medium mb-2">Confirmar Senha</label>
+                    <input 
+                        type="password" 
+                        id="confirmarSenha" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
+                        placeholder="Digite novamente sua senha"
+                        minlength="6"
+                        required
+                    >
+                    <p id="erroSenha" class="text-erro text-sm mt-1 hidden">As senhas não são iguais!</p>
                 </div>
 
                 <!-- Tipo de Usuário -->
@@ -150,11 +219,26 @@
         document.getElementById('formCadastro').addEventListener('submit', function(e) {
             e.preventDefault();
 
+            const senha = document.getElementById('senha').value;
+            const confirmarSenha = document.getElementById('confirmarSenha').value;
+
+            // Verifica se as senhas são iguais
+            if (senha !== confirmarSenha) {
+                document.getElementById('erroSenha').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('erroSenha').classList.add('hidden');
+            }
+
             // Pegar os dados do formulário
             const dadosUsuario = {
                 nome: document.getElementById('nome').value,
+                nascimento: document.getElementById('nascimento').value,
                 email: document.getElementById('email').value,
-                senha: document.getElementById('senha').value,
+                telefone: document.getElementById('telefone').value,
+                serie: document.getElementById('serie').value,
+                escola: document.getElementById('escola').value,
+                senha: senha,
                 tipo: document.querySelector('input[name="tipoUsuario"]:checked').value,
                 logado: true
             };
