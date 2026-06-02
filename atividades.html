@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividades e Exercícios - Plataforma de Estudos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primario: '#165DFF',
+                        secundario: '#36BFFA',
+                        sucesso: '#00B42A',
+                        aviso: '#FF7D00',
+                        erro: '#F53F3F',
+                        claro: '#F7F8FA',
+                        escuro: '#1D2129',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .conteudo-sombra {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            }
+            .botao-efeito {
+                transition: all 0.3s ease;
+            }
+            .botao-efeito:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
+            }
+            .aba-ativa {
+                background-color: #165DFF;
+                color: white;
+                font-weight: 600;
+            }
+            .exercicio {
+                transition: all 0.2s ease;
+            }
+            .exercicio:hover {
+                background-color: #f8fafc;
+            }
+        }
+    </style>
+</head>
+<body class="bg-claro min-h-screen font-sans text-escuro flex">
+    <!-- Cabeçalho -->
+    <header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-6 z-20">
+        <div class="flex items-center justify-between max-w-full">
+            <div class="flex items-center gap-3">
+                <i class="fa fa-graduation-cap text-2xl"></i>
+                <h1 class="text-xl font-bold">Plataforma de Estudos</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <span id="nomeUsuario" class="font-medium"></span>
+                <button onclick="sairDaConta()" class="bg-white text-primario px-3 py-1 rounded-lg text-sm font-medium botao-efeito">
+                    Sair
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Lateral -->
+    <aside class="fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-200 pt-6 z-10 overflow-y-auto">
+        <nav class="px-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="inicio.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-home w-5 text-center"></i>
+                        <span>Início</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="materias.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-book w-5 text-center"></i>
+                        <span>Matérias</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors aba-ativa">
+                        <i class="fa fa-tasks w-5 text-center"></i>
+                        <span>Atividades</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-bar-chart w-5 text-center"></i>
+                        <span>Meu Desempenho</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-credit-card w-5 text-center"></i>
+                        <span>Assinatura</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="perfil.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-user w-5 text-center"></i>
+                        <span>Perfil</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="pais.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-users w-5 text-center"></i>
+                        <span>Pais / Responsáveis</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="ml-64 mt-16 w-full p-6">
+        <!-- Cabeçalho da Página -->
+        <section class="mb-8">
+            <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-2">Atividades e Exercícios</h2>
+            <p class="text-gray-600">Pratique seus conhecimentos com exercícios organizados por matéria e série.</p>
+            
+            <!-- Aviso de Status da Conta -->
+            <div id="avisoStatus" class="mt-4 p-4 rounded-lg"></div>
+        </section>
+
+        <!-- Filtros -->
+        <section class="bg-white rounded-2xl p-6 mb-8 conteudo-sombra">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Selecione a Série</label>
+                    <select id="filtroSerie" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo" onchange="carregarExercicios()">
+                        <option value="">Todas as Séries</option>
+                        <option value="5ano">5º Ano - Fundamental</option>
+                        <option value="6ano">6º Ano - Fundamental</option>
+                        <option value="7ano">7º Ano - Fundamental</option>
+                        <option value="8ano">8º Ano - Fundamental</option>
+                        <option value="9ano">9º Ano - Fundamental</option>
+                        <option value="1medio">1º Ano - Médio</option>
+                        <option value="2medio">2º Ano - Médio</option>
+                        <option value="3medio">3º Ano - Médio</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Selecione a Matéria</label>
+                    <select id="filtroMateria" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo" onchange="carregarExercicios()">
+                        <option value="">Todas as Matérias</option>
+                        <option value="matematica">Matemática</option>
+                        <option value="portugues">Língua Portuguesa</option>
+                        <option value="ciencias">Ciências</option>
+                        <option value="historia">História</option>
+                        <option value="geografia">Geografia</option>
+                        <option value="ingles">Inglês</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lista de Exercícios -->
+        <section id="listaExercicios" class="space-y-6">
+            <!-- Os exercícios serão carregados aqui via JavaScript -->
+        </section>
+    </main>
+
+    <script>
+        // Dados dos exercícios organizados por matéria e série
+        const bancoExercicios = [
+            // 5º Ano
+            {
+                id: 1,
+                serie: '5ano',
+                materia: 'matematica',
+                titulo: 'Operações Básicas',
+                descricao: 'Adição, subtração, multiplicação e divisão com números inteiros.',
+                nivel: 'Fácil',
+                quantidade: 10
+            },
+            {
+                id: 2,
+                serie: '5ano',
+                materia: 'portugues',
+                titulo: 'Tipos de Texto',
+                descricao: 'Identificar características de textos narrativos, descritivos e dissertativos.',
+                nivel: 'Fácil',
+                quantidade: 8
+            },
+            {
+                id: 3,
+                serie: '5ano',
+                materia: 'ciencias',
+                titulo: 'Seres Vivos',
+                descricao: 'Diferenças entre seres vivos e elementos não vivos. Classificação dos seres vivos.',
+                nivel: 'Médio',
+                quantidade: 12
+            },
+            {
+                id: 4,
+                serie: '5ano',
+                materia: 'historia',
+                titulo: 'História Local',
+                descricao: 'Conhecendo a história da sua cidade e região.',
+                nivel: 'Médio',
+                quantidade: 9
+            },
+            {
+                id: 5,
+                serie: '5ano',
+                materia: 'geografia',
+                titulo: 'Meio Ambiente',
+                descricao: 'Recursos naturais e preservação do meio ambiente.',
+                nivel: 'Fácil',
+                quantidade: 10
+            },
+
+            // 6º Ano
+            {
+                id: 6,
+                serie: '6ano',
+                materia: 'matematica',
+                titulo: 'Números Decimais',
+                descricao: 'Operações com números decimais e resolução de problemas.',
+                nivel: 'Médio',
+                quantidade: 12
+            },
+            {
+                id: 7,
+                serie: '6ano',
+                materia: 'portugues',
+                titulo: 'Interpretação de Textos',
+                descricao: 'Compreensão e interpretação de textos diversos.',
+                nivel: 'Médio',
+                quantidade: 10
+            },
+            {
+                id: 8,
+                serie: '6ano',
+                materia: 'ciencias',
+                titulo: 'Corpo Humano',
+                descricao: 'Sistemas do corpo humano e suas funções.',
+                nivel: 'Médio',
+                quantidade: 14
+            },
+            {
+                id: 9,
+                serie: '6ano',
+                materia: 'historia',
+                titulo: 'Brasil Colônia',
+                descricao: 'Período colonial no Brasil e suas características.',
+                nivel: 'Difícil',
+                quantidade: 11
+            },
+            {
+                id: 10,
+                serie: '6ano',
+                materia: 'geografia',
+                titulo: 'Relevo e Clima',
+                descricao: 'Formações geográficas e tipos de clima.',
+                nivel: 'Médio',
+                quantidade: 10
+            },
+
+            // 7º Ano
+            {
+                id: 11,
+                serie: '7ano',
+                materia: 'matematica',
+                titulo: 'Proporções e Razões',
+                descricao: 'Conceitos de proporção, razão e regra de três simples.',
+                nivel: 'Médio',
+                quantidade: 12
+            },
+            {
+                id: 12,
+                serie: '7ano',
+                materia: 'portugues',
+                titulo: 'Gramática: Classes de Palavras',
+                descricao: 'Revisão e exercícios sobre as classes gramaticais.',
+                nivel: 'Médio',
+                quantidade: 15
+            },
+            {
+                id: 13,
+                serie: '7ano',
+                materia: 'ciencias',
+                titulo: 'Energia e Suas Formas',
+                descricao: 'Tipos de energia, transformação e usos no dia a dia.',
+                nivel: 'Médio',
+                quantidade: 13
+            },
+            {
+                id: 14,
+                serie: '7ano',
+                materia: 'historia',
+                titulo: 'Independência do Brasil',
+                descricao: 'Causas e consequências da independência do Brasil.',
+                nivel: 'Difícil',
+                quantidade: 11
+            },
+            {
+                id: 15,
+                serie: '7ano',
+                materia: 'geografia',
+                titulo: 'População Brasileira',
+                descricao: 'Características da população brasileira e distribuição espacial.',
+                nivel: 'Médio',
+                quantidade: 10
+            },
+
+            // 8º Ano
+            {
+                id: 16,
+                serie: '8ano',
+                materia: 'matematica',
+                titulo: 'Equações do 1º Grau',
+                descricao: 'Resolução de equações e problemas envolvendo equações.',
+                nivel: 'Difícil',
+                quantidade: 14
+            },
+            {
+                id: 17,
+                serie: '8ano',
+                materia: 'portugues',
+                titulo: 'Gêneros Textuais',
+                descricao: 'Diferentes tipos de gêneros textuais e suas características.',
+                nivel: 'Médio',
+                quantidade: 12
+            },
+            {
+                id: 18,
+                serie: '8ano',
+                materia: 'ciencias',
+                titulo: 'Ecologia e Meio Ambiente',
+                descricao: 'Ecossistemas, cadeias alimentares e preservação ambiental.',
+                nivel: 'Difícil',
+                quantidade: 13
+            },
+            {
+                id: 19,
+                serie: '8ano',
+                materia: 'historia',
+                titulo: 'Brasil Império',
+                descricao: 'Período do Império e acontecimentos importantes.',
+                nivel: 'Difícil',
+                quantidade: 12
+            },
+            {
+                id: 20,
+                serie: '8ano',
+                materia: 'geografia',
+                titulo: 'Urbanização',
+                descricao: 'Processo de urbanização e suas consequências.',
+                nivel: 'Médio',
+                quantidade: 10
+            },
+
+            // 9º Ano
+            {
+                id: 21,
+                serie: '9ano',
+                materia: 'matematica',
+                titulo: 'Geometria Plana',
+                descricao: 'Áreas, perímetros e propriedades das figuras geométricas.',
+                nivel: 'Difícil',
+                quantidade: 15
+            },
+            {
+                id: 22,
+                serie: '9ano',
+                materia: 'portugues',
+                titulo: 'Literatura Brasileira',
+                descricao: 'Conhecimento sobre períodos e autores da literatura brasileira.',
+                nivel: 'Difícil',
+                quantidade: 12
+            },
+            {
+                id: 23,
+                serie: '9ano',
+                materia: 'ciencias',
+                titulo: 'Química Básica',
+                descricao: 'Elementos químicos, tabela periódica e propriedades da matéria.',
+                nivel: 'Difícil',
+                quantidade: 14
+            },
+            {
+                id: 24,
+                serie: '9ano',
+                materia: 'historia',
+                titulo: 'Brasil República',
+                descricao: 'Início da república e transformações sociais e políticas.',

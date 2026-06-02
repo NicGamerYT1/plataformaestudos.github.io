@@ -39,58 +39,82 @@
                 box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
             }
             .aba-ativa {
-                border-bottom: 3px solid #165DFF;
-                color: #165DFF;
+                background-color: #165DFF;
+                color: white;
                 font-weight: 600;
             }
         }
     </style>
 </head>
-<body class="bg-claro min-h-screen font-sans text-escuro">
-    <!-- Cabeçalho -->
-    <header class="bg-primario text-white py-6 px-4">
-        <div class="max-w-6xl mx-auto flex items-center justify-between">
+<body class="bg-claro min-h-screen font-sans text-escuro flex">
+    <!-- Cabeçalho (apenas nome do usuário e sair) -->
+    <header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-6 z-20">
+        <div class="flex items-center justify-between max-w-full">
             <div class="flex items-center gap-3">
-                <i class="fa fa-graduation-cap text-3xl"></i>
-                <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
+                <i class="fa fa-graduation-cap text-2xl"></i>
+                <h1 class="text-xl font-bold">Plataforma de Estudos</h1>
             </div>
             <div class="flex items-center gap-4">
                 <span id="nomeUsuario" class="font-medium"></span>
-                <button onclick="sairDaConta()" class="bg-white text-primario px-4 py-2 rounded-lg font-medium botao-efeito">
+                <button onclick="sairDaConta()" class="bg-white text-primario px-3 py-1 rounded-lg text-sm font-medium botao-efeito">
                     Sair
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Menu de Navegação -->
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-wrap">
-                <a href="inicio.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all aba-ativa">
-                    <i class="fa fa-home"></i> Início
-                </a>
-                <a href="materias.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
-                    <i class="fa fa-book"></i> Matérias
-                </a>
-                <a href="desempenho.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
-                    <i class="fa fa-bar-chart"></i> Meu Desempenho
-                </a>
-                <a href="assinatura.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
-                    <i class="fa fa-credit-card"></i> Assinatura
-                </a>
-                <a href="perfil.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
-                    <i class="fa fa-user"></i> Perfil
-                </a>
-                <a href="pais.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
-                    <i class="fa fa-users"></i> Pais / Responsáveis
-                </a>
-            </div>
-        </div>
-    </nav>
+    <!-- MENU LATERAL (ao lado do site) -->
+    <aside class="fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-200 pt-6 z-10 overflow-y-auto">
+        <nav class="px-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="inicio.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors aba-ativa">
+                        <i class="fa fa-home w-5 text-center"></i>
+                        <span>Início</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="materias.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-book w-5 text-center"></i>
+                        <span>Matérias</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-tasks w-5 text-center"></i>
+                        <span>Atividades</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-bar-chart w-5 text-center"></i>
+                        <span>Meu Desempenho</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-credit-card w-5 text-center"></i>
+                        <span>Assinatura</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="perfil.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-user w-5 text-center"></i>
+                        <span>Perfil</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="pais.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-users w-5 text-center"></i>
+                        <span>Pais / Responsáveis</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
 
-    <!-- Conteúdo Principal -->
-    <main class="max-w-6xl mx-auto py-10 px-4">
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="ml-64 mt-16 w-full p-6">
         <!-- Boas Vindas -->
         <section class="bg-white rounded-2xl p-8 mb-10 conteudo-sombra">
             <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-3">Olá, <span id="nomeBoasVindas"></span>!</h2>
@@ -111,9 +135,9 @@
                     <p class="text-2xl font-bold text-sucesso">12</p>
                 </div>
                 <div class="bg-secundario/10 p-6 rounded-xl">
-                    <i class="fa fa-check-square-o text-3xl text-secundario mb-3"></i>
-                    <h3 class="font-bold text-lg mb-1">Atividades</h3>
-                    <p class="text-2xl font-bold text-secundario">45</p>
+                    <i class="fa fa-tasks text-3xl text-secundario mb-3"></i>
+                    <h3 class="font-bold text-lg mb-1">Exercícios</h3>
+                    <p class="text-2xl font-bold text-secundario">150+</p>
                 </div>
             </div>
         </section>
@@ -183,39 +207,8 @@
         </section>
     </main>
 
-    <!-- Rodapé -->
-    <footer class="bg-escuro text-white py-10 px-4 mt-16">
-        <div class="max-w-6xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                <div>
-                    <h4 class="text-xl font-bold mb-4 flex items-center gap-2">
-                        <i class="fa fa-graduation-cap"></i> Plataforma de Estudos
-                    </h4>
-                    <p class="text-gray-300">Sua melhor opção para aprender e se preparar para o futuro.</p>
-                </div>
-                <div>
-                    <h4 class="text-lg font-bold mb-4">Links Rápidos</h4>
-                    <ul class="space-y-2 text-gray-300">
-                        <li><a href="inicio.html" class="hover:text-white transition-colors">Início</a></li>
-                        <li><a href="materias.html" class="hover:text-white transition-colors">Matérias</a></li>
-                        <li><a href="assinatura.html" class="hover:text-white transition-colors">Assinatura</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-bold mb-4">Contato</h4>
-                    <ul class="space-y-2 text-gray-300">
-                        <li class="flex items-center gap-2"><i class="fa fa-envelope"></i> contato@plataformaestudos.com.br</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-gray-600 pt-6 text-center text-gray-400">
-                <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        // BLOQUEIO DE ACESSO SE O TESTE ACABOU E SISTEMA DE VERIFICAÇÃO
+        // Sistema de verificação de acesso
         function verificarAcesso() {
             const usuarioSalvo = localStorage.getItem('usuarioLogado');
             if (!usuarioSalvo) {
@@ -236,21 +229,18 @@
             const diasRestantesElement = document.getElementById('diasRestantes');
 
             if (dadosUsuario.statusAssinatura === 'ativa') {
-                // Assinatura ativa
                 avisoStatus.className = 'p-4 rounded-lg mb-6 bg-sucesso/10 text-sucesso border border-sucesso/20';
                 avisoStatus.innerHTML = `<i class="fa fa-check-circle mr-2"></i> Sua assinatura está ativa! Acesso liberado a todo o conteúdo da plataforma.`;
                 diasRestantesElement.textContent = 'Ilimitado';
                 diasRestantesElement.className = 'text-2xl font-bold text-sucesso';
 
             } else if (dataAtual < dataFimTeste) {
-                // No período de teste
                 const diasRestantes = Math.ceil((dataFimTeste - dataAtual) / (1000 * 60 * 60 * 24));
                 avisoStatus.className = 'p-4 rounded-lg mb-6 bg-primario/10 text-primario border border-primario/20';
                 avisoStatus.innerHTML = `<i class="fa fa-gift mr-2"></i> Você está no período de teste! Faltam <strong>${diasRestantes} dias</strong> para acabar.`;
                 diasRestantesElement.textContent = diasRestantes;
 
             } else {
-                // Teste vencido
                 dadosUsuario.statusAssinatura = 'expirada';
                 localStorage.setItem('usuarioLogado', JSON.stringify(dadosUsuario));
                 
