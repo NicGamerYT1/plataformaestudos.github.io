@@ -38,12 +38,6 @@
                 transform: translateY(-2px);
                 box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
             }
-            .card-conteudo {
-                transition: all 0.2s ease;
-            }
-            .card-conteudo:hover {
-                transform: translateY(-3px);
-            }
             .aba-ativa {
                 border-bottom: 3px solid #165DFF;
                 color: #165DFF;
@@ -60,7 +54,7 @@
                 <i class="fa fa-graduation-cap text-3xl"></i>
                 <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
             </div>
-            <div id="areaUsuario" class="flex items-center gap-4">
+            <div class="flex items-center gap-4">
                 <span id="nomeUsuario" class="font-medium"></span>
                 <button onclick="sairDaConta()" class="bg-white text-primario px-4 py-2 rounded-lg font-medium botao-efeito">
                     Sair
@@ -73,7 +67,7 @@
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div class="max-w-6xl mx-auto">
             <div class="flex flex-wrap">
-                <a href="inicio.html" class="aba-ativa py-4 px-6 flex items-center gap-2">
+                <a href="inicio.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all aba-ativa">
                     <i class="fa fa-home"></i> Início
                 </a>
                 <a href="materias.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
@@ -81,6 +75,9 @@
                 </a>
                 <a href="desempenho.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
                     <i class="fa fa-bar-chart"></i> Meu Desempenho
+                </a>
+                <a href="assinatura.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-credit-card"></i> Assinatura
                 </a>
                 <a href="perfil.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
                     <i class="fa fa-user"></i> Perfil
@@ -94,172 +91,181 @@
 
     <!-- Conteúdo Principal -->
     <main class="max-w-6xl mx-auto py-10 px-4">
-        <!-- Seção de Boas-Vindas -->
-        <div class="bg-white rounded-2xl p-8 conteudo-sombra mb-10">
-            <div class="flex flex-col md:flex-row items-center gap-8">
-                <div class="w-24 h-24 bg-primario/10 text-primario rounded-full flex items-center justify-center">
-                    <i class="fa fa-graduation-cap text-5xl"></i>
+        <!-- Boas Vindas -->
+        <section class="bg-white rounded-2xl p-8 mb-10 conteudo-sombra">
+            <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-3">Olá, <span id="nomeBoasVindas"></span>!</h2>
+            <p class="text-gray-600 mb-4">Bem-vindo à sua plataforma de estudos. Aqui você encontra todo o material necessário para aprender e se destacar.</p>
+            
+            <!-- Aviso de Status da Conta -->
+            <div id="avisoStatus" class="p-4 rounded-lg mb-6"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                <div class="bg-primario/10 p-6 rounded-xl">
+                    <i class="fa fa-calendar text-3xl text-primario mb-3"></i>
+                    <h3 class="font-bold text-lg mb-1">Dias de Teste</h3>
+                    <p id="diasRestantes" class="text-2xl font-bold text-primario">0</p>
                 </div>
-                <div class="text-center md:text-left">
-                    <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-2">Bem-vindo, <span id="nomeBoasVindas"></span>!</h2>
-                    <p class="text-gray-600 text-lg">Aqui você encontra todos os materiais de estudo organizados por série para aprender de forma fácil e divertida.</p>
+                <div class="bg-sucesso/10 p-6 rounded-xl">
+                    <i class="fa fa-book text-3xl text-sucesso mb-3"></i>
+                    <h3 class="font-bold text-lg mb-1">Matérias Disponíveis</h3>
+                    <p class="text-2xl font-bold text-sucesso">12</p>
+                </div>
+                <div class="bg-secundario/10 p-6 rounded-xl">
+                    <i class="fa fa-check-square-o text-3xl text-secundario mb-3"></i>
+                    <h3 class="font-bold text-lg mb-1">Atividades</h3>
+                    <p class="text-2xl font-bold text-secundario">45</p>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Seção de Acesso Rápido -->
-        <h3 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-center mb-8">O que você quer estudar hoje?</h3>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <!-- Card Matérias -->
-            <div class="card-conteudo bg-white rounded-2xl p-6 conteudo-sombra text-center">
-                <div class="w-16 h-16 bg-primario/10 text-primario rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa fa-book text-3xl"></i>
+        <!-- Destaques -->
+        <section class="mb-12">
+            <h3 class="text-2xl font-bold mb-6">Conteúdos em Destaque</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white rounded-xl overflow-hidden conteudo-sombra botao-efeito">
+                    <img src="https://picsum.photos/id/20/600/300" alt="Matemática" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h4 class="font-bold text-xl mb-2">Matemática</h4>
+                        <p class="text-gray-600 mb-4">Estude números, equações, geometria e muito mais com materiais exclusivos.</p>
+                        <a href="materias.html#matematica" class="text-primario font-medium flex items-center gap-1 hover:underline">
+                            Acessar conteúdo <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-                <h4 class="text-xl font-bold mb-2">Matérias</h4>
-                <p class="text-gray-600 mb-4">Acesse todos os conteúdos organizados por série e disciplina.</p>
-                <a href="materias.html" class="inline-block bg-primario text-white px-4 py-2 rounded-lg font-medium botao-efeito">
-                    Ver Matérias
-                </a>
-            </div>
 
-            <!-- Card Desempenho -->
-            <div class="card-conteudo bg-white rounded-2xl p-6 conteudo-sombra text-center">
-                <div class="w-16 h-16 bg-secundario/10 text-secundario rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa fa-bar-chart text-3xl"></i>
+                <!-- Card 2 -->
+                <div class="bg-white rounded-xl overflow-hidden conteudo-sombra botao-efeito">
+                    <img src="https://picsum.photos/id/42/600/300" alt="Língua Portuguesa" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h4 class="font-bold text-xl mb-2">Língua Portuguesa</h4>
+                        <p class="text-gray-600 mb-4">Gramática, interpretação de textos, produção textual e redação.</p>
+                        <a href="materias.html#portugues" class="text-primario font-medium flex items-center gap-1 hover:underline">
+                            Acessar conteúdo <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-                <h4 class="text-xl font-bold mb-2">Meu Desempenho</h4>
-                <p class="text-gray-600 mb-4">Veja seu progresso, notas e como está seu aprendizado em cada matéria.</p>
-                <a href="desempenho.html" class="inline-block bg-secundario text-white px-4 py-2 rounded-lg font-medium botao-efeito">
-                    Acessar Desempenho
-                </a>
-            </div>
 
-            <!-- Card Perfil -->
-            <div class="card-conteudo bg-white rounded-2xl p-6 conteudo-sombra text-center">
-                <div class="w-16 h-16 bg-aviso/10 text-aviso rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa fa-user text-3xl"></i>
+                <!-- Card 3 -->
+                <div class="bg-white rounded-xl overflow-hidden conteudo-sombra botao-efeito">
+                    <img src="https://picsum.photos/id/60/600/300" alt="Ciências" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h4 class="font-bold text-xl mb-2">Ciências</h4>
+                        <p class="text-gray-600 mb-4">Biologia, química e física explicadas de forma simples e divertida.</p>
+                        <a href="materias.html#ciencias" class="text-primario font-medium flex items-center gap-1 hover:underline">
+                            Acessar conteúdo <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-                <h4 class="text-xl font-bold mb-2">Meu Perfil</h4>
-                <p class="text-gray-600 mb-4">Veja e edite seus dados pessoais e informações de cadastro.</p>
-                <a href="perfil.html" class="inline-block bg-aviso text-white px-4 py-2 rounded-lg font-medium botao-efeito">
-                    Acessar Perfil
-                </a>
             </div>
+        </section>
 
-            <!-- Card Pais / Responsáveis -->
-            <div class="card-conteudo bg-white rounded-2xl p-6 conteudo-sombra text-center">
-                <div class="w-16 h-16 bg-sucesso/10 text-sucesso rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa fa-users text-3xl"></i>
-                </div>
-                <h4 class="text-xl font-bold mb-2">Pais / Responsáveis</h4>
-                <p class="text-gray-600 mb-4">Acompanhe o desenvolvimento dos estudos e veja dicas importantes.</p>
-                <a href="pais.html" class="inline-block bg-sucesso text-white px-4 py-2 rounded-lg font-medium botao-efeito">
-                    Ver Informações
-                </a>
-            </div>
-        </div>
-
-        <!-- Seção de Conteúdos por Série -->
-        <h3 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-center mb-8">Conteúdos por Série</h3>
-        <p class="text-gray-600 text-center max-w-3xl mx-auto mb-10">
-            Escolha a série que você estuda para acessar todos os materiais disponíveis:
-        </p>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mb-12">
-            <!-- 5º Ano -->
-            <div class="card-conteudo bg-white rounded-xl p-5 conteudo-sombra text-center">
-                <h4 class="text-lg font-bold mb-2">5º Ano</h4>
-                <p class="text-gray-600 text-sm mb-4">Conteúdos básicos de português, matemática, ciências e história.</p>
-                <a href="materias.html" class="text-primario font-medium text-sm hover:underline">Acessar</a>
-            </div>
-
-            <!-- 6º Ano -->
-            <div class="card-conteudo bg-white rounded-xl p-5 conteudo-sombra text-center">
-                <h4 class="text-lg font-bold mb-2">6º Ano</h4>
-                <p class="text-gray-600 text-sm mb-4">Gramática, interpretação de textos, geometria e ciências naturais.</p>
-                <a href="materias.html" class="text-primario font-medium text-sm hover:underline">Acessar</a>
-            </div>
-
-            <!-- 7º Ano -->
-            <div class="card-conteudo bg-white rounded-xl p-5 conteudo-sombra text-center">
-                <h4 class="text-lg font-bold mb-2">7º Ano</h4>
-                <p class="text-gray-600 text-sm mb-4">Sintaxe, frações, proporções, história do Brasil e geografia.</p>
-                <a href="materias.html" class="text-primario font-medium text-sm hover:underline">Acessar</a>
-            </div>
-
-            <!-- 8º Ano -->
-            <div class="card-conteudo bg-white rounded-xl p-5 conteudo-sombra text-center">
-                <h4 class="text-lg font-bold mb-2">8º Ano</h4>
-                <p class="text-gray-600 text-sm mb-4">Análise de textos, equações, ciências da natureza e história geral.</p>
-                <a href="materias.html" class="text-primario font-medium text-sm hover:underline">Acessar</a>
-            </div>
-
-            <!-- 9º Ano -->
-            <div class="card-conteudo bg-white rounded-xl p-5 conteudo-sombra text-center">
-                <h4 class="text-lg font-bold mb-2">9º Ano</h4>
-                <p class="text-gray-600 text-sm mb-4">Preparação para o ensino médio, revisão geral e temas avançados.</p>
-                <a href="materias.html" class="text-primario font-medium text-sm hover:underline">Acessar</a>
-            </div>
-        </div>
-
-        <!-- Seção de Vantagens -->
-        <div class="bg-white rounded-2xl p-8 conteudo-sombra">
-            <h3 class="text-xl font-bold mb-6 text-center">Por que usar nossa plataforma?</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Como Funciona -->
+        <section class="bg-white rounded-2xl p-8 conteudo-sombra">
+            <h3 class="text-2xl font-bold mb-6 text-center">Como Funciona</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="text-center">
-                    <i class="fa fa-check-circle text-sucesso text-4xl mb-4"></i>
-                    <h4 class="text-lg font-bold mb-2">Conteúdos Organizados</h4>
-                    <p class="text-gray-600">Todos os materiais separados por série e disciplina para você estudar com facilidade.</p>
+                    <div class="w-16 h-16 bg-primario rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">1</div>
+                    <h4 class="font-bold text-lg mb-2">Cadastre-se</h4>
+                    <p class="text-gray-600">Crie sua conta e ganhe 3 dias grátis para testar todos os recursos da plataforma.</p>
                 </div>
                 <div class="text-center">
-                    <i class="fa fa-clock-o text-primario text-4xl mb-4"></i>
-                    <h4 class="text-lg font-bold mb-2">Estude Quando Quiser</h4>
-                    <p class="text-gray-600">Acesse os materiais a qualquer momento, de onde estiver, no seu ritmo.</p>
+                    <div class="w-16 h-16 bg-primario rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">2</div>
+                    <h4 class="font-bold text-lg mb-2">Estude</h4>
+                    <p class="text-gray-600">Acesse materiais, exercícios e aulas em vídeo no seu ritmo e horário.</p>
                 </div>
                 <div class="text-center">
-                    <i class="fa fa-book text-aviso text-4xl mb-4"></i>
-                    <h4 class="text-lg font-bold mb-2">Material de Qualidade</h4>
-                    <p class="text-gray-600">Conteúdos elaborados de acordo com o programa escolar oficial.</p>
+                    <div class="w-16 h-16 bg-primario rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">3</div>
+                    <h4 class="font-bold text-lg mb-2">Assine</h4>
+                    <p class="text-gray-600">Após o teste, escolha o plano que melhor se adapta a você e continue estudando.</p>
                 </div>
             </div>
-        </div>
+        </section>
     </main>
 
     <!-- Rodapé -->
-    <footer class="bg-escuro text-white py-6 px-4 mt-16">
-        <div class="max-w-6xl mx-auto text-center">
-            <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
+    <footer class="bg-escuro text-white py-10 px-4 mt-16">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <h4 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fa fa-graduation-cap"></i> Plataforma de Estudos
+                    </h4>
+                    <p class="text-gray-300">Sua melhor opção para aprender e se preparar para o futuro.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Links Rápidos</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="inicio.html" class="hover:text-white transition-colors">Início</a></li>
+                        <li><a href="materias.html" class="hover:text-white transition-colors">Matérias</a></li>
+                        <li><a href="assinatura.html" class="hover:text-white transition-colors">Assinatura</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Contato</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li class="flex items-center gap-2"><i class="fa fa-envelope"></i> contato@plataformaestudos.com.br</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-600 pt-6 text-center text-gray-400">
+                <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
+            </div>
         </div>
     </footer>
 
     <script>
-        // Verifica se o usuário está logado
-        function verificarLogin() {
+        // BLOQUEIO DE ACESSO SE O TESTE ACABOU E SISTEMA DE VERIFICAÇÃO
+        function verificarAcesso() {
             const usuarioSalvo = localStorage.getItem('usuarioLogado');
-            
             if (!usuarioSalvo) {
-                // Se não estiver logado, redireciona para a página de login
                 window.location.href = 'login.html';
                 return;
             }
 
-            // Pega os dados do usuário
             const dadosUsuario = JSON.parse(usuarioSalvo);
-
-            // Exibe o nome do usuário na página
+            
+            // Preencher dados na página
             document.getElementById('nomeUsuario').textContent = dadosUsuario.nome;
             document.getElementById('nomeBoasVindas').textContent = dadosUsuario.nome;
+
+            // Verificar status da conta
+            const dataAtual = new Date();
+            const dataFimTeste = new Date(dadosUsuario.dataFimTeste);
+            const avisoStatus = document.getElementById('avisoStatus');
+            const diasRestantesElement = document.getElementById('diasRestantes');
+
+            if (dadosUsuario.statusAssinatura === 'ativa') {
+                // Assinatura ativa
+                avisoStatus.className = 'p-4 rounded-lg mb-6 bg-sucesso/10 text-sucesso border border-sucesso/20';
+                avisoStatus.innerHTML = `<i class="fa fa-check-circle mr-2"></i> Sua assinatura está ativa! Acesso liberado a todo o conteúdo da plataforma.`;
+                diasRestantesElement.textContent = 'Ilimitado';
+                diasRestantesElement.className = 'text-2xl font-bold text-sucesso';
+
+            } else if (dataAtual < dataFimTeste) {
+                // No período de teste
+                const diasRestantes = Math.ceil((dataFimTeste - dataAtual) / (1000 * 60 * 60 * 24));
+                avisoStatus.className = 'p-4 rounded-lg mb-6 bg-primario/10 text-primario border border-primario/20';
+                avisoStatus.innerHTML = `<i class="fa fa-gift mr-2"></i> Você está no período de teste! Faltam <strong>${diasRestantes} dias</strong> para acabar.`;
+                diasRestantesElement.textContent = diasRestantes;
+
+            } else {
+                // Teste vencido
+                dadosUsuario.statusAssinatura = 'expirada';
+                localStorage.setItem('usuarioLogado', JSON.stringify(dadosUsuario));
+                
+                avisoStatus.className = 'p-4 rounded-lg mb-6 bg-erro/10 text-erro border border-erro/20';
+                avisoStatus.innerHTML = `<i class="fa fa-lock mr-2"></i> Seu período de teste gratuito acabou! <a href="assinatura.html" class="font-bold underline hover:text-erro/80">Clique aqui para assinar e continuar acessando.</a>`;
+                diasRestantesElement.textContent = '0';
+            }
         }
 
-        // Função para sair da conta
         function sairDaConta() {
             localStorage.removeItem('usuarioLogado');
             window.location.href = 'login.html';
         }
 
-        // Executa a verificação quando a página carregar
-        window.onload = verificarLogin;
+        window.onload = verificarAcesso;
     </script>
 </body>
 </html>

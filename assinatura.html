@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assinatura - Plataforma de Estudos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primario: '#165DFF',
+                        secundario: '#36BFFA',
+                        sucesso: '#00B42A',
+                        aviso: '#FF7D00',
+                        erro: '#F53F3F',
+                        claro: '#F7F8FA',
+                        escuro: '#1D2129',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .conteudo-sombra {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            }
+            .plano-destaque {
+                border: 2px solid #165DFF;
+                transform: scale(1.05);
+            }
+            .plano {
+                transition: all 0.3s ease;
+            }
+            .plano:hover {
+                transform: translateY(-5px);
+            }
+            .botao-efeito {
+                transition: all 0.3s ease;
+            }
+            .botao-efeito:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
+            }
+            .input-estilo {
+                transition: all 0.2s ease;
+            }
+            .input-estilo:focus {
+                border-color: #165DFF;
+                outline: none;
+                box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.2);
+            }
+        }
+    </style>
+</head>
+<body class="bg-claro min-h-screen font-sans text-escuro">
+    <!-- Cabeçalho -->
+    <header class="bg-primario text-white py-6 px-4">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <i class="fa fa-graduation-cap text-3xl"></i>
+                <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
+            </div>
+            <div id="areaUsuario" class="flex items-center gap-4">
+                <span id="nomeUsuario" class="font-medium"></span>
+                <button onclick="sairDaConta()" class="bg-white text-primario px-4 py-2 rounded-lg font-medium botao-efeito">
+                    Sair
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu de Navegação -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-wrap">
+                <a href="inicio.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-home"></i> Início
+                </a>
+                <a href="materias.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-book"></i> Matérias
+                </a>
+                <a href="desempenho.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-bar-chart"></i> Meu Desempenho
+                </a>
+                <a href="assinatura.html" class="aba-ativa py-4 px-6 flex items-center gap-2">
+                    <i class="fa fa-credit-card"></i> Assinatura
+                </a>
+                <a href="perfil.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-user"></i> Perfil
+                </a>
+                <a href="pais.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
+                    <i class="fa fa-users"></i> Pais / Responsáveis
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-6xl mx-auto py-10 px-4">
+        <!-- Aviso de Status da Conta -->
+        <div id="avisoStatus" class="mb-8 rounded-lg p-5 text-center"></div>
+
+        <!-- Título da página -->
+        <div class="text-center mb-12">
+            <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-3">Escolha seu plano</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Acesse todos os materiais, exercícios e recursos exclusivos. Teste grátis por 3 dias!</p>
+        </div>
+
+        <!-- Planos de Assinatura -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <!-- Plano Básico -->
+            <div class="plano bg-white rounded-2xl p-8 conteudo-sombra text-center">
+                <h3 class="text-xl font-bold mb-2">Plano Básico</h3>
+                <p class="text-gray-600 mb-6">Ideal para começar a estudar</p>
+                <div class="mb-6">
+                    <span class="text-4xl font-bold text-escuro">R$ 19,90</span>
+                    <span class="text-gray-500">/mês</span>
+                </div>
+                <ul class="text-left space-y-3 mb-8">
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-check text-sucesso"></i>
+                        <span>Acesso a todas as matérias</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-check text-sucesso"></i>
+                        <span>Exercícios e atividades</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-check text-sucesso"></i>
+                        <span>Material em PDF para baixar</span>
+                    </li>
+                    <li class="flex items-center gap-2 text-gray-400">
+                        <i class="fa fa-times"></i>
+                        <span>Aulas em vídeo</span>
+                    </li>
+                    <li class="flex items-center gap-2 text-gray-400">
+                        <i class="fa fa-times"></i>
+                        <span>Relatórios de desempenho</span>
+                    </li>
+                </ul>
+                <button onclick="selecionarPlano('basico', 19.90)" class="w-full py-3 px-4 rounded-lg font-medium botao-efeito border-2 border-primario text-primario hover:bg-primario hover:text-white">
+                    Escolher Plano
+                </button>
+            </div>
+
+            <!-- Plano Premium (Destaque) -->
+            <div class="plano plano-destaque bg-white rounded-2xl p-8 conteudo-sombra text-center relative">
+                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-sucesso text-white px-6 py-1 rounded-full text-sm font-medium">
+                    Mais Popular
+                </div>
+                <h3 class="text-xl font-bold mb-2">Plano Premium</h3>
+                <p class="text-gray-600 mb-6">Tudo o que você precisa para se destacar</p>
+                <div class="mb-6">
+                    <span class="text-4xl font-bold text-escuro">R$ 34,90</span>
+                    <span class="text-gray-500">/mês</span>
+                </div>
+                <ul class="text-left space-y-3 mb-8">
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-check text-sucesso"></i>
+                        <span>Tudo do Plano Básico</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-check text-sucesso"></i>
+                        <span>Aulas em vídeo</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-check text-sucesso"></i>
+                        <span>Relatórios de desempenho</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-check text-sucesso"></i>
+                        <span>Atendimento especializado</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-check text-sucesso"></i>
+                        <span>Conteúdos exclusivos</span>
+                    </li>
+                </ul>
+                <button onclick="selecionarPlano('premium', 34.90)" class="w-full py-3 px-4 rounded-lg font-medium botao-efeito bg-primario text-white hover:bg-primario/90">
+                    Escolher Plano
+                </button>
+            </div>
+
+            <!-- Plano Família -->
+            <div class="plano bg-white rounded-2xl p-8 conteudo-sombra text-center">
+                <h3 class="text-xl font-bold mb-2">Plano Família</h3>
+                <p class="text-gray-600 mb-6">Até 3 contas inclusas</p>
+                <div class="mb-6">
+                    <span class="text-4xl font-bold text-escuro">R$ 59,90</span>
+                    <span class="text-gray-500">/mês</span>
+                </div>
+                <ul class="text-left space-y-3 mb-8">
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-check text-sucesso"></i>
+                        <span>Tudo do Plano Premium</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-check text-sucesso"></i>
+                        <span>Até 3 contas de usuários</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-check text-sucesso"></i>
+                        <span>Acesso para responsáveis</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-check text-sucesso"></i>
+                        <span>Relatórios para pais</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i class="fa fa-check text-sucesso"></i>
+                        <span>Descontos em materiais</span>
+                    </li>
+                </ul>
+                <button onclick="selecionarPlano('familia', 59.90)" class="w-full py-3 px-4 rounded-lg font-medium botao-efeito border-2 border-secundario text-secundario hover:bg-secundario hover:text-white">
+                    Escolher Plano
+                </button>
+            </div>
+        </div>
+
+        <!-- Formulário de Pagamento -->
+        <div id="formularioPagamento" class="hidden max-w-2xl mx-auto bg-white rounded-2xl p-8 conteudo-sombra mb-16">
+            <h3 class="text-2xl font-bold text-center mb-6">Dados de Pagamento</h3>
+            <p class="text-center text-gray-600 mb-8">Plano selecionado: <span id="nomePlano" class="font-medium"></span> - Valor: R$ <span id="valorPlano"></span></p>
+
+            <form id="formPagamento" class="space-y-6">
+                <!-- Nome no Cartão -->
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Nome impresso no cartão</label>
+                    <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo" placeholder="Como aparece no cartão" required>
+                </div>
+
+                <!-- Número do Cartão -->
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Número do Cartão</label>
+                    <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Validade -->
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Validade (Mês/Ano)</label>
+                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo" placeholder="MM/AA" maxlength="5" required>
+                    </div>
+
+                    <!-- Código de Segurança -->
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Código CVV</label>
+                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo" placeholder="123" maxlength="3" required>
+                    </div>
+                </div>
+
+                <!-- Botão Finalizar -->
+                <button type="submit" class="w-full bg-sucesso text-white py-3 px-4 rounded-lg font-medium botao-efeito hover:bg-sucesso/90">
+                    Finalizar Assinatura
+                </button>
+            </form>
+        </div>
+
+        <!-- Mensagem de Confirmação -->
+        <div id="confirmacaoAssinatura" class="hidden max-w-2xl mx-auto bg-sucesso/10 border border-sucesso rounded-2xl p-8 text-center">
+            <i class="fa fa-check-circle text-sucesso text-5xl mb-4"></i>
+            <h3 class="text-2xl font-bold text-sucesso mb-2">Assinatura Ativada!</h3>
+            <p class="text-gray-600">Obrigado por assinar! Agora você tem acesso liberado a todo o conteúdo da plataforma.</p>
+            <a href="inicio.html" class="inline-block mt-6 bg-primario text-white px-6 py-2 rounded-lg botao-efeito">Voltar ao Início</a>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-escuro text-white py-6 px-4 mt-16">
+        <div class="max-w-6xl mx-auto text-center">
+            <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        let planoEscolhido = '';
+        let valorEscolhido = 0;
+
+        // Verificar login e status da assinatura
+        function verificarStatus() {
+            const usuarioSalvo = localStorage.getItem('usuarioLogado');
+            if (!usuarioSalvo) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const dadosUsuario = JSON.parse(usuarioSalvo);
+            document.getElementById('nomeUsuario').textContent = dadosUsuario.nome;
+
+            // Verificar se o teste já venceu
+            const dataAtual = new Date();
+            const dataFimTeste = new Date(dadosUsuario.dataFimTeste);
+
+            let aviso = document.getElementById('avisoStatus');
+
+            if (dadosUsuario.statusAssinatura === 'ativa') {
+                aviso.className = 'mb-8 rounded-lg p-5 text-center bg-sucesso/10 text-sucesso';
+                aviso.innerHTML = `<i class="fa fa-check-circle"></i> Sua assinatura está ativa! Acesso liberado a todo o conteúdo.`;
+            } else if (dataAtual < dataFimTeste) {
+                const diasRestantes = Math.ceil((dataFimTeste - dataAtual) / (1000 * 60 * 60 * 24));
+                aviso.className = 'mb-8 rounded-lg p-5 text-center bg-primario/10 text-primario';
+                aviso.innerHTML = `<i class="fa fa-gift"></i> Você está no período de teste! Faltam ${diasRestantes} dias para acabar.`;
+            } else {
+                // Teste vencido
+                dadosUsuario.statusAssinatura = 'expirada';
+                localStorage.setItem('usuarioLogado', JSON.stringify(dadosUsuario));
+                
+                aviso.className = 'mb-8 rounded-lg p-5 text-center bg-erro/10 text-erro';
+                aviso.innerHTML = `<i class="fa fa-lock"></i> <strong>Teste gratuito encerrado!</strong> Para continuar estudando, escolha um plano abaixo e ative sua assinatura.`;
+            }
+        }
+
+        function selecionarPlano(nome, valor) {
+            planoEscolhido = nome;
+            valorEscolhido = valor;
+            document.getElementById('nomePlano').textContent = nome.charAt(0).toUpperCase() + nome.slice(1);
+            document.getElementById('valorPlano').textContent = valor.toFixed(2);
+            document.getElementById('formularioPagamento').classList.remove('hidden');
+            window.scrollTo({top: document.getElementById('formularioPagamento').offsetTop, behavior: 'smooth'});
+        }
+
+        // Processar pagamento
+        document.getElementById('formPagamento').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Atualizar dados do usuário
+            const usuarioSalvo = JSON.parse(localStorage.getItem('usuarioLogado'));
+            usuarioSalvo.statusAssinatura = 'ativa';
+            usuarioSalvo.planoAssinatura = planoEscolhido;
+            usuarioSalvo.valorAssinatura = valorEscolhido;
+            usuarioSalvo.dataAssinatura = new Date().toISOString();
+
+            // Salvar alterações
+            localStorage.setItem('usuarioLogado', JSON.stringify(usuarioSalvo));
+
+            // Atualizar também na lista geral
+            let listaUsuarios = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+            let index = listaUsuarios.findIndex(u => u.email === usuarioSalvo.email);
+            if (index !== -1) listaUsuarios[index] = usuarioSalvo;
+            localStorage.setItem('listaUsuarios', JSON.stringify(listaUsuarios));
+
+            // Mostrar confirmação
+            document.getElementById('formularioPagamento').classList.add('hidden');
+            document.getElementById('confirmacaoAssinatura').classList.remove('hidden');
+        });
+
+        function sairDaConta() {
+            localStorage.removeItem('usuarioLogado');
+            window.location.href = 'login.html';
+        }
+
+        window.onload = verificarStatus;
+    </script>
+</body>
+</html>
