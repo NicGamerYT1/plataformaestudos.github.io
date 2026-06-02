@@ -38,11 +38,6 @@
                 transform: translateY(-2px);
                 box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
             }
-            .aba-ativa {
-                background-color: #165DFF;
-                color: white;
-                font-weight: 600;
-            }
             .menu-aberto {
                 transform: translateX(0);
             }
@@ -70,7 +65,7 @@
         </div>
     </header>
 
-    <!-- Menu Lateral -->
+    <!-- Menu Lateral - TODOS OS ITENS SÃO CLICÁVEIS -->
     <aside id="menuLateral" class="fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-200 pt-6 z-30 overflow-y-auto transition-transform duration-300 transform -translate-x-full md:translate-x-0">
         <nav class="px-4">
             <ul class="space-y-2">
@@ -105,7 +100,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="perfil.html" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors aba-ativa">
+                    <a href="perfil.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
                         <i class="fa fa-user w-5 text-center"></i>
                         <span>Perfil</span>
                     </a>
@@ -248,7 +243,7 @@
             fundo.classList.toggle('hidden');
         }
 
-        // Sistema de verificação de acesso corrigido e responsivo
+        // Sistema de verificação de acesso
         function verificarAcesso() {
             // Verifica se existem dados salvos
             const usuarioLogado = localStorage.getItem('usuarioLogado');
@@ -301,4 +296,8 @@
                 document.getElementById('campoSerie').textContent = nomesSeries[dadosUsuario.serie] || 'Não informado';
                 document.getElementById('campoTipo').textContent = dadosUsuario.tipo === 'aluno' ? 'Aluno' : 'Responsável';
 
-                // Trata o
+                // Trata o status da conta
+                const dataAtual = new Date();
+                const dataFimTeste = new Date(dadosUsuario.dataFimTeste);
+                
+                if (dadosUsuario.statusAssinatura)
