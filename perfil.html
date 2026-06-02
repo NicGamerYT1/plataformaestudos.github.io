@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Perfil - Plataforma de Estudos</title>
+    <title>Perfil - Plataforma de Estudos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script>
@@ -38,174 +38,267 @@
                 transform: translateY(-2px);
                 box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
             }
-            .item-dado {
-                transition: all 0.2s ease;
+            .aba-ativa {
+                background-color: #165DFF;
+                color: white;
+                font-weight: 600;
             }
-            .item-dado:hover {
-                background-color: rgba(22, 93, 255, 0.05);
+            .menu-aberto {
+                transform: translateX(0);
             }
         }
     </style>
 </head>
-<body class="bg-claro min-h-screen font-sans text-escuro">
+<body class="bg-claro min-h-screen font-sans text-escuro flex">
     <!-- Cabeçalho -->
-    <header class="bg-primario text-white py-6 px-4">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20">
+        <div class="flex items-center justify-between max-w-full">
             <div class="flex items-center gap-3">
-                <i class="fa fa-graduation-cap text-3xl"></i>
-                <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
+                <!-- Botão de menu para celular -->
+                <button id="botaoMenu" class="md:hidden text-white text-xl" onclick="toggleMenu()">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <i class="fa fa-graduation-cap text-2xl"></i>
+                <h1 class="text-lg md:text-xl font-bold">Plataforma de Estudos</h1>
             </div>
-            <p class="text-secundario/90 text-lg">Meu Perfil</p>
+            <div class="flex items-center gap-3">
+                <span id="nomeUsuario" class="font-medium text-sm md:text-base"></span>
+                <button onclick="sairDaConta()" class="bg-white text-primario px-2 py-1 rounded-lg text-xs md:text-sm font-medium botao-efeito">
+                    Sair
+                </button>
+            </div>
         </div>
     </header>
 
-    <!-- Navegação -->
-    <nav class="bg-white border-b border-gray-200 py-4 px-4">
-        <div class="max-w-6xl mx-auto flex flex-wrap gap-2">
-            <a href="materias.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-700 hover:bg-primario/10 hover:text-primario font-medium transition-all">
-                <i class="fa fa-book"></i> Matérias
-            </a>
-            <a href="perfil.html" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primario text-white font-medium">
-                <i class="fa fa-user"></i> Meu Perfil
-            </a>
-            <button onclick="voltarParaMatérias()" class="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg bg-escuro text-white botao-efeito font-medium">
-                <i class="fa fa-arrow-left"></i> Voltar
-            </button>
-        </div>
-    </nav>
+    <!-- Menu Lateral -->
+    <aside id="menuLateral" class="fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-200 pt-6 z-30 overflow-y-auto transition-transform duration-300 transform -translate-x-full md:translate-x-0">
+        <nav class="px-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="inicio.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-home w-5 text-center"></i>
+                        <span>Início</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="materias.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-book w-5 text-center"></i>
+                        <span>Matérias</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-tasks w-5 text-center"></i>
+                        <span>Atividades</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-bar-chart w-5 text-center"></i>
+                        <span>Meu Desempenho</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-credit-card w-5 text-center"></i>
+                        <span>Assinatura</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="perfil.html" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors aba-ativa">
+                        <i class="fa fa-user w-5 text-center"></i>
+                        <span>Perfil</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="pais.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-users w-5 text-center"></i>
+                        <span>Pais / Responsáveis</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Fundo escuro quando o menu estiver aberto no celular -->
+    <div id="fundoMenu" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden" onclick="toggleMenu()"></div>
 
     <!-- Conteúdo Principal -->
-    <main class="max-w-4xl mx-auto py-10 px-4">
-        <!-- Título -->
-        <div class="text-center mb-10">
-            <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold mb-3">Dados do Usuário</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">
-                Abaixo estão os seus dados cadastrados na plataforma. Você pode visualizar suas informações a qualquer momento.
-            </p>
-        </div>
+    <main class="w-full p-4 md:ml-64 mt-20">
+        <h2 class="text-[clamp(1.5rem,4vw,2.2rem)] font-bold mb-6">Meu Perfil</h2>
 
-        <!-- Card do Perfil -->
-        <div class="bg-white rounded-2xl p-8 conteudo-sombra mb-8">
-            <!-- Cabeçalho do Perfil -->
-            <div class="flex flex-col md:flex-row items-center gap-6 mb-10 pb-8 border-b border-gray-100">
-                <div class="w-28 h-28 bg-primario/10 text-primario rounded-full flex items-center justify-center text-5xl">
-                    <i class="fa fa-user-circle"></i>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+            <!-- Dados Principais -->
+            <div class="lg:col-span-2 space-y-6 md:space-y-8">
+                <div class="bg-white rounded-2xl p-5 md:p-8 conteudo-sombra">
+                    <h3 class="text-xl font-bold mb-6 border-b pb-4">Dados Pessoais</h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2 text-sm md:text-base">Nome Completo</label>
+                            <p id="campoNome" class="w-full px-4 py-3 bg-claro rounded-lg border border-gray-200 text-sm md:text-base"></p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2 text-sm md:text-base">Data de Nascimento</label>
+                            <p id="campoNascimento" class="w-full px-4 py-3 bg-claro rounded-lg border border-gray-200 text-sm md:text-base"></p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2 text-sm md:text-base">E-mail</label>
+                            <p id="campoEmail" class="w-full px-4 py-3 bg-claro rounded-lg border border-gray-200 text-sm md:text-base"></p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2 text-sm md:text-base">Telefone</label>
+                            <p id="campoTelefone" class="w-full px-4 py-3 bg-claro rounded-lg border border-gray-200 text-sm md:text-base"></p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2 text-sm md:text-base">Série/Ano</label>
+                            <p id="campoSerie" class="w-full px-4 py-3 bg-claro rounded-lg border border-gray-200 text-sm md:text-base"></p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2 text-sm md:text-base">Escola</label>
+                            <p id="campoEscola" class="w-full px-4 py-3 bg-claro rounded-lg border border-gray-200 text-sm md:text-base"></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="text-center md:text-left">
-                    <h3 id="nomeCompleto" class="text-2xl font-bold mb-2"></h3>
-                    <span id="tipoUsuario" class="inline-block bg-primario/10 text-primario px-4 py-2 rounded-full text-sm font-medium"></span>
-                    <p class="text-gray-500 mt-2">Membro da Plataforma de Estudos</p>
+
+                <div class="bg-white rounded-2xl p-5 md:p-8 conteudo-sombra">
+                    <h3 class="text-xl font-bold mb-6 border-b pb-4">Dados da Conta</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 border-b gap-2 sm:gap-0">
+                            <span class="text-gray-700 font-medium text-sm md:text-base">Status da Conta</span>
+                            <span id="campoStatus" class="px-4 py-1 rounded-full text-xs md:text-sm font-medium w-fit"></span>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 border-b gap-2 sm:gap-0">
+                            <span class="text-gray-700 font-medium text-sm md:text-base">Tipo de Usuário</span>
+                            <span id="campoTipo" class="text-gray-600 text-sm md:text-base"></span>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 border-b gap-2 sm:gap-0">
+                            <span class="text-gray-700 font-medium text-sm md:text-base">Início do Teste</span>
+                            <span id="campoInicioTeste" class="text-gray-600 text-sm md:text-base"></span>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 border-b gap-2 sm:gap-0">
+                            <span class="text-gray-700 font-medium text-sm md:text-base">Fim do Teste</span>
+                            <span id="campoFimTeste" class="text-gray-600 text-sm md:text-base"></span>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 gap-2 sm:gap-0">
+                            <span class="text-gray-700 font-medium text-sm md:text-base">Plano de Assinatura</span>
+                            <span id="campoPlano" class="text-gray-600 text-sm md:text-base"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Dados Cadastrais -->
-            <h4 class="text-xl font-bold mb-6 flex items-center">
-                <i class="fa fa-id-card text-primario mr-3"></i>
-                Informações Pessoais
-            </h4>
-
-            <div class="space-y-4">
-                <div class="item-dado flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100">
-                    <span class="text-gray-600 font-medium mb-1 sm:mb-0">
-                        <i class="fa fa-envelope text-primario mr-2"></i> E-mail
-                    </span>
-                    <span id="email" class="text-escuro font-medium"></span>
+            <!-- Lateral -->
+            <div class="space-y-6 md:space-y-8">
+                <div class="bg-white rounded-2xl p-5 md:p-8 conteudo-sombra text-center">
+                    <div class="w-24 h-24 md:w-32 md:h-32 bg-primario/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fa fa-user text-4xl md:text-5xl text-primario"></i>
+                    </div>
+                    <h3 id="nomePerfil" class="text-lg md:text-xl font-bold mb-2"></h3>
+                    <p id="tipoPerfil" class="text-gray-600 mb-4 text-sm md:text-base"></p>
+                    
+                    <div id="statusPerfil" class="px-4 py-2 rounded-full text-xs md:text-sm font-medium inline-block mb-6"></div>
+                    
+                    <button onclick="sairDaConta()" class="w-full bg-erro text-white py-3 px-4 rounded-lg font-medium botao-efeito text-sm md:text-base">
+                        Sair da Conta
+                    </button>
                 </div>
 
-                <div class="item-dado flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100">
-                    <span class="text-gray-600 font-medium mb-1 sm:mb-0">
-                        <i class="fa fa-phone text-primario mr-2"></i> Telefone
-                    </span>
-                    <span id="telefone" class="text-escuro font-medium"></span>
-                </div>
-
-                <div class="item-dado flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100">
-                    <span class="text-gray-600 font-medium mb-1 sm:mb-0">
-                        <i class="fa fa-calendar text-primario mr-2"></i> Data do Cadastro
-                    </span>
-                    <span id="dataCadastro" class="text-escuro font-medium"></span>
-                </div>
-
-                <div class="item-dado flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100">
-                    <span class="text-gray-600 font-medium mb-1 sm:mb-0">
-                        <i class="fa fa-school text-primario mr-2"></i> Escola
-                    </span>
-                    <span class="text-escuro font-medium">Escola Estadual Exemplo</span>
-                </div>
-
-                <div class="item-dado flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100">
-                    <span class="text-gray-600 font-medium mb-1 sm:mb-0">
-                        <i class="fa fa-graduation-cap text-primario mr-2"></i> Série / Ano
-                    </span>
-                    <span class="text-escuro font-medium">8º Ano - Ensino Fundamental</span>
-                </div>
-
-                <div class="item-dado flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-100">
-                    <span class="text-gray-600 font-medium mb-1 sm:mb-0">
-                        <i class="fa fa-money text-primario mr-2"></i> Plano de Acesso
-                    </span>
-                    <span class="text-sucesso font-medium font-semibold">Anual - R$ 10,00</span>
+                <div class="bg-white rounded-2xl p-5 md:p-8 conteudo-sombra">
+                    <h3 class="text-lg font-bold mb-4">Informações da Plataforma</h3>
+                    <ul class="space-y-3 text-gray-600 text-sm md:text-base">
+                        <li class="flex items-center gap-2">
+                            <i class="fa fa-check text-sucesso"></i>
+                            <span>Mais de 12 matérias</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa fa-check text-sucesso"></i>
+                            <span>Mais de 150 exercícios</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa fa-check text-sucesso"></i>
+                            <span>Conteúdo organizado por série</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa fa-check text-sucesso"></i>
+                            <span>Acesso via assinatura</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
-
-        <!-- Ações -->
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button onclick="limparDadosESair()" class="bg-erro text-white px-6 py-3 rounded-xl botao-efeito font-medium">
-                <i class="fa fa-sign-out mr-2"></i> Sair da Conta
-            </button>
-            <a href="materias.html" class="bg-primario text-white px-6 py-3 rounded-xl botao-efeito font-medium text-center">
-                <i class="fa fa-book mr-2"></i> Acessar Matérias
-            </a>
         </div>
     </main>
 
-    <!-- Rodapé -->
-    <footer class="bg-escuro text-white py-8 px-4 mt-16">
-        <div class="max-w-4xl mx-auto text-center">
-            <p class="mb-2">&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
-            <p class="text-gray-400 text-sm">Mantenha seus dados sempre atualizados para melhorar sua experiência</p>
-        </div>
-    </footer>
-
     <script>
-        // Carrega os dados do perfil quando a página abrir
-        window.onload = function() {
-            carregarDadosPerfil();
+        // Função para abrir/fechar o menu no celular
+        function toggleMenu() {
+            const menu = document.getElementById('menuLateral');
+            const fundo = document.getElementById('fundoMenu');
+            menu.classList.toggle('menu-aberto');
+            fundo.classList.toggle('hidden');
         }
 
-        // Função para buscar e exibir os dados do cadastro
-        function carregarDadosPerfil() {
-            const dadosSalvos = localStorage.getItem('dadosCadastro');
-            
-            if (!dadosSalvos) {
-                // Se não tiver dados salvos, volta para o cadastro
-                window.location.href = 'index.html';
+        // Sistema de verificação de acesso corrigido e responsivo
+        function verificarAcesso() {
+            // Verifica se existem dados salvos
+            const usuarioLogado = localStorage.getItem('usuarioLogado');
+            const listaUsuarios = localStorage.getItem('listaUsuarios');
+
+            // Se não tiver dados, redireciona para login
+            if (!usuarioLogado || !listaUsuarios) {
+                window.location.href = 'login.html';
                 return;
             }
 
-            const dados = JSON.parse(dadosSalvos);
+            try {
+                // Converte os dados para objeto
+                const dadosUsuario = JSON.parse(usuarioLogado);
+                
+                // Verifica se os dados são válidos
+                if (!dadosUsuario || !dadosUsuario.email) {
+                    localStorage.removeItem('usuarioLogado');
+                    window.location.href = 'login.html';
+                    return;
+                }
 
-            // Preenche os dados na tela
-            document.getElementById('nomeCompleto').textContent = dados.nome;
-            document.getElementById('tipoUsuario').textContent = dados.tipoUsuario === 'aluno' ? 'Aluno' : 'Responsável';
-            document.getElementById('email').textContent = dados.email || 'Não informado';
-            document.getElementById('telefone').textContent = dados.telefone || 'Não informado';
-            document.getElementById('dataCadastro').textContent = dados.dataCadastro;
-        }
+                // Preenche todos os campos da página
+                document.getElementById('nomeUsuario').textContent = dadosUsuario.nome;
+                document.getElementById('nomePerfil').textContent = dadosUsuario.nome;
+                document.getElementById('tipoPerfil').textContent = dadosUsuario.tipo === 'aluno' ? 'Aluno' : 'Responsável';
+                document.getElementById('campoNome').textContent = dadosUsuario.nome;
+                document.getElementById('campoEmail').textContent = dadosUsuario.email;
+                document.getElementById('campoTelefone').textContent = dadosUsuario.telefone || 'Não informado';
+                document.getElementById('campoEscola').textContent = dadosUsuario.escola || 'Não informado';
+                
+                // Formata a data de nascimento
+                if (dadosUsuario.nascimento) {
+                    const data = new Date(dadosUsuario.nascimento);
+                    const dataFormatada = data.toLocaleDateString('pt-BR');
+                    document.getElementById('campoNascimento').textContent = dataFormatada;
+                }
 
-        // Função para voltar para a página de matérias
-        function voltarParaMatérias() {
-            window.location.href = 'materias.html';
-        }
+                // Formata a série
+                const nomesSeries = {
+                    '5ano': '5º Ano - Fundamental',
+                    '6ano': '6º Ano - Fundamental',
+                    '7ano': '7º Ano - Fundamental',
+                    '8ano': '8º Ano - Fundamental',
+                    '9ano': '9º Ano - Fundamental',
+                    '1medio': '1º Ano - Médio',
+                    '2medio': '2º Ano - Médio',
+                    '3medio': '3º Ano - Médio'
+                };
+                document.getElementById('campoSerie').textContent = nomesSeries[dadosUsuario.serie] || 'Não informado';
+                document.getElementById('campoTipo').textContent = dadosUsuario.tipo === 'aluno' ? 'Aluno' : 'Responsável';
 
-        // Função para sair da conta e apagar os dados
-        function limparDadosESair() {
-            if (confirm('Tem certeza que deseja sair da sua conta? Você precisará fazer o cadastro novamente para acessar o conteúdo.')) {
-                localStorage.removeItem('dadosCadastro');
-                window.location.href = 'index.html';
-            }
-        }
-    </script>
-</body>
-</html>
+                // Trata o

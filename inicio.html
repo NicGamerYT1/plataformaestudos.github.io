@@ -43,28 +43,35 @@
                 color: white;
                 font-weight: 600;
             }
+            .menu-aberto {
+                transform: translateX(0);
+            }
         }
     </style>
 </head>
 <body class="bg-claro min-h-screen font-sans text-escuro flex">
-    <!-- Cabeçalho (apenas nome do usuário e sair) -->
-    <header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-6 z-20">
+    <!-- Cabeçalho -->
+    <header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20">
         <div class="flex items-center justify-between max-w-full">
             <div class="flex items-center gap-3">
+                <!-- Botão de menu para celular -->
+                <button id="botaoMenu" class="md:hidden text-white text-xl" onclick="toggleMenu()">
+                    <i class="fa fa-bars"></i>
+                </button>
                 <i class="fa fa-graduation-cap text-2xl"></i>
-                <h1 class="text-xl font-bold">Plataforma de Estudos</h1>
+                <h1 class="text-lg md:text-xl font-bold">Plataforma de Estudos</h1>
             </div>
-            <div class="flex items-center gap-4">
-                <span id="nomeUsuario" class="font-medium"></span>
-                <button onclick="sairDaConta()" class="bg-white text-primario px-3 py-1 rounded-lg text-sm font-medium botao-efeito">
+            <div class="flex items-center gap-3">
+                <span id="nomeUsuario" class="font-medium text-sm md:text-base"></span>
+                <button onclick="sairDaConta()" class="bg-white text-primario px-2 py-1 rounded-lg text-xs md:text-sm font-medium botao-efeito">
                     Sair
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- MENU LATERAL (ao lado do site) -->
-    <aside class="fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-200 pt-6 z-10 overflow-y-auto">
+    <!-- Menu Lateral -->
+    <aside id="menuLateral" class="fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-200 pt-6 z-30 overflow-y-auto transition-transform duration-300 transform -translate-x-full md:translate-x-0">
         <nav class="px-4">
             <ul class="space-y-2">
                 <li>
@@ -113,46 +120,49 @@
         </nav>
     </aside>
 
-    <!-- CONTEÚDO PRINCIPAL -->
-    <main class="ml-64 mt-16 w-full p-6">
+    <!-- Fundo escuro quando o menu estiver aberto no celular -->
+    <div id="fundoMenu" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden" onclick="toggleMenu()"></div>
+
+    <!-- Conteúdo Principal -->
+    <main class="w-full p-4 md:ml-64 mt-20">
         <!-- Boas Vindas -->
-        <section class="bg-white rounded-2xl p-8 mb-10 conteudo-sombra">
-            <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-3">Olá, <span id="nomeBoasVindas"></span>!</h2>
-            <p class="text-gray-600 mb-4">Bem-vindo à sua plataforma de estudos. Aqui você encontra todo o material necessário para aprender e se destacar.</p>
+        <section class="bg-white rounded-2xl p-5 md:p-8 mb-8 conteudo-sombra">
+            <h2 class="text-[clamp(1.5rem,4vw,2.5rem)] font-bold mb-3">Olá, <span id="nomeBoasVindas"></span>!</h2>
+            <p class="text-gray-600 mb-4 text-sm md:text-base">Bem-vindo à sua plataforma de estudos. Aqui você encontra todo o material necessário para aprender e se destacar.</p>
             
             <!-- Aviso de Status da Conta -->
-            <div id="avisoStatus" class="p-4 rounded-lg mb-6"></div>
+            <div id="avisoStatus" class="p-4 rounded-lg mb-6 text-sm"></div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-                <div class="bg-primario/10 p-6 rounded-xl">
-                    <i class="fa fa-calendar text-3xl text-primario mb-3"></i>
-                    <h3 class="font-bold text-lg mb-1">Dias de Teste</h3>
-                    <p id="diasRestantes" class="text-2xl font-bold text-primario">0</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+                <div class="bg-primario/10 p-5 rounded-xl">
+                    <i class="fa fa-calendar text-2xl text-primario mb-2"></i>
+                    <h3 class="font-bold text-base mb-1">Dias de Teste</h3>
+                    <p id="diasRestantes" class="text-xl font-bold text-primario">0</p>
                 </div>
-                <div class="bg-sucesso/10 p-6 rounded-xl">
-                    <i class="fa fa-book text-3xl text-sucesso mb-3"></i>
-                    <h3 class="font-bold text-lg mb-1">Matérias Disponíveis</h3>
-                    <p class="text-2xl font-bold text-sucesso">12</p>
+                <div class="bg-sucesso/10 p-5 rounded-xl">
+                    <i class="fa fa-book text-2xl text-sucesso mb-2"></i>
+                    <h3 class="font-bold text-base mb-1">Matérias Disponíveis</h3>
+                    <p class="text-xl font-bold text-sucesso">12</p>
                 </div>
-                <div class="bg-secundario/10 p-6 rounded-xl">
-                    <i class="fa fa-tasks text-3xl text-secundario mb-3"></i>
-                    <h3 class="font-bold text-lg mb-1">Exercícios</h3>
-                    <p class="text-2xl font-bold text-secundario">150+</p>
+                <div class="bg-secundario/10 p-5 rounded-xl">
+                    <i class="fa fa-tasks text-2xl text-secundario mb-2"></i>
+                    <h3 class="font-bold text-base mb-1">Exercícios</h3>
+                    <p class="text-xl font-bold text-secundario">150+</p>
                 </div>
             </div>
         </section>
 
         <!-- Destaques -->
-        <section class="mb-12">
-            <h3 class="text-2xl font-bold mb-6">Conteúdos em Destaque</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <section class="mb-10">
+            <h3 class="text-xl md:text-2xl font-bold mb-6">Conteúdos em Destaque</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 <!-- Card 1 -->
                 <div class="bg-white rounded-xl overflow-hidden conteudo-sombra botao-efeito">
-                    <img src="https://picsum.photos/id/20/600/300" alt="Matemática" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h4 class="font-bold text-xl mb-2">Matemática</h4>
-                        <p class="text-gray-600 mb-4">Estude números, equações, geometria e muito mais com materiais exclusivos.</p>
-                        <a href="materias.html#matematica" class="text-primario font-medium flex items-center gap-1 hover:underline">
+                    <img src="https://picsum.photos/id/20/600/300" alt="Matemática" class="w-full h-40 object-cover">
+                    <div class="p-5">
+                        <h4 class="font-bold text-lg mb-2">Matemática</h4>
+                        <p class="text-gray-600 mb-4 text-sm">Estude números, equações, geometria e muito mais com materiais exclusivos.</p>
+                        <a href="materias.html#matematica" class="text-primario font-medium flex items-center gap-1 text-sm hover:underline">
                             Acessar conteúdo <i class="fa fa-arrow-right"></i>
                         </a>
                     </div>
@@ -160,11 +170,11 @@
 
                 <!-- Card 2 -->
                 <div class="bg-white rounded-xl overflow-hidden conteudo-sombra botao-efeito">
-                    <img src="https://picsum.photos/id/42/600/300" alt="Língua Portuguesa" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h4 class="font-bold text-xl mb-2">Língua Portuguesa</h4>
-                        <p class="text-gray-600 mb-4">Gramática, interpretação de textos, produção textual e redação.</p>
-                        <a href="materias.html#portugues" class="text-primario font-medium flex items-center gap-1 hover:underline">
+                    <img src="https://picsum.photos/id/42/600/300" alt="Língua Portuguesa" class="w-full h-40 object-cover">
+                    <div class="p-5">
+                        <h4 class="font-bold text-lg mb-2">Língua Portuguesa</h4>
+                        <p class="text-gray-600 mb-4 text-sm">Gramática, interpretação de textos, produção textual e redação.</p>
+                        <a href="materias.html#portugues" class="text-primario font-medium flex items-center gap-1 text-sm hover:underline">
                             Acessar conteúdo <i class="fa fa-arrow-right"></i>
                         </a>
                     </div>
@@ -172,11 +182,11 @@
 
                 <!-- Card 3 -->
                 <div class="bg-white rounded-xl overflow-hidden conteudo-sombra botao-efeito">
-                    <img src="https://picsum.photos/id/60/600/300" alt="Ciências" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h4 class="font-bold text-xl mb-2">Ciências</h4>
-                        <p class="text-gray-600 mb-4">Biologia, química e física explicadas de forma simples e divertida.</p>
-                        <a href="materias.html#ciencias" class="text-primario font-medium flex items-center gap-1 hover:underline">
+                    <img src="https://picsum.photos/id/60/600/300" alt="Ciências" class="w-full h-40 object-cover">
+                    <div class="p-5">
+                        <h4 class="font-bold text-lg mb-2">Ciências</h4>
+                        <p class="text-gray-600 mb-4 text-sm">Biologia, química e física explicadas de forma simples e divertida.</p>
+                        <a href="materias.html#ciencias" class="text-primario font-medium flex items-center gap-1 text-sm hover:underline">
                             Acessar conteúdo <i class="fa fa-arrow-right"></i>
                         </a>
                     </div>
@@ -185,29 +195,37 @@
         </section>
 
         <!-- Como Funciona -->
-        <section class="bg-white rounded-2xl p-8 conteudo-sombra">
-            <h3 class="text-2xl font-bold mb-6 text-center">Como Funciona</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <section class="bg-white rounded-2xl p-6 md:p-8 conteudo-sombra">
+            <h3 class="text-xl md:text-2xl font-bold mb-6 text-center">Como Funciona</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
                 <div class="text-center">
-                    <div class="w-16 h-16 bg-primario rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">1</div>
+                    <div class="w-14 h-14 bg-primario rounded-full flex items-center justify-center text-white text-xl font-bold mx-auto mb-4">1</div>
                     <h4 class="font-bold text-lg mb-2">Cadastre-se</h4>
-                    <p class="text-gray-600">Crie sua conta e ganhe 3 dias grátis para testar todos os recursos da plataforma.</p>
+                    <p class="text-gray-600 text-sm">Crie sua conta e ganhe 3 dias grátis para testar todos os recursos da plataforma.</p>
                 </div>
                 <div class="text-center">
-                    <div class="w-16 h-16 bg-primario rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">2</div>
+                    <div class="w-14 h-14 bg-primario rounded-full flex items-center justify-center text-white text-xl font-bold mx-auto mb-4">2</div>
                     <h4 class="font-bold text-lg mb-2">Estude</h4>
-                    <p class="text-gray-600">Acesse materiais, exercícios e aulas em vídeo no seu ritmo e horário.</p>
+                    <p class="text-gray-600 text-sm">Acesse materiais, exercícios e aulas em vídeo no seu ritmo e horário.</p>
                 </div>
                 <div class="text-center">
-                    <div class="w-16 h-16 bg-primario rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">3</div>
+                    <div class="w-14 h-14 bg-primario rounded-full flex items-center justify-center text-white text-xl font-bold mx-auto mb-4">3</div>
                     <h4 class="font-bold text-lg mb-2">Assine</h4>
-                    <p class="text-gray-600">Após o teste, escolha o plano que melhor se adapta a você e continue estudando.</p>
+                    <p class="text-gray-600 text-sm">Após o teste, escolha o plano que melhor se adapta a você e continue estudando.</p>
                 </div>
             </div>
         </section>
     </main>
 
     <script>
+        // Função para abrir/fechar o menu no celular
+        function toggleMenu() {
+            const menu = document.getElementById('menuLateral');
+            const fundo = document.getElementById('fundoMenu');
+            menu.classList.toggle('menu-aberto');
+            fundo.classList.toggle('hidden');
+        }
+
         // Sistema de verificação de acesso
         function verificarAcesso() {
             const usuarioSalvo = localStorage.getItem('usuarioLogado');
@@ -218,25 +236,23 @@
 
             const dadosUsuario = JSON.parse(usuarioSalvo);
             
-            // Preencher dados na página
             document.getElementById('nomeUsuario').textContent = dadosUsuario.nome;
             document.getElementById('nomeBoasVindas').textContent = dadosUsuario.nome;
 
-            // Verificar status da conta
             const dataAtual = new Date();
             const dataFimTeste = new Date(dadosUsuario.dataFimTeste);
             const avisoStatus = document.getElementById('avisoStatus');
             const diasRestantesElement = document.getElementById('diasRestantes');
 
             if (dadosUsuario.statusAssinatura === 'ativa') {
-                avisoStatus.className = 'p-4 rounded-lg mb-6 bg-sucesso/10 text-sucesso border border-sucesso/20';
+                avisoStatus.className = 'p-4 rounded-lg mb-6 bg-sucesso/10 text-sucesso border border-sucesso/20 text-sm';
                 avisoStatus.innerHTML = `<i class="fa fa-check-circle mr-2"></i> Sua assinatura está ativa! Acesso liberado a todo o conteúdo da plataforma.`;
                 diasRestantesElement.textContent = 'Ilimitado';
-                diasRestantesElement.className = 'text-2xl font-bold text-sucesso';
+                diasRestantesElement.className = 'text-xl font-bold text-sucesso';
 
             } else if (dataAtual < dataFimTeste) {
                 const diasRestantes = Math.ceil((dataFimTeste - dataAtual) / (1000 * 60 * 60 * 24));
-                avisoStatus.className = 'p-4 rounded-lg mb-6 bg-primario/10 text-primario border border-primario/20';
+                avisoStatus.className = 'p-4 rounded-lg mb-6 bg-primario/10 text-primario border border-primario/20 text-sm';
                 avisoStatus.innerHTML = `<i class="fa fa-gift mr-2"></i> Você está no período de teste! Faltam <strong>${diasRestantes} dias</strong> para acabar.`;
                 diasRestantesElement.textContent = diasRestantes;
 
@@ -244,7 +260,7 @@
                 dadosUsuario.statusAssinatura = 'expirada';
                 localStorage.setItem('usuarioLogado', JSON.stringify(dadosUsuario));
                 
-                avisoStatus.className = 'p-4 rounded-lg mb-6 bg-erro/10 text-erro border border-erro/20';
+                avisoStatus.className = 'p-4 rounded-lg mb-6 bg-erro/10 text-erro border border-erro/20 text-sm';
                 avisoStatus.innerHTML = `<i class="fa fa-lock mr-2"></i> Seu período de teste gratuito acabou! <a href="assinatura.html" class="font-bold underline hover:text-erro/80">Clique aqui para assinar e continuar acessando.</a>`;
                 diasRestantesElement.textContent = '0';
             }

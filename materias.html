@@ -38,186 +38,224 @@
                 transform: translateY(-2px);
                 box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
             }
-            .materia-card {
-                transition: all 0.3s ease;
-            }
-            .materia-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
-            }
-            .ano-botao {
-                transition: all 0.2s ease;
-            }
-            .ano-botao:hover {
-                transform: scale(1.05);
-            }
             .aba-ativa {
-                border-bottom: 3px solid #165DFF;
-                color: #165DFF;
+                background-color: #165DFF;
+                color: white;
                 font-weight: 600;
+            }
+            .menu-aberto {
+                transform: translateX(0);
             }
         }
     </style>
 </head>
-<body class="bg-claro min-h-screen font-sans text-escuro">
+<body class="bg-claro min-h-screen font-sans text-escuro flex">
     <!-- Cabeçalho -->
-    <header class="bg-primario text-white py-6 px-4">
-        <div class="max-w-6xl mx-auto flex items-center gap-3">
-            <i class="fa fa-graduation-cap text-3xl"></i>
-            <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
-        </div>
-    </header>
-
-    <!-- Menu de Abas -->
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-wrap">
-                <!-- Aba: Início -->
-                <a href="inicio.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
-                    <i class="fa fa-home"></i> Início
-                </a>
-
-                <!-- Aba: Matérias -->
-                <a href="materias.html" class="aba-ativa py-4 px-6 flex items-center gap-2">
-                    <i class="fa fa-book"></i> Matérias
-                </a>
-
-                <!-- Aba: Perfil -->
-                <a href="perfil.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
-                    <i class="fa fa-user"></i> Meu Perfil
-                </a>
-
-                <!-- Aba: Pais / Responsáveis -->
-                <a href="pais.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
-                    <i class="fa fa-users"></i> Pais / Responsáveis
-                </a>
-
-                <!-- Botão Voltar para Início - NO LUGAR DO DESLOGAR -->
-                <button onclick="voltarParaInicio()" class="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg bg-escuro text-white botao-efeito font-medium">
-                    <i class="fa fa-arrow-left"></i> Voltar para Início
+    <header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20">
+        <div class="flex items-center justify-between max-w-full">
+            <div class="flex items-center gap-3">
+                <!-- Botão de menu para celular -->
+                <button id="botaoMenu" class="md:hidden text-white text-xl" onclick="toggleMenu()">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <i class="fa fa-graduation-cap text-2xl"></i>
+                <h1 class="text-lg md:text-xl font-bold">Plataforma de Estudos</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <span id="nomeUsuario" class="font-medium text-sm md:text-base"></span>
+                <button onclick="sairDaConta()" class="bg-white text-primario px-2 py-1 rounded-lg text-xs md:text-sm font-medium botao-efeito">
+                    Sair
                 </button>
             </div>
         </div>
-    </nav>
+    </header>
+
+    <!-- Menu Lateral -->
+    <aside id="menuLateral" class="fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-200 pt-6 z-30 overflow-y-auto transition-transform duration-300 transform -translate-x-full md:translate-x-0">
+        <nav class="px-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="inicio.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-home w-5 text-center"></i>
+                        <span>Início</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="materias.html" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors aba-ativa">
+                        <i class="fa fa-book w-5 text-center"></i>
+                        <span>Matérias</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-tasks w-5 text-center"></i>
+                        <span>Atividades</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-bar-chart w-5 text-center"></i>
+                        <span>Meu Desempenho</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-credit-card w-5 text-center"></i>
+                        <span>Assinatura</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="perfil.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-user w-5 text-center"></i>
+                        <span>Perfil</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="pais.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
+                        <i class="fa fa-users w-5 text-center"></i>
+                        <span>Pais / Responsáveis</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Fundo escuro quando o menu estiver aberto no celular -->
+    <div id="fundoMenu" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden" onclick="toggleMenu()"></div>
 
     <!-- Conteúdo Principal -->
-    <main class="max-w-6xl mx-auto py-10 px-4">
-        <!-- Título -->
-        <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-center mb-8">Nossas Matérias</h2>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Card: Português - SEM QUESTÕES, APENAS ANOS -->
-            <div class="materia-card bg-white rounded-2xl p-6 conteudo-sombra text-center">
-                <div class="w-16 h-16 bg-primario/10 text-primario rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa fa-book text-2xl"></i>
+    <main class="w-full p-4 md:ml-64 mt-20">
+        <!-- Cabeçalho da Página -->
+        <section class="mb-8">
+            <h2 class="text-[clamp(1.5rem,4vw,2.2rem)] font-bold mb-2">Matérias de Estudo</h2>
+            <p class="text-gray-600 text-sm md:text-base">Escolha uma matéria para acessar conteúdos, materiais e atividades.</p>
+            
+            <!-- Aviso de Status da Conta -->
+            <div id="avisoStatus" class="mt-4 p-4 rounded-lg text-sm"></div>
+        </section>
+
+        <!-- Grade de Matérias -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6">
+            <!-- Matemática -->
+            <div id="matematica" class="bg-white rounded-2xl overflow-hidden conteudo-sombra botao-efeito">
+                <div class="h-36 bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
+                    <i class="fa fa-calculator text-white text-6xl"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-3">Português</h3>
-                <p class="text-gray-600 text-sm mb-5">Gramática, interpretação de textos e regras da língua</p>
-                
-                <!-- Opções de Anos -->
-                <div class="flex flex-wrap gap-2 justify-center mb-5">
-                    <a href="portugues_5ano.html" class="ano-botao bg-primario/10 text-primario px-3 py-1 rounded-full text-sm font-medium">5º Ano</a>
-                    <a href="portugues_6ano.html" class="ano-botao bg-primario/10 text-primario px-3 py-1 rounded-full text-sm font-medium">6º Ano</a>
-                    <a href="portugues_7ano.html" class="ano-botao bg-primario/10 text-primario px-3 py-1 rounded-full text-sm font-medium">7º Ano</a>
-                    <a href="portugues_8ano.html" class="ano-botao bg-primario/10 text-primario px-3 py-1 rounded-full text-sm font-medium">8º Ano</a>
-                    <a href="portugues_9ano.html" class="ano-botao bg-primario/10 text-primario px-3 py-1 rounded-full text-sm font-medium">9º Ano</a>
+                <div class="p-5">
+                    <h3 class="text-xl font-bold mb-2">Matemática</h3>
+                    <p class="text-gray-600 text-sm mb-4">Estude números, operações, geometria, equações, proporções e resolução de problemas.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">5º ao 9º Ano</span>
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Ensino Médio</span>
+                    </div>
+                    <a href="atividades.html?materia=matematica" class="inline-block w-full text-center bg-primario text-white py-2 px-4 rounded-lg font-medium botao-efeito text-sm">
+                        Acessar Matéria
+                    </a>
                 </div>
             </div>
 
-            <!-- Card: Matemática -->
-            <div class="materia-card bg-white rounded-2xl p-6 conteudo-sombra text-center">
-                <div class="w-16 h-16 bg-secundario/10 text-secundario rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa fa-calculator text-2xl"></i>
+            <!-- Língua Portuguesa -->
+            <div id="portugues" class="bg-white rounded-2xl overflow-hidden conteudo-sombra botao-efeito">
+                <div class="h-36 bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center">
+                    <i class="fa fa-book text-white text-6xl"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-3">Matemática</h3>
-                <p class="text-gray-600 text-sm mb-5">Números, operações, geometria e lógica</p>
-                
-                <!-- Opções de Anos -->
-                <div class="flex flex-wrap gap-2 justify-center mb-5">
-                    <a href="matematica_5ano.html" class="ano-botao bg-secundario/10 text-secundario px-3 py-1 rounded-full text-sm font-medium">5º Ano</a>
-                    <a href="matematica_6ano.html" class="ano-botao bg-secundario/10 text-secundario px-3 py-1 rounded-full text-sm font-medium">6º Ano</a>
-                    <a href="matematica_7ano.html" class="ano-botao bg-secundario/10 text-secundario px-3 py-1 rounded-full text-sm font-medium">7º Ano</a>
-                    <a href="matematica_8ano.html" class="ano-botao bg-secundario/10 text-secundario px-3 py-1 rounded-full text-sm font-medium">8º Ano</a>
-                    <a href="matematica_9ano.html" class="ano-botao bg-secundario/10 text-secundario px-3 py-1 rounded-full text-sm font-medium">9º Ano</a>
-                </div>
-            </div>
-
-            <!-- Card: História -->
-            <div class="materia-card bg-white rounded-2xl p-6 conteudo-sombra text-center">
-                <div class="w-16 h-16 bg-aviso/10 text-aviso rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa fa-university text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">História</h3>
-                <p class="text-gray-600 text-sm mb-5">História do Brasil, mundial e fatos importantes</p>
-                
-                <!-- Opções de Anos -->
-                <div class="flex flex-wrap gap-2 justify-center mb-5">
-                    <a href="historia_5ano.html" class="ano-botao bg-aviso/10 text-aviso px-3 py-1 rounded-full text-sm font-medium">5º Ano</a>
-                    <a href="historia_6ano.html" class="ano-botao bg-aviso/10 text-aviso px-3 py-1 rounded-full text-sm font-medium">6º Ano</a>
-                    <a href="historia_7ano.html" class="ano-botao bg-aviso/10 text-aviso px-3 py-1 rounded-full text-sm font-medium">7º Ano</a>
-                    <a href="historia_8ano.html" class="ano-botao bg-aviso/10 text-aviso px-3 py-1 rounded-full text-sm font-medium">8º Ano</a>
-                    <a href="historia_9ano.html" class="ano-botao bg-aviso/10 text-aviso px-3 py-1 rounded-full text-sm font-medium">9º Ano</a>
+                <div class="p-5">
+                    <h3 class="text-xl font-bold mb-2">Língua Portuguesa</h3>
+                    <p class="text-gray-600 text-sm mb-4">Gramática, interpretação de textos, produção textual, redação e literatura brasileira.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs">5º ao 9º Ano</span>
+                        <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs">Ensino Médio</span>
+                    </div>
+                    <a href="atividades.html?materia=portugues" class="inline-block w-full text-center bg-primario text-white py-2 px-4 rounded-lg font-medium botao-efeito text-sm">
+                        Acessar Matéria
+                    </a>
                 </div>
             </div>
 
-            <!-- Card: Geografia -->
-            <div class="materia-card bg-white rounded-2xl p-6 conteudo-sombra text-center">
-                <div class="w-16 h-16 bg-sucesso/10 text-sucesso rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa fa-globe text-2xl"></i>
+            <!-- Ciências -->
+            <div id="ciencias" class="bg-white rounded-2xl overflow-hidden conteudo-sombra botao-efeito">
+                <div class="h-36 bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center">
+                    <i class="fa fa-flask text-white text-6xl"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-3">Geografia</h3>
-                <p class="text-gray-600 text-sm mb-5">Países, regiões, climas e paisagens do mundo</p>
-                
-                <!-- Opções de Anos -->
-                <div class="flex flex-wrap gap-2 justify-center mb-5">
-                    <a href="geografia_5ano.html" class="ano-botao bg-sucesso/10 text-sucesso px-3 py-1 rounded-full text-sm font-medium">5º Ano</a>
-                    <a href="geografia_6ano.html" class="ano-botao bg-sucesso/10 text-sucesso px-3 py-1 rounded-full text-sm font-medium">6º Ano</a>
-                    <a href="geografia_7ano.html" class="ano-botao bg-sucesso/10 text-sucesso px-3 py-1 rounded-full text-sm font-medium">7º Ano</a>
-                    <a href="geografia_8ano.html" class="ano-botao bg-sucesso/10 text-sucesso px-3 py-1 rounded-full text-sm font-medium">8º Ano</a>
-                    <a href="geografia_9ano.html" class="ano-botao bg-sucesso/10 text-sucesso px-3 py-1 rounded-full text-sm font-medium">9º Ano</a>
-                </div>
-            </div>
-
-            <!-- Card: Ciências -->
-            <div class="materia-card bg-white rounded-2xl p-6 conteudo-sombra text-center">
-                <div class="w-16 h-16 bg-erro/10 text-erro rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa fa-flask text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-3">Ciências</h3>
-                <p class="text-gray-600 text-sm mb-5">Corpo humano, natureza e seres vivos</p>
-                
-                <!-- Opções de Anos -->
-                <div class="flex flex-wrap gap-2 justify-center mb-5">
-                    <a href="ciencias_5ano.html" class="ano-botao bg-erro/10 text-erro px-3 py-1 rounded-full text-sm font-medium">5º Ano</a>
-                    <a href="ciencias_6ano.html" class="ano-botao bg-erro/10 text-erro px-3 py-1 rounded-full text-sm font-medium">6º Ano</a>
-                    <a href="ciencias_7ano.html" class="ano-botao bg-erro/10 text-erro px-3 py-1 rounded-full text-sm font-medium">7º Ano</a>
-                    <a href="ciencias_8ano.html" class="ano-botao bg-erro/10 text-erro px-3 py-1 rounded-full text-sm font-medium">8º Ano</a>
-                    <a href="ciencias_9ano.html" class="ano-botao bg-erro/10 text-erro px-3 py-1 rounded-full text-sm font-medium">9º Ano</a>
+                <div class="p-5">
+                    <h3 class="text-xl font-bold mb-2">Ciências</h3>
+                    <p class="text-gray-600 text-sm mb-4">Biologia, química, física, corpo humano, meio ambiente e seres vivos.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs">5º ao 9º Ano</span>
+                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs">Ensino Médio</span>
+                    </div>
+                    <a href="atividades.html?materia=ciencias" class="inline-block w-full text-center bg-primario text-white py-2 px-4 rounded-lg font-medium botao-efeito text-sm">
+                        Acessar Matéria
+                    </a>
                 </div>
             </div>
 
-            <!-- Card: Artes -->
-            <div class="materia-card bg-white rounded-2xl p-6 conteudo-sombra text-center">
-                <div class="w-16 h-16 bg-purple-500/10 text-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa fa-paint-brush text-2xl"></i>
+            <!-- História -->
+            <div id="historia" class="bg-white rounded-2xl overflow-hidden conteudo-sombra botao-efeito">
+                <div class="h-36 bg-gradient-to-r from-amber-500 to-amber-600 flex items-center justify-center">
+                    <i class="fa fa-history text-white text-6xl"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-3">Artes</h3>
-                <p class="text-gray-600 text-sm mb-5">Desenho, música, teatro e cultura</p>
-                
-                <!-- Opções de Anos -->
-                <div class="flex flex-wrap gap-2 justify-center mb-5">
-                    <a href="artes_5ano.html" class="ano-botao bg-purple-500/10 text-purple-500 px-3 py-1 rounded-full text-sm font-medium">5º Ano</a>
-                    <a href="artes_6ano.html" class="ano-botao bg-purple-500/10 text-purple-500 px-3 py-1 rounded-full text-sm font-medium">6º Ano</a>
-                    <a href="artes_7ano.html" class="ano-botao bg-purple-500/10 text-purple-500 px-3 py-1 rounded-full text-sm font-medium">7º Ano</a>
-                    <a href="artes_8ano.html" class="ano-botao bg-purple-500/10 text-purple-500 px-3 py-1 rounded-full text-sm font-medium">8º Ano</a>
-                    <a href="artes_9ano.html" class="ano-botao bg-purple-500/10 text-purple-500 px-3 py-1 rounded-full text-sm font-medium">9º Ano</a>
+                <div class="p-5">
+                    <h3 class="text-xl font-bold mb-2">História</h3>
+                    <p class="text-gray-600 text-sm mb-4">História do Brasil, história mundial, períodos históricos e acontecimentos importantes.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">5º ao 9º Ano</span>
+                        <span class="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">Ensino Médio</span>
+                    </div>
+                    <a href="atividades.html?materia=historia" class="inline-block w-full text-center bg-primario text-white py-2 px-4 rounded-lg font-medium botao-efeito text-sm">
+                        Acessar Matéria
+                    </a>
                 </div>
             </div>
 
-            <!-- Card: Educação Física -->
-            <div class="materia-card bg-white rounded-2xl p-6 conteudo-sombra text-center">
-                <div class="w-16 h-16 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa fa-futbol-o text-2xl"></i>
+            <!-- Geografia -->
+            <div id="geografia" class="bg-white rounded-2xl overflow-hidden conteudo-sombra botao-efeito">
+                <div class="h-36 bg-gradient-to-r from-emerald-500 to-emerald-600 flex items-center justify-center">
+                    <i class="fa fa-globe text-white text-6xl"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-3">Educação Física</h3>
-                <p class="text-gray-6
+                <div class="p-5">
+                    <h3 class="text-xl font-bold mb-2">Geografia</h3>
+                    <p class="text-gray-600 text-sm mb-4">Relevo, clima, vegetação, população, economia, meio ambiente e regiões do Brasil.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs">5º ao 9º Ano</span>
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs">Ensino Médio</span>
+                    </div>
+                    <a href="atividades.html?materia=geografia" class="inline-block w-full text-center bg-primario text-white py-2 px-4 rounded-lg font-medium botao-efeito text-sm">
+                        Acessar Matéria
+                    </a>
+                </div>
+            </div>
+
+            <!-- Inglês -->
+            <div id="ingles" class="bg-white rounded-2xl overflow-hidden conteudo-sombra botao-efeito">
+                <div class="h-36 bg-gradient-to-r from-purple-500 to-purple-600 flex items-center justify-center">
+                    <i class="fa fa-language text-white text-6xl"></i>
+                </div>
+                <div class="p-5">
+                    <h3 class="text-xl font-bold mb-2">Inglês</h3>
+                    <p class="text-gray-600 text-sm mb-4">Vocabulário, gramática, compreensão de textos e conversação básica.</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">5º ao 9º Ano</span>
+                        <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">Ensino Médio</span>
+                    </div>
+                    <a href="atividades.html?materia=ingles" class="inline-block w-full text-center bg-primario text-white py-2 px-4 rounded-lg font-medium botao-efeito text-sm">
+                        Acessar Matéria
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Conteúdos Complementares -->
+        <section class="mt-12 bg-white rounded-2xl p-6 md:p-8 conteudo-sombra">
+            <h3 class="text-xl md:text-2xl font-bold mb-6">Conteúdos Complementares</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="p-5 bg-claro rounded-xl">
+                    <h4 class="font-bold text-lg mb-2 flex items-center gap-2">
+                        <i class="fa fa-video-camera text-primario"></i> Aulas em Vídeo
+                    </h4>
+                    <p class="text-gray-600 text-sm mb-4">Assista a aulas explicativas com professores especializados.</p>
+                    <a href="#" class="text-primario font-medium text-sm hover:underline">Ver aulas <i class="fa fa-arrow-right ml-1"></i></a>
+                </div>
+                <div class="p-5 bg-claro rounded-xl">
+                    <h4 class="font-bold text-lg mb-2 flex items-center gap-2">
+                        <i class="fa fa-file-pdf-o text-primario"></i> Materiais para
