@@ -6,6 +6,7 @@
     <title>Atividades - Plataforma de Estudos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -20,247 +21,556 @@
                         escuro: '#1D2129',
                     },
                     fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        sans: ['Nunito', 'system-ui', 'sans-serif'],
                     },
                 }
             }
         }
     </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .conteudo-sombra {
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            }
-            .botao-efeito {
-                transition: all 0.3s ease;
-            }
-            .botao-efeito:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
-            }
-            .menu-aberto {
-                transform: translateX(0);
-            }
+    <style>
+        * { box-sizing: border-box; }
+        body { background: #F0F4FF; }
+
+        .conteudo-sombra { box-shadow: 0 4px 24px rgba(22,93,255,0.07); }
+        .botao-efeito { transition: all 0.3s ease; }
+        .botao-efeito:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(22,93,255,0.25); }
+        .menu-lateral { transition: transform 0.3s cubic-bezier(.4,0,.2,1); }
+
+        /* Modal */
+        #modalAtividade { transition: opacity 0.2s ease; }
+
+        /* Opção de questão */
+        .opcao-questao {
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 0.875rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
+        .opcao-questao:hover { border-color: #165DFF; background: #eff4ff; }
+        .opcao-questao.selecionada { border-color: #165DFF; background: #eff4ff; color: #165DFF; }
+        .opcao-questao.correta  { border-color: #00B42A; background: #f0fdf4; color: #00B42A; }
+        .opcao-questao.errada   { border-color: #F53F3F; background: #fff1f1; color: #F53F3F; }
+
+        .letra-opcao {
+            width: 2rem; height: 2rem;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.8rem;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .selecionada .letra-opcao { background: #165DFF; color: white; }
+        .correta .letra-opcao    { background: #00B42A; color: white; }
+        .errada .letra-opcao     { background: #F53F3F; color: white; }
+
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(20px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+        .anim { animation: fadeUp 0.4s ease both; }
     </style>
 </head>
-<body class="bg-claro min-h-screen font-sans text-escuro flex">
-    <!-- Cabeçalho -->
-    <header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20">
-        <div class="flex items-center justify-between max-w-full">
+<body class="min-h-screen font-sans text-escuro flex">
+
+    <!-- CABEÇALHO -->
+    <header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20 shadow-lg">
+        <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <!-- Botão de menu para celular -->
-                <button id="botaoMenu" class="md:hidden text-white text-xl" onclick="toggleMenu()">
+                <button class="md:hidden text-white text-xl p-1" onclick="toggleMenu()">
                     <i class="fa fa-bars"></i>
                 </button>
                 <i class="fa fa-graduation-cap text-2xl"></i>
                 <h1 class="text-lg md:text-xl font-bold">Plataforma de Estudos</h1>
             </div>
             <div class="flex items-center gap-3">
-                <span id="nomeUsuario" class="font-medium text-sm md:text-base"></span>
-                <button onclick="sairDaConta()" class="bg-white text-primario px-2 py-1 rounded-lg text-xs md:text-sm font-medium botao-efeito">
+                <span id="nomeUsuario" class="font-semibold text-sm hidden sm:inline"></span>
+                <button onclick="sairDaConta()" class="bg-white text-primario px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-50 transition-colors">
                     Sair
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Menu Lateral - TODOS OS ITENS SÃO CLICÁVEIS -->
-    <aside id="menuLateral" class="fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-200 pt-6 z-30 overflow-y-auto transition-transform duration-300 transform -translate-x-full md:translate-x-0">
+    <!-- MENU LATERAL -->
+    <aside id="menuLateral" class="menu-lateral fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-100 pt-6 z-30 overflow-y-auto -translate-x-full md:translate-x-0 shadow-xl md:shadow-none">
         <nav class="px-4">
-            <ul class="space-y-2">
-                <li>
-                    <a href="inicio.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
-                        <i class="fa fa-home w-5 text-center"></i>
-                        <span>Início</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="materias.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
-                        <i class="fa fa-book w-5 text-center"></i>
-                        <span>Matérias</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors bg-primario/10 text-primario font-medium">
-                        <i class="fa fa-tasks w-5 text-center"></i>
-                        <span>Atividades</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
-                        <i class="fa fa-bar-chart w-5 text-center"></i>
-                        <span>Meu Desempenho</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
-                        <i class="fa fa-credit-card w-5 text-center"></i>
-                        <span>Assinatura</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="perfil.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
-                        <i class="fa fa-user w-5 text-center"></i>
-                        <span>Perfil</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="pais.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
-                        <i class="fa fa-users w-5 text-center"></i>
-                        <span>Pais / Responsáveis</span>
-                    </a>
-                </li>
+            <ul class="space-y-1">
+                <li><a href="inicio.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-home w-5 text-center"></i> Início</a></li>
+                <li><a href="materias.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-book w-5 text-center"></i> Matérias</a></li>
+                <li><a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primario/10 text-primario font-bold text-sm"><i class="fa fa-tasks w-5 text-center"></i> Atividades</a></li>
+                <li><a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-bar-chart w-5 text-center"></i> Meu Desempenho</a></li>
+                <li><a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-credit-card w-5 text-center"></i> Assinatura</a></li>
+                <li><a href="perfil.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-user w-5 text-center"></i> Perfil</a></li>
+                <li><a href="pais.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-users w-5 text-center"></i> Pais / Responsáveis</a></li>
             </ul>
         </nav>
     </aside>
 
-    <!-- Fundo escuro quando o menu estiver aberto no celular -->
     <div id="fundoMenu" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden" onclick="toggleMenu()"></div>
 
-    <!-- Conteúdo Principal -->
-    <main class="w-full p-4 md:ml-64 mt-20">
-        <!-- Cabeçalho da Página -->
-        <section class="mb-8">
-            <h2 class="text-[clamp(1.5rem,4vw,2.2rem)] font-bold mb-2">Atividades de Estudo</h2>
-            <p class="text-gray-600 text-sm md:text-base">Resolva exercícios, teste seus conhecimentos e acompanhe seu progresso.</p>
-            
-            <!-- Filtros -->
-            <div class="mt-5 bg-white p-4 md:p-6 rounded-2xl conteudo-sombra">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="w-full md:ml-64 mt-16 pb-16 px-3 sm:px-6 pt-8">
+
+        <!-- Título -->
+        <div class="mb-6 anim">
+            <h2 class="text-2xl sm:text-3xl font-black mb-1">Atividades de Estudo</h2>
+            <p class="text-gray-500 text-sm">Resolva exercícios, teste seus conhecimentos e acompanhe seu progresso.</p>
+        </div>
+
+        <!-- Filtros -->
+        <div class="bg-white rounded-2xl p-4 sm:p-6 conteudo-sombra mb-8 anim">
+            <h3 class="font-bold text-base mb-4 flex items-center gap-2"><i class="fa fa-filter text-primario"></i> Filtrar Atividades</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-gray-700 font-bold mb-1.5 text-xs uppercase tracking-wide">Matéria</label>
+                    <select id="filtroMateria" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primario bg-gray-50">
+                        <option value="">Todas as matérias</option>
+                        <option value="matematica">Matemática</option>
+                        <option value="portugues">Língua Portuguesa</option>
+                        <option value="ciencias">Ciências</option>
+                        <option value="historia">História</option>
+                        <option value="geografia">Geografia</option>
+                        <option value="ingles">Inglês</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-1.5 text-xs uppercase tracking-wide">Série / Ano</label>
+                    <select id="filtroSerie" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primario bg-gray-50">
+                        <option value="">Todas as séries</option>
+                        <option value="5ano">5º Ano</option>
+                        <option value="6ano">6º Ano</option>
+                        <option value="7ano">7º Ano</option>
+                        <option value="8ano">8º Ano</option>
+                        <option value="9ano">9º Ano</option>
+                        <option value="1medio">1º Médio</option>
+                        <option value="2medio">2º Médio</option>
+                        <option value="3medio">3º Médio</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-1.5 text-xs uppercase tracking-wide">Dificuldade</label>
+                    <select id="filtroDificuldade" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primario bg-gray-50">
+                        <option value="">Todas</option>
+                        <option value="facil">Fácil</option>
+                        <option value="medio">Médio</option>
+                        <option value="dificil">Difícil</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button onclick="filtrarAtividades()" class="w-full bg-primario text-white py-2.5 px-4 rounded-xl font-bold botao-efeito text-sm">
+                        <i class="fa fa-search mr-1"></i> Filtrar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contador de resultados -->
+        <p id="contadorResultados" class="text-sm text-gray-500 font-semibold mb-4"></p>
+
+        <!-- Grade de Atividades -->
+        <div id="listaAtividades" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5"></div>
+
+        <!-- Mensagem sem resultados -->
+        <div id="semResultados" class="hidden text-center py-16">
+            <i class="fa fa-search text-5xl text-gray-300 mb-4 block"></i>
+            <p class="text-gray-500 font-bold text-lg">Nenhuma atividade encontrada</p>
+            <p class="text-gray-400 text-sm mt-1">Tente outros filtros</p>
+        </div>
+    </main>
+
+    <!-- ===== MODAL DA ATIVIDADE ===== -->
+    <div id="modalAtividade" class="fixed inset-0 bg-black/60 z-50 hidden flex items-start justify-center p-3 sm:p-6 overflow-y-auto">
+        <div class="bg-white rounded-2xl w-full max-w-2xl my-4 overflow-hidden shadow-2xl">
+            <!-- Cabeçalho do modal -->
+            <div id="modalHeader" class="p-5 text-white">
+                <div class="flex items-start justify-between">
                     <div>
-                        <label class="block text-gray-700 font-medium mb-2 text-sm">Matéria</label>
-                        <select id="filtroMateria" class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primario">
-                            <option value="">Todas as matérias</option>
-                            <option value="matematica">Matemática</option>
-                            <option value="portugues">Língua Portuguesa</option>
-                            <option value="ciencias">Ciências</option>
-                            <option value="historia">História</option>
-                            <option value="geografia">Geografia</option>
-                            <option value="ingles">Inglês</option>
-                        </select>
+                        <p id="modalMateria" class="text-xs font-bold uppercase tracking-widest opacity-80 mb-1"></p>
+                        <h3 id="modalTitulo" class="text-xl font-black leading-tight"></h3>
+                        <p id="modalInfo" class="text-sm opacity-80 mt-1"></p>
                     </div>
-                    <div>
-                        <label class="block text-gray-700 font-medium mb-2 text-sm">Série/Ano</label>
-                        <select id="filtroSerie" class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primario">
-                            <option value="">Todas as séries</option>
-                            <option value="5ano">5º Ano</option>
-                            <option value="6ano">6º Ano</option>
-                            <option value="7ano">7º Ano</option>
-                            <option value="8ano">8º Ano</option>
-                            <option value="9ano">9º Ano</option>
-                            <option value="1medio">1º Ano Médio</option>
-                            <option value="2medio">2º Ano Médio</option>
-                            <option value="3medio">3º Ano Médio</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-medium mb-2 text-sm">Dificuldade</label>
-                        <select id="filtroDificuldade" class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primario">
-                            <option value="">Todas</option>
-                            <option value="facil">Fácil</option>
-                            <option value="medio">Médio</option>
-                            <option value="dificil">Difícil</option>
-                        </select>
-                    </div>
-                    <div class="flex items-end">
-                        <button onclick="filtrarAtividades()" class="w-full bg-primario text-white py-2 px-4 rounded-lg font-medium botao-efeito text-sm">
-                            Filtrar
-                        </button>
-                    </div>
+                    <button onclick="fecharModal()" class="text-white/70 hover:text-white text-2xl ml-4 flex-shrink-0 leading-none">&times;</button>
                 </div>
+                <!-- Barra de progresso -->
+                <div class="mt-4 bg-white/20 rounded-full h-2">
+                    <div id="barraProgresso" class="bg-white rounded-full h-2 transition-all duration-500" style="width:0%"></div>
+                </div>
+                <p id="progressoTexto" class="text-xs opacity-70 mt-1 text-right"></p>
             </div>
-        </section>
 
-        <!-- Lista de Atividades -->
-        <section id="listaAtividades" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
-            <!-- Atividade 1 -->
-            <div class="bg-white rounded-2xl overflow-hidden conteudo-sombra botao-efeito">
-                <div class="h-3 bg-blue-500"></div>
+            <!-- Corpo da questão -->
+            <div id="corpoModal" class="p-5 sm:p-6">
+                <p id="enunciadoQuestao" class="text-base font-bold text-escuro mb-5 leading-relaxed"></p>
+                <div id="opcoesQuestao" class="space-y-3"></div>
+                <div id="feedbackQuestao" class="hidden mt-4 p-4 rounded-xl text-sm font-semibold"></div>
+            </div>
+
+            <!-- Rodapé do modal -->
+            <div class="px-5 pb-5 sm:px-6 sm:pb-6 flex justify-between items-center gap-3">
+                <div id="placarModal" class="text-sm font-bold text-gray-500"></div>
+                <button id="btnProximo" onclick="proximaQuestao()" class="bg-primario text-white px-6 py-2.5 rounded-xl font-bold botao-efeito text-sm hidden">
+                    Próxima <i class="fa fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL DE RESULTADO FINAL ===== -->
+    <div id="modalResultado" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md p-8 text-center shadow-2xl">
+            <div id="iconResultado" class="text-6xl mb-4"></div>
+            <h3 id="tituloResultado" class="text-2xl font-black mb-2"></h3>
+            <p id="subtituloResultado" class="text-gray-500 mb-6"></p>
+            <div class="flex gap-3 justify-center flex-wrap">
+                <button onclick="reiniciarAtividade()" class="bg-primario text-white px-6 py-2.5 rounded-xl font-bold botao-efeito text-sm">
+                    <i class="fa fa-refresh mr-1"></i> Tentar Novamente
+                </button>
+                <button onclick="fecharTudo()" class="bg-gray-100 text-gray-700 px-6 py-2.5 rounded-xl font-bold hover:bg-gray-200 transition-colors text-sm">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ===================== DADOS DAS ATIVIDADES =====================
+    const atividades = [
+        {
+            id: 1, titulo: 'Operações Básicas', materia: 'matematica', materiaLabel: 'Matemática',
+            serie: '5ano', dificuldade: 'facil', cor: '#3B82F6',
+            descricao: 'Exercícios de adição, subtração, multiplicação e divisão.',
+            questoes: [
+                { enunciado: 'Quanto é 48 + 37?', opcoes: ['75','85','95','65'], correta: 1 },
+                { enunciado: 'Quanto é 120 - 45?', opcoes: ['65','75','85','95'], correta: 1 },
+                { enunciado: 'Quanto é 7 × 8?', opcoes: ['54','56','58','48'], correta: 1 },
+                { enunciado: 'Quanto é 144 ÷ 12?', opcoes: ['10','11','12','13'], correta: 2 },
+                { enunciado: 'Qual é o dobro de 35?', opcoes: ['60','65','70','75'], correta: 2 },
+            ]
+        },
+        {
+            id: 2, titulo: 'Interpretação de Texto', materia: 'portugues', materiaLabel: 'Português',
+            serie: '6ano', dificuldade: 'medio', cor: '#EF4444',
+            descricao: 'Leia os textos e responda perguntas sobre conteúdo e interpretação.',
+            questoes: [
+                { enunciado: 'O que é um substantivo?', opcoes: ['Palavra que indica ação','Palavra que dá nome aos seres','Palavra que modifica o verbo','Palavra que une orações'], correta: 1 },
+                { enunciado: 'Qual é o plural de "cidadão"?', opcoes: ['cidadãos','cidadões','cidadões','cidadãis'], correta: 0 },
+                { enunciado: 'Qual classe gramatical pertence a palavra "rapidamente"?', opcoes: ['Adjetivo','Substantivo','Advérbio','Pronome'], correta: 2 },
+                { enunciado: 'Em "O gato subiu no telhado", qual é o sujeito?', opcoes: ['subiu','no telhado','O gato','telhado'], correta: 2 },
+                { enunciado: 'Qual é o sinônimo de "feliz"?', opcoes: ['Triste','Contente','Irritado','Cansado'], correta: 1 },
+            ]
+        },
+        {
+            id: 3, titulo: 'Corpo Humano', materia: 'ciencias', materiaLabel: 'Ciências',
+            serie: '7ano', dificuldade: 'medio', cor: '#22C55E',
+            descricao: 'Estude os sistemas do corpo humano e suas funções principais.',
+            questoes: [
+                { enunciado: 'Qual órgão é responsável pela bombeamento do sangue?', opcoes: ['Pulmão','Rim','Coração','Fígado'], correta: 2 },
+                { enunciado: 'Qual sistema é responsável pela troca de gases no corpo?', opcoes: ['Digestório','Respiratório','Circulatório','Nervoso'], correta: 1 },
+                { enunciado: 'Onde ocorre a digestão dos alimentos?', opcoes: ['Coração','Pulmão','Cérebro','Sistema digestório'], correta: 3 },
+                { enunciado: 'Qual é a função dos rins?', opcoes: ['Produzir sangue','Filtrar o sangue e produzir urina','Realizar trocas gasosas','Controlar o corpo'], correta: 1 },
+                { enunciado: 'Quantos ossos tem o corpo humano adulto aproximadamente?', opcoes: ['106','206','306','406'], correta: 1 },
+            ]
+        },
+        {
+            id: 4, titulo: 'Períodos Históricos', materia: 'historia', materiaLabel: 'História',
+            serie: '8ano', dificuldade: 'dificil', cor: '#F59E0B',
+            descricao: 'Conheça as principais fases da história e seus acontecimentos.',
+            questoes: [
+                { enunciado: 'Em que ano o Brasil foi descoberto pelos portugueses?', opcoes: ['1498','1500','1502','1492'], correta: 1 },
+                { enunciado: 'Quem proclamou a Independência do Brasil?', opcoes: ['Dom João VI','Tiradentes','Dom Pedro I','Getúlio Vargas'], correta: 2 },
+                { enunciado: 'Em que ano ocorreu a Proclamação da República no Brasil?', opcoes: ['1888','1889','1890','1891'], correta: 1 },
+                { enunciado: 'Qual movimento buscava a independência do Brasil no século XVIII?', opcoes: ['Revolução Farroupilha','Conjuração Baiana','Inconfidência Mineira','Cabanagem'], correta: 2 },
+                { enunciado: 'Qual foi o primeiro presidente do Brasil?', opcoes: ['Floriano Peixoto','Getúlio Vargas','Deodoro da Fonseca','Campos Sales'], correta: 2 },
+            ]
+        },
+        {
+            id: 5, titulo: 'Regiões do Brasil', materia: 'geografia', materiaLabel: 'Geografia',
+            serie: '6ano', dificuldade: 'facil', cor: '#10B981',
+            descricao: 'Características, climas, vegetação e economia das regiões brasileiras.',
+            questoes: [
+                { enunciado: 'Quantas regiões tem o Brasil?', opcoes: ['3','4','5','6'], correta: 2 },
+                { enunciado: 'Qual é a maior região do Brasil em extensão territorial?', opcoes: ['Sudeste','Sul','Nordeste','Norte'], correta: 3 },
+                { enunciado: 'Qual é a capital do Brasil?', opcoes: ['São Paulo','Rio de Janeiro','Brasília','Salvador'], correta: 2 },
+                { enunciado: 'Qual região é conhecida como o "celeiro do Brasil"?', opcoes: ['Norte','Nordeste','Centro-Oeste','Sul'], correta: 3 },
+                { enunciado: 'O bioma Cerrado está presente principalmente em qual região?', opcoes: ['Norte','Sul','Centro-Oeste','Sudeste'], correta: 2 },
+            ]
+        },
+        {
+            id: 6, titulo: 'Vocabulário em Inglês', materia: 'ingles', materiaLabel: 'Inglês',
+            serie: '5ano', dificuldade: 'facil', cor: '#8B5CF6',
+            descricao: 'Aprenda palavras e expressões básicas em inglês.',
+            questoes: [
+                { enunciado: 'Como se diz "cachorro" em inglês?', opcoes: ['Cat','Bird','Dog','Fish'], correta: 2 },
+                { enunciado: 'O que significa "Hello"?', opcoes: ['Tchau','Obrigado','Olá','Por favor'], correta: 2 },
+                { enunciado: 'Como se diz "escola" em inglês?', opcoes: ['House','School','Book','Table'], correta: 1 },
+                { enunciado: 'O que significa "I am happy"?', opcoes: ['Estou com fome','Estou feliz','Estou cansado','Estou com frio'], correta: 1 },
+                { enunciado: 'Como se diz "vermelho" em inglês?', opcoes: ['Blue','Green','Yellow','Red'], correta: 3 },
+            ]
+        },
+        {
+            id: 7, titulo: 'Frações e Decimais', materia: 'matematica', materiaLabel: 'Matemática',
+            serie: '6ano', dificuldade: 'medio', cor: '#3B82F6',
+            descricao: 'Operações com frações, números decimais e porcentagem.',
+            questoes: [
+                { enunciado: 'Quanto é 1/2 + 1/4?', opcoes: ['2/6','3/4','1/3','2/4'], correta: 1 },
+                { enunciado: 'Quanto é 0,5 + 0,25?', opcoes: ['0,70','0,75','0,80','0,85'], correta: 1 },
+                { enunciado: 'Qual é a fração equivalente a 0,25?', opcoes: ['1/5','1/3','1/4','1/2'], correta: 2 },
+                { enunciado: '50% de 200 é igual a?', opcoes: ['50','75','100','150'], correta: 2 },
+                { enunciado: 'Quanto é 3/4 de 80?', opcoes: ['40','50','60','70'], correta: 2 },
+            ]
+        },
+        {
+            id: 8, titulo: 'Ortografia e Gramática', materia: 'portugues', materiaLabel: 'Português',
+            serie: '5ano', dificuldade: 'facil', cor: '#EF4444',
+            descricao: 'Regras de escrita, acentuação e uso correto da língua portuguesa.',
+            questoes: [
+                { enunciado: 'Qual a grafia correta?', opcoes: ['Excessão','Exeção','Exceção','Execeção'], correta: 2 },
+                { enunciado: 'Qual palavra está acentuada corretamente?', opcoes: ['Voce','Você','Vocé','Vôce'], correta: 1 },
+                { enunciado: 'Qual é o plural de "cidadão"?', opcoes: ['Cidadões','Cidadãos','Cidadõis','Cidadeis'], correta: 1 },
+                { enunciado: 'Qual alternativa usa a vírgula corretamente?', opcoes: ['João, foi ao mercado','Maria comprou pão, leite e ovos','Ele correu, rápido','A casa, é bonita'], correta: 1 },
+                { enunciado: 'Qual é o antônimo de "generoso"?', opcoes: ['Bondoso','Gentil','Mesquinho','Amável'], correta: 2 },
+            ]
+        },
+        {
+            id: 9, titulo: 'Sistema Solar', materia: 'ciencias', materiaLabel: 'Ciências',
+            serie: '6ano', dificuldade: 'facil', cor: '#22C55E',
+            descricao: 'Planetas, estrelas e os principais elementos do sistema solar.',
+            questoes: [
+                { enunciado: 'Quantos planetas tem o Sistema Solar?', opcoes: ['7','8','9','10'], correta: 1 },
+                { enunciado: 'Qual é o maior planeta do Sistema Solar?', opcoes: ['Saturno','Netuno','Júpiter','Urano'], correta: 2 },
+                { enunciado: 'Qual planeta é conhecido como o "planeta vermelho"?', opcoes: ['Vênus','Mercúrio','Marte','Júpiter'], correta: 2 },
+                { enunciado: 'O que é o Sol?', opcoes: ['Um planeta','Uma lua','Uma estrela','Um asteroide'], correta: 2 },
+                { enunciado: 'Qual planeta fica mais próximo do Sol?', opcoes: ['Vênus','Terra','Mercúrio','Marte'], correta: 2 },
+            ]
+        },
+    ];
+
+    // ===================== ESTADO =====================
+    let atividadeAtual = null;
+    let questaoAtual = 0;
+    let acertos = 0;
+    let respondida = false;
+
+    // ===================== MENU =====================
+    function toggleMenu() {
+        document.getElementById('menuLateral').classList.toggle('-translate-x-full');
+        document.getElementById('fundoMenu').classList.toggle('hidden');
+    }
+
+    function sairDaConta() {
+        localStorage.removeItem('usuarioLogado');
+        window.location.href = 'login.html';
+    }
+
+    // ===================== RENDERIZAR CARDS =====================
+    const coresDificuldade = { facil: 'text-sucesso bg-green-50', medio: 'text-aviso bg-orange-50', dificil: 'text-erro bg-red-50' };
+    const labelDificuldade = { facil: 'Fácil', medio: 'Médio', dificil: 'Difícil' };
+    const labelSerie = { '5ano':'5º Ano','6ano':'6º Ano','7ano':'7º Ano','8ano':'8º Ano','9ano':'9º Ano','1medio':'1º Médio','2medio':'2º Médio','3medio':'3º Médio' };
+
+    function renderizarCards(lista) {
+        const container = document.getElementById('listaAtividades');
+        const semRes = document.getElementById('semResultados');
+        const contador = document.getElementById('contadorResultados');
+
+        container.innerHTML = '';
+        contador.textContent = `${lista.length} atividade${lista.length !== 1 ? 's' : ''} encontrada${lista.length !== 1 ? 's' : ''}`;
+
+        if (lista.length === 0) {
+            semRes.classList.remove('hidden');
+            return;
+        }
+        semRes.classList.add('hidden');
+
+        lista.forEach((a, i) => {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-2xl overflow-hidden conteudo-sombra botao-efeito anim';
+            card.style.animationDelay = `${i * 0.06}s`;
+            card.innerHTML = `
+                <div class="h-2" style="background:${a.cor}"></div>
                 <div class="p-5">
-                    <div class="flex justify-between items-start mb-3">
-                        <h3 class="text-lg font-bold">Operações Básicas</h3>
-                        <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">Matemática</span>
+                    <div class="flex justify-between items-start mb-3 gap-2">
+                        <h3 class="text-base font-black leading-tight">${a.titulo}</h3>
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold flex-shrink-0" style="background:${a.cor}22; color:${a.cor}">${a.materiaLabel}</span>
                     </div>
-                    <p class="text-gray-600 text-sm mb-4">Exercícios de adição, subtração, multiplicação e divisão.</p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="text-xs text-gray-500"><i class="fa fa-graduation-cap mr-1"></i> 5º ao 7º Ano</span>
-                        <span class="text-xs text-gray-500"><i class="fa fa-signal mr-1"></i> Fácil</span>
-                        <span class="text-xs text-gray-500"><i class="fa fa-clock-o mr-1"></i> 10 questões</span>
+                    <p class="text-gray-500 text-sm mb-4 leading-relaxed">${a.descricao}</p>
+                    <div class="flex flex-wrap gap-3 mb-5 text-xs text-gray-500 font-semibold">
+                        <span><i class="fa fa-graduation-cap mr-1"></i>${labelSerie[a.serie] || a.serie}</span>
+                        <span class="px-2 py-0.5 rounded-full text-xs font-bold ${coresDificuldade[a.dificuldade]}">${labelDificuldade[a.dificuldade]}</span>
+                        <span><i class="fa fa-list mr-1"></i>${a.questoes.length} questões</span>
                     </div>
-                    <button class="w-full bg-primario text-white py-2 px-4 rounded-lg font-medium botao-efeito text-sm">
-                        Começar Atividade
+                    <button onclick="abrirAtividade(${a.id})" class="w-full py-2.5 px-4 rounded-xl font-bold text-sm text-white botao-efeito" style="background:${a.cor}">
+                        <i class="fa fa-play mr-1"></i> Começar Atividade
                     </button>
-                </div>
-            </div>
+                </div>`;
+            container.appendChild(card);
+        });
+    }
 
-            <!-- Atividade 2 -->
-            <div class="bg-white rounded-2xl overflow-hidden conteudo-sombra botao-efeito">
-                <div class="h-3 bg-red-500"></div>
-                <div class="p-5">
-                    <div class="flex justify-between items-start mb-3">
-                        <h3 class="text-lg font-bold">Interpretação de Texto</h3>
-                        <span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">Português</span>
-                    </div>
-                    <p class="text-gray-600 text-sm mb-4">Leia os textos e responda as perguntas sobre o conteúdo.</p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="text-xs text-gray-500"><i class="fa fa-graduation-cap mr-1"></i> 6º ao 9º Ano</span>
-                        <span class="text-xs text-gray-500"><i class="fa fa-signal mr-1"></i> Médio</span>
-                        <span class="text-xs text-gray-500"><i class="fa fa-clock-o mr-1"></i> 8 questões</span>
-                    </div>
-                    <button class="w-full bg-primario text-white py-2 px-4 rounded-lg font-medium botao-efeito text-sm">
-                        Começar Atividade
-                    </button>
-                </div>
-            </div>
+    // ===================== FILTRO =====================
+    function filtrarAtividades() {
+        const mat = document.getElementById('filtroMateria').value;
+        const ser = document.getElementById('filtroSerie').value;
+        const dif = document.getElementById('filtroDificuldade').value;
+        const resultado = atividades.filter(a =>
+            (!mat || a.materia === mat) &&
+            (!ser || a.serie === ser) &&
+            (!dif || a.dificuldade === dif)
+        );
+        renderizarCards(resultado);
+    }
 
-            <!-- Atividade 3 -->
-            <div class="bg-white rounded-2xl overflow-hidden conteudo-sombra botao-efeito">
-                <div class="h-3 bg-green-500"></div>
-                <div class="p-5">
-                    <div class="flex justify-between items-start mb-3">
-                        <h3 class="text-lg font-bold">Corpo Humano</h3>
-                        <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Ciências</span>
-                    </div>
-                    <p class="text-gray-600 text-sm mb-4">Estude os sistemas do corpo humano e suas funções.</p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="text-xs text-gray-500"><i class="fa fa-graduation-cap mr-1"></i> 7º e 8º Ano</span>
-                        <span class="text-xs text-gray-500"><i class="fa fa-signal mr-1"></i> Médio</span>
-                        <span class="text-xs text-gray-500"><i class="fa fa-clock-o mr-1"></i> 12 questões</span>
-                    </div>
-                    <button class="w-full bg-primario text-white py-2 px-4 rounded-lg font-medium botao-efeito text-sm">
-                        Começar Atividade
-                    </button>
-                </div>
-            </div>
+    // ===================== MODAL - ABRIR =====================
+    function abrirAtividade(id) {
+        atividadeAtual = atividades.find(a => a.id === id);
+        questaoAtual = 0;
+        acertos = 0;
+        respondida = false;
+        document.getElementById('modalAtividade').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        renderizarQuestao();
+    }
 
-            <!-- Atividade 4 -->
-            <div class="bg-white rounded-2xl overflow-hidden conteudo-sombra botao-efeito">
-                <div class="h-3 bg-amber-500"></div>
-                <div class="p-5">
-                    <div class="flex justify-between items-start mb-3">
-                        <h3 class="text-lg font-bold">Períodos Históricos</h3>
-                        <span class="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs">História</span>
-                    </div>
-                    <p class="text-gray-600 text-sm mb-4">Conheça as principais fases da história e seus acontecimentos.</p>
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="text-xs text-gray-500"><i class="fa fa-graduation-cap mr-1"></i> 8º e 9º Ano</span>
-                        <span class="text-xs text-gray-500"><i class="fa fa-signal mr-1"></i> Difícil</span>
-                        <span class="text-xs text-gray-500"><i class="fa fa-clock-o mr-1"></i> 15 questões</span>
-                    </div>
-                    <button class="w-full bg-primario text-white py-2 px-4 rounded-lg font-medium botao-efeito text-sm">
-                        Começar Atividade
-                    </button>
-                </div>
-            </div>
+    function fecharModal() {
+        document.getElementById('modalAtividade').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
 
-            <!-- Atividade 5 -->
-            <div class="bg-white rounded-2xl overflow-hidden conteudo-sombra botao-efeito">
-                <div class="h-3 bg-emerald-500"></div>
-                <div class="p-5">
-                    <div class="flex justify-between items-start mb-3">
-                        <h3 class="text-lg font-bold">Regiões do Brasil</h3>
-                        <span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs">Geografia</span>
-                    </div>
-                    <p class="text-gray-600 text-sm mb-4">Características, climas, vegetação e economia das regiões brasileiras.</p>
-                    <div class="flex flex-wrap gap-2 mb-4">
+    function fecharTudo() {
+        fecharModal();
+        document.getElementById('modalResultado').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    // ===================== RENDERIZAR QUESTÃO =====================
+    function renderizarQuestao() {
+        const q = atividadeAtual.questoes[questaoAtual];
+        const total = atividadeAtual.questoes.length;
+        const progresso = (questaoAtual / total) * 100;
+
+        // Header
+        document.getElementById('modalHeader').style.background = `linear-gradient(135deg, ${atividadeAtual.cor}, ${atividadeAtual.cor}cc)`;
+        document.getElementById('modalMateria').textContent = atividadeAtual.materiaLabel;
+        document.getElementById('modalTitulo').textContent = atividadeAtual.titulo;
+        document.getElementById('modalInfo').textContent = `${labelDificuldade[atividadeAtual.dificuldade]} · ${labelSerie[atividadeAtual.serie]}`;
+        document.getElementById('barraProgresso').style.width = progresso + '%';
+        document.getElementById('progressoTexto').textContent = `Questão ${questaoAtual + 1} de ${total}`;
+
+        // Enunciado
+        document.getElementById('enunciadoQuestao').textContent = q.enunciado;
+
+        // Opções
+        const letras = ['A','B','C','D','E'];
+        const opcoesEl = document.getElementById('opcoesQuestao');
+        opcoesEl.innerHTML = '';
+        q.opcoes.forEach((op, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'opcao-questao w-full text-left';
+            btn.innerHTML = `<span class="letra-opcao">${letras[i]}</span>${op}`;
+            btn.onclick = () => responder(i, btn);
+            opcoesEl.appendChild(btn);
+        });
+
+        // Feedback e botão
+        const feedback = document.getElementById('feedbackQuestao');
+        feedback.classList.add('hidden');
+        feedback.textContent = '';
+        document.getElementById('btnProximo').classList.add('hidden');
+        document.getElementById('placarModal').textContent = `✅ ${acertos} acerto${acertos !== 1 ? 's' : ''}`;
+        respondida = false;
+    }
+
+    // ===================== RESPONDER =====================
+    function responder(indice, btnClicado) {
+        if (respondida) return;
+        respondida = true;
+
+        const q = atividadeAtual.questoes[questaoAtual];
+        const opcoes = document.querySelectorAll('.opcao-questao');
+        const feedback = document.getElementById('feedbackQuestao');
+
+        opcoes.forEach(b => b.style.pointerEvents = 'none');
+
+        if (indice === q.correta) {
+            acertos++;
+            btnClicado.classList.add('correta');
+            feedback.className = 'mt-4 p-4 rounded-xl text-sm font-semibold bg-green-50 text-sucesso border border-green-200';
+            feedback.textContent = '✅ Correto! Muito bem!';
+        } else {
+            btnClicado.classList.add('errada');
+            opcoes[q.correta].classList.add('correta');
+            feedback.className = 'mt-4 p-4 rounded-xl text-sm font-semibold bg-red-50 text-erro border border-red-200';
+            feedback.textContent = `❌ Incorreto. A resposta certa é: ${q.opcoes[q.correta]}`;
+        }
+
+        feedback.classList.remove('hidden');
+        document.getElementById('placarModal').textContent = `✅ ${acertos} acerto${acertos !== 1 ? 's' : ''}`;
+
+        const btnProx = document.getElementById('btnProximo');
+        btnProx.classList.remove('hidden');
+        const isUltima = questaoAtual === atividadeAtual.questoes.length - 1;
+        btnProx.innerHTML = isUltima
+            ? 'Ver Resultado <i class="fa fa-trophy ml-1"></i>'
+            : 'Próxima <i class="fa fa-arrow-right ml-1"></i>';
+    }
+
+    // ===================== PRÓXIMA QUESTÃO =====================
+    function proximaQuestao() {
+        const total = atividadeAtual.questoes.length;
+        questaoAtual++;
+        if (questaoAtual >= total) {
+            mostrarResultado();
+        } else {
+            renderizarQuestao();
+        }
+    }
+
+    // ===================== RESULTADO FINAL =====================
+    function mostrarResultado() {
+        fecharModal();
+        const total = atividadeAtual.questoes.length;
+        const pct = Math.round((acertos / total) * 100);
+        let icone, titulo, sub;
+
+        if (pct >= 80) {
+            icone = '🏆'; titulo = `Excelente! ${pct}%`;
+            sub = `Você acertou ${acertos} de ${total} questões. Parabéns!`;
+        } else if (pct >= 50) {
+            icone = '👍'; titulo = `Bom trabalho! ${pct}%`;
+            sub = `Você acertou ${acertos} de ${total} questões. Continue praticando!`;
+        } else {
+            icone = '📚'; titulo = `Pode melhorar! ${pct}%`;
+            sub = `Você acertou ${acertos} de ${total} questões. Revise o conteúdo e tente novamente!`;
+        }
+
+        document.getElementById('iconResultado').textContent = icone;
+        document.getElementById('tituloResultado').textContent = titulo;
+        document.getElementById('subtituloResultado').textContent = sub;
+        document.getElementById('modalResultado').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function reiniciarAtividade() {
+        document.getElementById('modalResultado').classList.add('hidden');
+        abrirAtividade(atividadeAtual.id);
+    }
+
+    // ===================== INIT =====================
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
+    if (usuario.nome) document.getElementById('nomeUsuario').textContent = usuario.nome;
+
+    // Verificar parâmetro ?materia= da URL
+    const params = new URLSearchParams(window.location.search);
+    const materiaParam = params.get('materia');
+    if (materiaParam) document.getElementById('filtroMateria').value = materiaParam;
+
+    filtrarAtividades();
+    </script>
+</body>
+</html>
