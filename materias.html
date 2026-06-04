@@ -166,7 +166,8 @@
                         <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs">5º ao 9º Ano</span>
                         <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs">Ensino Médio</span>
                     </div>
-                    <a href="atividades.html?materia=portugues" class="inline-block w-full text-center bg-primario text-white py-2 px-4 rounded-lg font-medium botao-efeito text-sm">
+                    <!-- LINK ALTERADO: agora redireciona para portugues_5ano.html -->
+                    <a href="portugues_5ano.html" class="inline-block w-full text-center bg-primario text-white py-2 px-4 rounded-lg font-medium botao-efeito text-sm">
                         Acessar Matéria
                     </a>
                 </div>
@@ -258,3 +259,33 @@
                 </div>
                 <div class="p-5 bg-claro rounded-xl">
                     <h4 class="font-bold text-lg mb-2 flex items-center gap-2">
+                        <i class="fa fa-file-text text-primario"></i> Materiais de Apoio
+                    </h4>
+                    <p class="text-gray-600 text-sm mb-4">Acesse resumos, mapas mentais e fichas de estudo.</p>
+                    <a href="#" class="text-primario font-medium text-sm hover:underline">Ver materiais <i class="fa fa-arrow-right ml-1"></i></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('menuLateral');
+            const fundo = document.getElementById('fundoMenu');
+            menu.classList.toggle('menu-aberto');
+            fundo.classList.toggle('hidden');
+        }
+
+        function sairDaConta() {
+            localStorage.removeItem('usuarioLogado');
+            window.location.href = 'index.html';
+        }
+
+        // Carregar nome do usuário
+        const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
+        if (usuario.nome) {
+            document.getElementById('nomeUsuario').textContent = usuario.nome;
+        }
+    </script>
+</body>
+</html>
