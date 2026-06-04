@@ -6,298 +6,434 @@
     <title>Perfil - Plataforma de Estudos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primario: '#165DFF',
-                        secundario: '#36BFFA',
-                        sucesso: '#00B42A',
-                        aviso: '#FF7D00',
-                        erro: '#F53F3F',
-                        claro: '#F7F8FA',
-                        escuro: '#1D2129',
+                        primario: '#165DFF', secundario: '#36BFFA', sucesso: '#00B42A',
+                        aviso: '#FF7D00', erro: '#F53F3F', claro: '#F7F8FA', escuro: '#1D2129',
                     },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Nunito', 'system-ui', 'sans-serif'] }
                 }
             }
         }
     </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .conteudo-sombra {
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            }
-            .botao-efeito {
-                transition: all 0.3s ease;
-            }
-            .botao-efeito:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
-            }
-            .menu-aberto {
-                transform: translateX(0);
-            }
+    <style>
+        * { box-sizing: border-box; }
+        body { background: #F0F4FF; }
+        .menu-lateral { transition: transform 0.3s cubic-bezier(.4,0,.2,1); }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .anim { animation: fadeUp 0.45s ease both; }
+        .info-item { border-bottom: 1px solid #f3f4f6; padding: 0.875rem 0; display: flex; align-items: flex-start; gap: 1rem; }
+        .info-item:last-child { border-bottom: none; }
+        .info-icone { width: 2.2rem; height: 2.2rem; border-radius: 0.6rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; }
+        .input-edit {
+            width: 100%; padding: 0.6rem 0.9rem; border: 2px solid #e5e7eb;
+            border-radius: 0.65rem; font-family: 'Nunito', sans-serif;
+            font-size: 0.875rem; font-weight: 700; background: #fafafa;
+            transition: all 0.2s;
         }
+        .input-edit:focus { border-color: #165DFF; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(22,93,255,0.1); }
+        .badge-status { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; }
     </style>
 </head>
-<body class="bg-claro min-h-screen font-sans text-escuro flex">
-    <!-- Cabeçalho -->
-    <header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20">
-        <div class="flex items-center justify-between max-w-full">
+<body class="min-h-screen font-sans text-escuro flex">
+
+    <!-- CABEÇALHO -->
+    <header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20 shadow-lg">
+        <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <!-- Botão de menu para celular -->
-                <button id="botaoMenu" class="md:hidden text-white text-xl" onclick="toggleMenu()">
+                <button class="md:hidden text-white text-xl p-1" onclick="toggleMenu()">
                     <i class="fa fa-bars"></i>
                 </button>
                 <i class="fa fa-graduation-cap text-2xl"></i>
                 <h1 class="text-lg md:text-xl font-bold">Plataforma de Estudos</h1>
             </div>
             <div class="flex items-center gap-3">
-                <span id="nomeUsuario" class="font-medium text-sm md:text-base"></span>
-                <button onclick="sairDaConta()" class="bg-white text-primario px-2 py-1 rounded-lg text-xs md:text-sm font-medium botao-efeito">
+                <span id="nomeHeader" class="font-semibold text-sm hidden sm:inline"></span>
+                <button onclick="sairDaConta()" class="bg-white text-primario px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-50 transition-colors">
                     Sair
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Menu Lateral - TODOS OS ITENS SÃO CLICÁVEIS -->
-    <aside id="menuLateral" class="fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-200 pt-6 z-30 overflow-y-auto transition-transform duration-300 transform -translate-x-full md:translate-x-0">
+    <!-- MENU LATERAL -->
+    <aside id="menuLateral" class="menu-lateral fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-100 pt-6 z-30 overflow-y-auto -translate-x-full md:translate-x-0 shadow-xl md:shadow-none">
         <nav class="px-4">
-            <ul class="space-y-2">
-                <li>
-                    <a href="inicio.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
-                        <i class="fa fa-home w-5 text-center"></i>
-                        <span>Início</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="materias.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
-                        <i class="fa fa-book w-5 text-center"></i>
-                        <span>Matérias</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
-                        <i class="fa fa-tasks w-5 text-center"></i>
-                        <span>Atividades</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
-                        <i class="fa fa-bar-chart w-5 text-center"></i>
-                        <span>Meu Desempenho</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
-                        <i class="fa fa-credit-card w-5 text-center"></i>
-                        <span>Assinatura</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="perfil.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
-                        <i class="fa fa-user w-5 text-center"></i>
-                        <span>Perfil</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="pais.html" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-primario/10 transition-colors">
-                        <i class="fa fa-users w-5 text-center"></i>
-                        <span>Pais / Responsáveis</span>
-                    </a>
-                </li>
+            <ul class="space-y-1">
+                <li><a href="inicio.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-home w-5 text-center"></i> Início</a></li>
+                <li><a href="materias.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-book w-5 text-center"></i> Matérias</a></li>
+                <li><a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-tasks w-5 text-center"></i> Atividades</a></li>
+                <li><a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-bar-chart w-5 text-center"></i> Meu Desempenho</a></li>
+                <li><a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-credit-card w-5 text-center"></i> Assinatura</a></li>
+                <li><a href="perfil.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primario/10 text-primario font-bold text-sm"><i class="fa fa-user w-5 text-center"></i> Perfil</a></li>
+                <li><a href="pais.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-users w-5 text-center"></i> Pais / Responsáveis</a></li>
             </ul>
         </nav>
     </aside>
 
-    <!-- Fundo escuro quando o menu estiver aberto no celular -->
     <div id="fundoMenu" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden" onclick="toggleMenu()"></div>
 
-    <!-- Conteúdo Principal -->
-    <main class="w-full p-4 md:ml-64 mt-20">
-        <h2 class="text-[clamp(1.5rem,4vw,2.2rem)] font-bold mb-6">Meu Perfil</h2>
+    <!-- CONTEÚDO -->
+    <main class="w-full md:ml-64 mt-16 pb-16 px-3 sm:px-6 pt-8 max-w-4xl">
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
-            <!-- Dados Principais -->
-            <div class="lg:col-span-2 space-y-6 md:space-y-8">
-                <div class="bg-white rounded-2xl p-5 md:p-8 conteudo-sombra">
-                    <h3 class="text-xl font-bold mb-6 border-b pb-4">Dados Pessoais</h3>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
-                        <div>
-                            <label class="block text-gray-700 font-medium mb-2 text-sm md:text-base">Nome Completo</label>
-                            <p id="campoNome" class="w-full px-4 py-3 bg-claro rounded-lg border border-gray-200 text-sm md:text-base"></p>
+        <!-- Avatar + nome -->
+        <div class="flex flex-col sm:flex-row items-center sm:items-end gap-5 mb-8 anim">
+            <div class="relative">
+                <div id="avatarCirculo" class="w-24 h-24 rounded-full bg-gradient-to-br from-primario to-secundario flex items-center justify-center text-white text-4xl font-black shadow-lg shadow-blue-200">
+                    ?
+                </div>
+                <div class="absolute bottom-0 right-0 w-7 h-7 bg-sucesso rounded-full border-2 border-white flex items-center justify-center">
+                    <i class="fa fa-check text-white text-xs"></i>
+                </div>
+            </div>
+            <div class="text-center sm:text-left">
+                <h2 id="nomePerfilTitulo" class="text-2xl sm:text-3xl font-black text-escuro"></h2>
+                <div class="flex flex-wrap gap-2 mt-1 justify-center sm:justify-start">
+                    <span id="badgeTipo" class="badge-status bg-primario/10 text-primario"></span>
+                    <span id="badgeStatus" class="badge-status"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+            <!-- Coluna esquerda: Informações -->
+            <div class="lg:col-span-2 space-y-5">
+
+                <!-- Dados pessoais -->
+                <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm anim" style="animation-delay:0.05s">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-black text-base flex items-center gap-2">
+                            <i class="fa fa-user text-primario"></i> Dados Pessoais
+                        </h3>
+                        <button onclick="toggleEdicao()" id="btnEditar" class="text-xs font-bold text-primario hover:underline flex items-center gap-1">
+                            <i class="fa fa-pencil"></i> Editar
+                        </button>
+                    </div>
+
+                    <!-- Modo visualização -->
+                    <div id="modoVisualizar">
+                        <div class="info-item">
+                            <div class="info-icone bg-blue-50 text-primario"><i class="fa fa-user"></i></div>
+                            <div><p class="text-xs text-gray-400 font-bold uppercase tracking-wide">Nome</p><p id="vNome" class="font-bold text-escuro text-sm mt-0.5"></p></div>
                         </div>
-                        
-                        <div>
-                            <label class="block text-gray-700 font-medium mb-2 text-sm md:text-base">Data de Nascimento</label>
-                            <p id="campoNascimento" class="w-full px-4 py-3 bg-claro rounded-lg border border-gray-200 text-sm md:text-base"></p>
+                        <div class="info-item">
+                            <div class="info-icone bg-red-50 text-erro"><i class="fa fa-envelope"></i></div>
+                            <div><p class="text-xs text-gray-400 font-bold uppercase tracking-wide">E-mail</p><p id="vEmail" class="font-bold text-escuro text-sm mt-0.5 break-all"></p></div>
                         </div>
-                        
-                        <div>
-                            <label class="block text-gray-700 font-medium mb-2 text-sm md:text-base">E-mail</label>
-                            <p id="campoEmail" class="w-full px-4 py-3 bg-claro rounded-lg border border-gray-200 text-sm md:text-base"></p>
+                        <div class="info-item">
+                            <div class="info-icone bg-green-50 text-sucesso"><i class="fa fa-phone"></i></div>
+                            <div><p class="text-xs text-gray-400 font-bold uppercase tracking-wide">Telefone</p><p id="vTelefone" class="font-bold text-escuro text-sm mt-0.5"></p></div>
                         </div>
-                        
-                        <div>
-                            <label class="block text-gray-700 font-medium mb-2 text-sm md:text-base">Telefone</label>
-                            <p id="campoTelefone" class="w-full px-4 py-3 bg-claro rounded-lg border border-gray-200 text-sm md:text-base"></p>
+                        <div class="info-item">
+                            <div class="info-icone bg-orange-50 text-aviso"><i class="fa fa-calendar"></i></div>
+                            <div><p class="text-xs text-gray-400 font-bold uppercase tracking-wide">Data de Nascimento</p><p id="vNascimento" class="font-bold text-escuro text-sm mt-0.5"></p></div>
                         </div>
-                        
-                        <div>
-                            <label class="block text-gray-700 font-medium mb-2 text-sm md:text-base">Série/Ano</label>
-                            <p id="campoSerie" class="w-full px-4 py-3 bg-claro rounded-lg border border-gray-200 text-sm md:text-base"></p>
+                        <div class="info-item">
+                            <div class="info-icone bg-purple-50 text-purple-600"><i class="fa fa-graduation-cap"></i></div>
+                            <div><p class="text-xs text-gray-400 font-bold uppercase tracking-wide">Série / Ano</p><p id="vSerie" class="font-bold text-escuro text-sm mt-0.5"></p></div>
                         </div>
-                        
-                        <div>
-                            <label class="block text-gray-700 font-medium mb-2 text-sm md:text-base">Escola</label>
-                            <p id="campoEscola" class="w-full px-4 py-3 bg-claro rounded-lg border border-gray-200 text-sm md:text-base"></p>
+                        <div class="info-item">
+                            <div class="info-icone bg-cyan-50 text-secundario"><i class="fa fa-building"></i></div>
+                            <div><p class="text-xs text-gray-400 font-bold uppercase tracking-wide">Escola</p><p id="vEscola" class="font-bold text-escuro text-sm mt-0.5"></p></div>
                         </div>
+                    </div>
+
+                    <!-- Modo edição -->
+                    <div id="modoEditar" class="hidden space-y-3">
+                        <div>
+                            <label class="text-xs font-black text-gray-500 uppercase tracking-wide block mb-1">Nome</label>
+                            <input type="text" id="eNome" class="input-edit">
+                        </div>
+                        <div>
+                            <label class="text-xs font-black text-gray-500 uppercase tracking-wide block mb-1">E-mail</label>
+                            <input type="email" id="eEmail" class="input-edit">
+                        </div>
+                        <div>
+                            <label class="text-xs font-black text-gray-500 uppercase tracking-wide block mb-1">Telefone</label>
+                            <input type="tel" id="eTelefone" class="input-edit">
+                        </div>
+                        <div>
+                            <label class="text-xs font-black text-gray-500 uppercase tracking-wide block mb-1">Escola</label>
+                            <input type="text" id="eEscola" class="input-edit">
+                        </div>
+                        <div class="flex gap-3 pt-2">
+                            <button onclick="salvarEdicao()" class="bg-primario text-white px-5 py-2 rounded-xl font-black text-sm hover:bg-blue-700 transition-colors">
+                                <i class="fa fa-save mr-1"></i> Salvar
+                            </button>
+                            <button onclick="cancelarEdicao()" class="bg-gray-100 text-gray-600 px-5 py-2 rounded-xl font-black text-sm hover:bg-gray-200 transition-colors">
+                                Cancelar
+                            </button>
+                        </div>
+                        <p id="mensagemSalvo" class="hidden text-sucesso text-sm font-bold flex items-center gap-1">
+                            <i class="fa fa-check-circle"></i> Dados salvos com sucesso!
+                        </p>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl p-5 md:p-8 conteudo-sombra">
-                    <h3 class="text-xl font-bold mb-6 border-b pb-4">Dados da Conta</h3>
-                    
-                    <div class="space-y-4">
-                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 border-b gap-2 sm:gap-0">
-                            <span class="text-gray-700 font-medium text-sm md:text-base">Status da Conta</span>
-                            <span id="campoStatus" class="px-4 py-1 rounded-full text-xs md:text-sm font-medium w-fit"></span>
+                <!-- Alterar senha -->
+                <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm anim" style="animation-delay:0.1s">
+                    <h3 class="font-black text-base flex items-center gap-2 mb-4">
+                        <i class="fa fa-lock text-primario"></i> Alterar Senha
+                    </h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-xs font-black text-gray-500 uppercase tracking-wide block mb-1">Senha Atual</label>
+                            <input type="password" id="senhaAtual" class="input-edit" placeholder="Digite sua senha atual">
                         </div>
-                        
-                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 border-b gap-2 sm:gap-0">
-                            <span class="text-gray-700 font-medium text-sm md:text-base">Tipo de Usuário</span>
-                            <span id="campoTipo" class="text-gray-600 text-sm md:text-base"></span>
+                        <div>
+                            <label class="text-xs font-black text-gray-500 uppercase tracking-wide block mb-1">Nova Senha</label>
+                            <input type="password" id="novaSenha" class="input-edit" placeholder="Mínimo 6 caracteres">
                         </div>
-                        
-                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 border-b gap-2 sm:gap-0">
-                            <span class="text-gray-700 font-medium text-sm md:text-base">Início do Teste</span>
-                            <span id="campoInicioTeste" class="text-gray-600 text-sm md:text-base"></span>
+                        <div>
+                            <label class="text-xs font-black text-gray-500 uppercase tracking-wide block mb-1">Confirmar Nova Senha</label>
+                            <input type="password" id="confirmarNovaSenha" class="input-edit" placeholder="Repita a nova senha">
                         </div>
-                        
-                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 border-b gap-2 sm:gap-0">
-                            <span class="text-gray-700 font-medium text-sm md:text-base">Fim do Teste</span>
-                            <span id="campoFimTeste" class="text-gray-600 text-sm md:text-base"></span>
-                        </div>
-                        
-                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-3 gap-2 sm:gap-0">
-                            <span class="text-gray-700 font-medium text-sm md:text-base">Plano de Assinatura</span>
-                            <span id="campoPlano" class="text-gray-600 text-sm md:text-base"></span>
-                        </div>
+                        <p id="erroSenha" class="hidden text-erro text-xs font-bold"></p>
+                        <p id="sucessoSenha" class="hidden text-sucesso text-sm font-bold flex items-center gap-1"><i class="fa fa-check-circle"></i> Senha alterada com sucesso!</p>
+                        <button onclick="alterarSenha()" class="bg-escuro text-white px-5 py-2 rounded-xl font-black text-sm hover:bg-gray-800 transition-colors">
+                            <i class="fa fa-key mr-1"></i> Alterar Senha
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Lateral -->
-            <div class="space-y-6 md:space-y-8">
-                <div class="bg-white rounded-2xl p-5 md:p-8 conteudo-sombra text-center">
-                    <div class="w-24 h-24 md:w-32 md:h-32 bg-primario/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fa fa-user text-4xl md:text-5xl text-primario"></i>
-                    </div>
-                    <h3 id="nomePerfil" class="text-lg md:text-xl font-bold mb-2"></h3>
-                    <p id="tipoPerfil" class="text-gray-600 mb-4 text-sm md:text-base"></p>
-                    
-                    <div id="statusPerfil" class="px-4 py-2 rounded-full text-xs md:text-sm font-medium inline-block mb-6"></div>
-                    
-                    <button onclick="sairDaConta()" class="w-full bg-erro text-white py-3 px-4 rounded-lg font-medium botao-efeito text-sm md:text-base">
-                        Sair da Conta
-                    </button>
+            <!-- Coluna direita: Assinatura + Conta -->
+            <div class="space-y-5">
+
+                <!-- Status da conta -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm anim" style="animation-delay:0.08s">
+                    <h3 class="font-black text-base flex items-center gap-2 mb-4">
+                        <i class="fa fa-star text-aviso"></i> Minha Conta
+                    </h3>
+                    <div id="infoAssinatura" class="space-y-3 text-sm"></div>
+                    <a href="assinatura.html" class="mt-4 block w-full text-center bg-primario text-white py-2.5 rounded-xl font-black text-sm hover:bg-blue-700 transition-colors">
+                        <i class="fa fa-credit-card mr-1"></i> Ver Planos
+                    </a>
                 </div>
 
-                <div class="bg-white rounded-2xl p-5 md:p-8 conteudo-sombra">
-                    <h3 class="text-lg font-bold mb-4">Informações da Plataforma</h3>
-                    <ul class="space-y-3 text-gray-600 text-sm md:text-base">
-                        <li class="flex items-center gap-2">
-                            <i class="fa fa-check text-sucesso"></i>
-                            <span>Mais de 12 matérias</span>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <i class="fa fa-check text-sucesso"></i>
-                            <span>Mais de 150 exercícios</span>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <i class="fa fa-check text-sucesso"></i>
-                            <span>Conteúdo organizado por série</span>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <i class="fa fa-check text-sucesso"></i>
-                            <span>Acesso via assinatura</span>
-                        </li>
-                    </ul>
+                <!-- Tipo de usuário -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm anim" style="animation-delay:0.12s">
+                    <h3 class="font-black text-base flex items-center gap-2 mb-3">
+                        <i class="fa fa-id-card-o text-primario"></i> Tipo de Usuário
+                    </h3>
+                    <div id="infoTipo" class="text-sm text-gray-600"></div>
+                </div>
+
+                <!-- Ações perigosas -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm anim" style="animation-delay:0.15s">
+                    <h3 class="font-black text-base flex items-center gap-2 mb-3 text-erro">
+                        <i class="fa fa-exclamation-triangle"></i> Zona de Risco
+                    </h3>
+                    <button onclick="confirmarExclusao()" class="w-full border-2 border-red-200 text-erro py-2 rounded-xl font-black text-sm hover:bg-red-50 transition-colors">
+                        <i class="fa fa-trash mr-1"></i> Excluir minha conta
+                    </button>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- Modal confirmação exclusão -->
+    <div id="modalExclusao" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
+            <div class="text-5xl mb-3">⚠️</div>
+            <h3 class="text-xl font-black mb-2">Excluir conta?</h3>
+            <p class="text-gray-500 text-sm mb-5">Esta ação é irreversível. Todos os seus dados serão apagados permanentemente.</p>
+            <div class="flex gap-3">
+                <button onclick="excluirConta()" class="flex-1 bg-erro text-white py-2.5 rounded-xl font-black text-sm hover:bg-red-600 transition-colors">Sim, excluir</button>
+                <button onclick="document.getElementById('modalExclusao').classList.add('hidden')" class="flex-1 bg-gray-100 text-gray-700 py-2.5 rounded-xl font-black text-sm hover:bg-gray-200 transition-colors">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Função para abrir/fechar o menu no celular
+        let usuario = null;
+
         function toggleMenu() {
-            const menu = document.getElementById('menuLateral');
-            const fundo = document.getElementById('fundoMenu');
-            menu.classList.toggle('menu-aberto');
-            fundo.classList.toggle('hidden');
+            document.getElementById('menuLateral').classList.toggle('-translate-x-full');
+            document.getElementById('fundoMenu').classList.toggle('hidden');
         }
 
-        // Sistema de verificação de acesso
-        function verificarAcesso() {
-            // Verifica se existem dados salvos
-            const usuarioLogado = localStorage.getItem('usuarioLogado');
-            const listaUsuarios = localStorage.getItem('listaUsuarios');
+        function sairDaConta() {
+            localStorage.removeItem('usuarioLogado');
+            window.location.href = 'login.html';
+        }
 
-            // Se não tiver dados, redireciona para login
-            if (!usuarioLogado || !listaUsuarios) {
-                window.location.href = 'login.html';
-                return;
+        function formatarData(iso) {
+            if (!iso) return '—';
+            const d = new Date(iso);
+            return d.toLocaleDateString('pt-BR');
+        }
+
+        function formatarNascimento(str) {
+            if (!str) return '—';
+            // formato YYYY-MM-DD
+            const [y, m, d] = str.split('-');
+            return `${d}/${m}/${y}`;
+        }
+
+        const labelSerie = {
+            '5ano':'5º Ano', '6ano':'6º Ano', '7ano':'7º Ano', '8ano':'8º Ano', '9ano':'9º Ano',
+            '1medio':'1º Médio', '2medio':'2º Médio', '3medio':'3º Médio'
+        };
+
+        function carregarPerfil() {
+            const dados = localStorage.getItem('usuarioLogado');
+            if (!dados) { window.location.href = 'login.html'; return; }
+            usuario = JSON.parse(dados);
+
+            // Header
+            document.getElementById('nomeHeader').textContent = usuario.nome;
+
+            // Avatar com inicial
+            const inicial = usuario.nome ? usuario.nome.charAt(0).toUpperCase() : '?';
+            document.getElementById('avatarCirculo').textContent = inicial;
+
+            // Título
+            document.getElementById('nomePerfilTitulo').textContent = usuario.nome;
+
+            // Badge tipo
+            const tipo = usuario.tipo === 'responsavel' ? 'Responsável' : 'Aluno';
+            document.getElementById('badgeTipo').innerHTML = `<i class="fa fa-user mr-1"></i>${tipo}`;
+
+            // Badge status
+            const badgeStatus = document.getElementById('badgeStatus');
+            if (usuario.statusAssinatura === 'ativa') {
+                badgeStatus.className = 'badge-status bg-green-100 text-sucesso';
+                badgeStatus.innerHTML = '<i class="fa fa-check-circle mr-1"></i>Assinatura Ativa';
+            } else if (usuario.statusAssinatura === 'expirada') {
+                badgeStatus.className = 'badge-status bg-red-100 text-erro';
+                badgeStatus.innerHTML = '<i class="fa fa-times-circle mr-1"></i>Período Expirado';
+            } else {
+                badgeStatus.className = 'badge-status bg-orange-100 text-aviso';
+                badgeStatus.innerHTML = '<i class="fa fa-clock-o mr-1"></i>Período de Teste';
             }
 
-            try {
-                // Converte os dados para objeto
-                const dadosUsuario = JSON.parse(usuarioLogado);
-                
-                // Verifica se os dados são válidos
-                if (!dadosUsuario || !dadosUsuario.email) {
-                    localStorage.removeItem('usuarioLogado');
-                    window.location.href = 'login.html';
-                    return;
-                }
+            // Dados pessoais
+            document.getElementById('vNome').textContent = usuario.nome || '—';
+            document.getElementById('vEmail').textContent = usuario.email || '—';
+            document.getElementById('vTelefone').textContent = usuario.telefone || '—';
+            document.getElementById('vNascimento').textContent = formatarNascimento(usuario.nascimento);
+            document.getElementById('vSerie').textContent = labelSerie[usuario.serie] || usuario.serie || '—';
+            document.getElementById('vEscola').textContent = usuario.escola || '—';
 
-                // Preenche todos os campos da página
-                document.getElementById('nomeUsuario').textContent = dadosUsuario.nome;
-                document.getElementById('nomePerfil').textContent = dadosUsuario.nome;
-                document.getElementById('tipoPerfil').textContent = dadosUsuario.tipo === 'aluno' ? 'Aluno' : 'Responsável';
-                document.getElementById('campoNome').textContent = dadosUsuario.nome;
-                document.getElementById('campoEmail').textContent = dadosUsuario.email;
-                document.getElementById('campoTelefone').textContent = dadosUsuario.telefone || 'Não informado';
-                document.getElementById('campoEscola').textContent = dadosUsuario.escola || 'Não informado';
-                
-                // Formata a data de nascimento
-                if (dadosUsuario.nascimento) {
-                    const data = new Date(dadosUsuario.nascimento);
-                    const dataFormatada = data.toLocaleDateString('pt-BR');
-                    document.getElementById('campoNascimento').textContent = dataFormatada;
-                }
+            // Info assinatura
+            const infoAss = document.getElementById('infoAssinatura');
+            if (usuario.statusAssinatura === 'ativa') {
+                infoAss.innerHTML = `
+                    <div class="flex justify-between"><span class="text-gray-400 font-semibold">Status</span><span class="text-sucesso font-black">Ativa ✅</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400 font-semibold">Plano</span><span class="font-black">${usuario.planoAssinatura || '—'}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400 font-semibold">Desde</span><span class="font-black">${formatarData(usuario.dataAssinatura)}</span></div>`;
+            } else if (usuario.statusAssinatura === 'expirada') {
+                infoAss.innerHTML = `<div class="text-erro font-bold text-sm flex items-center gap-2"><i class="fa fa-lock"></i> Acesso expirado. Assine para continuar.</div>`;
+            } else {
+                const fim = new Date(usuario.dataFimTeste);
+                const dias = Math.max(0, Math.ceil((fim - new Date()) / (1000 * 60 * 60 * 24)));
+                infoAss.innerHTML = `
+                    <div class="flex justify-between"><span class="text-gray-400 font-semibold">Status</span><span class="text-aviso font-black">Teste Grátis</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400 font-semibold">Dias restantes</span><span class="font-black text-aviso">${dias} dias</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400 font-semibold">Expira em</span><span class="font-black">${formatarData(usuario.dataFimTeste)}</span></div>`;
+            }
 
-                // Formata a série
-                const nomesSeries = {
-                    '5ano': '5º Ano - Fundamental',
-                    '6ano': '6º Ano - Fundamental',
-                    '7ano': '7º Ano - Fundamental',
-                    '8ano': '8º Ano - Fundamental',
-                    '9ano': '9º Ano - Fundamental',
-                    '1medio': '1º Ano - Médio',
-                    '2medio': '2º Ano - Médio',
-                    '3medio': '3º Ano - Médio'
-                };
-                document.getElementById('campoSerie').textContent = nomesSeries[dadosUsuario.serie] || 'Não informado';
-                document.getElementById('campoTipo').textContent = dadosUsuario.tipo === 'aluno' ? 'Aluno' : 'Responsável';
+            // Info tipo
+            document.getElementById('infoTipo').innerHTML = usuario.tipo === 'responsavel'
+                ? `<p class="font-bold text-gray-700">👨‍👩‍👧 Responsável / Pai</p><p class="text-gray-400 text-xs mt-1">Você tem acesso à área de acompanhamento.</p>`
+                : `<p class="font-bold text-gray-700">🎓 Aluno</p><p class="text-gray-400 text-xs mt-1">Você tem acesso a matérias, atividades e exercícios.</p>`;
+        }
 
-                // Trata o status da conta
-                const dataAtual = new Date();
-                const dataFimTeste = new Date(dadosUsuario.dataFimTeste);
-                
-                if (dadosUsuario.statusAssinatura)
+        // ===== EDIÇÃO =====
+        function toggleEdicao() {
+            document.getElementById('modoVisualizar').classList.add('hidden');
+            document.getElementById('modoEditar').classList.remove('hidden');
+            document.getElementById('btnEditar').classList.add('hidden');
+            document.getElementById('eNome').value = usuario.nome || '';
+            document.getElementById('eEmail').value = usuario.email || '';
+            document.getElementById('eTelefone').value = usuario.telefone || '';
+            document.getElementById('eEscola').value = usuario.escola || '';
+        }
+
+        function cancelarEdicao() {
+            document.getElementById('modoVisualizar').classList.remove('hidden');
+            document.getElementById('modoEditar').classList.add('hidden');
+            document.getElementById('btnEditar').classList.remove('hidden');
+            document.getElementById('mensagemSalvo').classList.add('hidden');
+        }
+
+        function salvarEdicao() {
+            usuario.nome = document.getElementById('eNome').value.trim() || usuario.nome;
+            usuario.email = document.getElementById('eEmail').value.trim().toLowerCase() || usuario.email;
+            usuario.telefone = document.getElementById('eTelefone').value.trim() || usuario.telefone;
+            usuario.escola = document.getElementById('eEscola').value.trim() || usuario.escola;
+
+            // Atualizar na lista de usuários
+            const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+            const idx = lista.findIndex(u => u.email === usuario.email || (u.nome === usuario.nome && u.nascimento === usuario.nascimento));
+            if (idx !== -1) { lista[idx] = { ...lista[idx], ...usuario }; }
+            localStorage.setItem('listaUsuarios', JSON.stringify(lista));
+            localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+
+            document.getElementById('mensagemSalvo').classList.remove('hidden');
+            setTimeout(() => {
+                cancelarEdicao();
+                carregarPerfil();
+            }, 1200);
+        }
+
+        // ===== SENHA =====
+        function alterarSenha() {
+            const atual = document.getElementById('senhaAtual').value;
+            const nova = document.getElementById('novaSenha').value;
+            const confirmar = document.getElementById('confirmarNovaSenha').value;
+            const erro = document.getElementById('erroSenha');
+            const sucesso = document.getElementById('sucessoSenha');
+
+            erro.classList.add('hidden');
+            sucesso.classList.add('hidden');
+
+            if (atual !== usuario.senha) {
+                erro.textContent = '⚠ Senha atual incorreta.';
+                erro.classList.remove('hidden'); return;
+            }
+            if (nova.length < 6) {
+                erro.textContent = '⚠ A nova senha deve ter pelo menos 6 caracteres.';
+                erro.classList.remove('hidden'); return;
+            }
+            if (nova !== confirmar) {
+                erro.textContent = '⚠ As novas senhas não coincidem.';
+                erro.classList.remove('hidden'); return;
+            }
+
+            usuario.senha = nova;
+            const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+            const idx = lista.findIndex(u => u.email === usuario.email);
+            if (idx !== -1) lista[idx].senha = nova;
+            localStorage.setItem('listaUsuarios', JSON.stringify(lista));
+            localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+
+            document.getElementById('senhaAtual').value = '';
+            document.getElementById('novaSenha').value = '';
+            document.getElementById('confirmarNovaSenha').value = '';
+            sucesso.classList.remove('hidden');
+        }
+
+        // ===== EXCLUIR CONTA =====
+        function confirmarExclusao() {
+            document.getElementById('modalExclusao').classList.remove('hidden');
+        }
+
+        function excluirConta() {
+            const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+            const novaLista = lista.filter(u => u.email !== usuario.email);
+            localStorage.setItem('listaUsuarios', JSON.stringify(novaLista));
+            localStorage.removeItem('usuarioLogado');
+            window.location.href = 'cadastro.html';
+        }
+
+        carregarPerfil();
+    </script>
+</body>
+</html>

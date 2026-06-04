@@ -6,149 +6,140 @@
     <title>Login - Plataforma de Estudos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primario: '#165DFF',
-                        secundario: '#36BFFA',
-                        sucesso: '#00B42A',
-                        aviso: '#FF7D00',
-                        erro: '#F53F3F',
-                        claro: '#F7F8FA',
-                        escuro: '#1D2129',
+                        primario: '#165DFF', secundario: '#36BFFA', sucesso: '#00B42A',
+                        aviso: '#FF7D00', erro: '#F53F3F', claro: '#F7F8FA', escuro: '#1D2129',
                     },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Nunito', 'system-ui', 'sans-serif'] }
                 }
             }
         }
     </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .conteudo-sombra {
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            }
-            .botao-efeito {
-                transition: all 0.3s ease;
-            }
-            .botao-efeito:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
-            }
-            .input-estilo {
-                transition: all 0.2s ease;
-            }
-            .input-estilo:focus {
-                border-color: #165DFF;
-                outline: none;
-                box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.2);
-            }
+    <style>
+        * { box-sizing: border-box; }
+        body { background: linear-gradient(135deg, #0f2f8f 0%, #165DFF 50%, #36BFFA 100%); min-height: 100vh; }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+        .card { animation: fadeUp 0.5s ease both; }
+        .input-campo {
+            width: 100%; padding: 0.75rem 1rem 0.75rem 2.75rem;
+            border: 2px solid #e5e7eb; border-radius: 0.75rem;
+            font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 600;
+            transition: all 0.2s; background: #fafafa; color: #1D2129;
         }
+        .input-campo:focus { border-color: #165DFF; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(22,93,255,0.12); }
+        .input-campo::placeholder { color: #9ca3af; font-weight: 500; }
+        label { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #4b5563; margin-bottom: 0.4rem; }
     </style>
 </head>
-<body class="bg-claro min-h-screen font-sans text-escuro">
-    <!-- Cabeçalho -->
-    <header class="bg-primario text-white py-6 px-4">
-        <div class="max-w-6xl mx-auto flex items-center gap-3">
-            <i class="fa fa-graduation-cap text-3xl"></i>
-            <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
-        </div>
-    </header>
+<body class="font-sans flex items-center justify-center py-8 px-4 min-h-screen">
 
-    <!-- Conteúdo Principal -->
-    <main class="max-w-2xl mx-auto py-16 px-4">
-        <div class="bg-white rounded-2xl p-8 conteudo-sombra">
-            <div class="text-center mb-8">
-                <h2 class="text-[clamp(1.8rem,4vw,2.2rem)] font-bold mb-2">Entrar na Conta</h2>
-                <p class="text-gray-600">Digite seus dados para acessar sua conta</p>
-                <!-- Mensagem de erro -->
-                <div id="mensagemErro" class="mt-4 hidden bg-erro/10 text-erro p-3 rounded-lg text-center">
-                    E-mail ou senha incorretos! Ou você ainda não se cadastrou.
-                </div>
+    <div class="w-full max-w-md card">
+        <!-- Logo -->
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-3">
+                <i class="fa fa-graduation-cap text-white text-3xl"></i>
+            </div>
+            <h1 class="text-white text-2xl font-black">Plataforma de Estudos</h1>
+            <p class="text-blue-200 text-sm mt-1">Faça login para continuar estudando</p>
+        </div>
+
+        <!-- Card -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-2xl">
+            <h2 class="text-2xl font-black text-escuro mb-1">Bem-vindo de volta!</h2>
+            <p class="text-gray-400 text-sm mb-6">Entre com seu e-mail e senha</p>
+
+            <!-- Erro -->
+            <div id="erroLogin" class="hidden bg-red-50 border border-red-200 text-erro rounded-xl p-3 text-sm font-semibold mb-5 flex items-center gap-2">
+                <i class="fa fa-exclamation-circle"></i>
+                <span>E-mail ou senha incorretos. Tente novamente.</span>
             </div>
 
-            <!-- Formulário de Login -->
-            <form id="formLogin" class="space-y-6">
+            <!-- Sucesso (vindo do cadastro) -->
+            <div id="sucessoCadastro" class="hidden bg-green-50 border border-green-200 text-sucesso rounded-xl p-3 text-sm font-semibold mb-5 flex items-center gap-2">
+                <i class="fa fa-check-circle"></i>
+                <span>Conta criada com sucesso! Faça seu login.</span>
+            </div>
+
+            <div class="space-y-4">
                 <!-- E-mail -->
                 <div>
-                    <label for="email" class="block text-gray-700 font-medium mb-2">E-mail</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
-                        placeholder="seuemail@exemplo.com"
-                        required
-                    >
+                    <label for="email">E-mail</label>
+                    <div class="relative">
+                        <i class="fa fa-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input type="email" id="email" class="input-campo" placeholder="seuemail@exemplo.com">
+                    </div>
                 </div>
 
                 <!-- Senha -->
                 <div>
-                    <label for="senha" class="block text-gray-700 font-medium mb-2">Senha</label>
-                    <input 
-                        type="password" 
-                        id="senha" 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
-                        placeholder="Digite sua senha"
-                        required
-                    >
+                    <label for="senha">Senha</label>
+                    <div class="relative">
+                        <i class="fa fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input type="password" id="senha" class="input-campo pr-12" placeholder="Digite sua senha"
+                            onkeydown="if(event.key==='Enter') fazerLogin()">
+                        <button type="button" onclick="toggleSenha()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            <i id="olhoSenha" class="fa fa-eye-slash"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Botão de Entrar -->
-                <button 
-                    type="submit"
-                    class="w-full bg-primario text-white py-3 px-4 rounded-lg font-medium botao-efeito hover:bg-primario/90"
-                >
-                    Entrar
+                <!-- Botão entrar -->
+                <button onclick="fazerLogin()" class="w-full bg-primario text-white py-3.5 rounded-xl font-black text-base hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200 mt-2">
+                    <i class="fa fa-sign-in mr-2"></i> Entrar
                 </button>
-            </form>
+            </div>
 
-            <!-- Link para cadastro -->
-            <div class="text-center mt-6 pt-6 border-t border-gray-200">
-                <p class="text-gray-600">Ainda não tem uma conta? 
-                    <a href="cadastro.html" class="text-primario font-medium hover:underline">Criar conta</a>
+            <div class="text-center mt-5 pt-5 border-t border-gray-100">
+                <p class="text-gray-500 text-sm">Ainda não tem conta?
+                    <a href="cadastro.html" class="text-primario font-black hover:underline ml-1">Criar conta grátis</a>
                 </p>
             </div>
         </div>
-    </main>
 
-    <!-- Rodapé -->
-    <footer class="bg-escuro text-white py-6 px-4 mt-16">
-        <div class="max-w-6xl mx-auto text-center">
-            <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
-        </div>
-    </footer>
+        <p class="text-blue-200 text-xs text-center mt-4">&copy; 2024 Plataforma de Estudos</p>
+    </div>
 
     <script>
-        // Quando o formulário de login for enviado
-        document.getElementById('formLogin').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Mostrar mensagem de sucesso se veio do cadastro
+        if (new URLSearchParams(window.location.search).get('cadastro') === 'ok') {
+            document.getElementById('sucessoCadastro').classList.remove('hidden');
+        }
 
-            // Pegar os dados digitados
-            const emailDigitado = document.getElementById('email').value.toLowerCase();
-            const senhaDigitada = document.getElementById('senha').value;
+        function toggleSenha() {
+            const campo = document.getElementById('senha');
+            const icone = document.getElementById('olhoSenha');
+            campo.type = campo.type === 'password' ? 'text' : 'password';
+            icone.className = campo.type === 'password' ? 'fa fa-eye-slash' : 'fa fa-eye';
+        }
 
-            // Pegar todos os usuários cadastrados
-            const listaUsuarios = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+        function fazerLogin() {
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const senha = document.getElementById('senha').value;
+            const erro = document.getElementById('erroLogin');
+            erro.classList.add('hidden');
 
-            // Procurar se existe um usuário com esse e-mail e senha
-            const usuarioEncontrado = listaUsuarios.find(function(usuario) {
-                return usuario.email === emailDigitado && usuario.senha === senhaDigitada;
-            });
+            if (!email || !senha) {
+                erro.querySelector('span').textContent = 'Preencha e-mail e senha.';
+                erro.classList.remove('hidden');
+                return;
+            }
 
-            // Verificar se o usuário foi encontrado
-            if (usuarioEncontrado) {
-                // Salvar o usuário como logado
-                localStorage.setItem('usuarioLogado', JSON.stringify(usuarioEncontrado));
-                // Redirecionar para a página inicial
+            const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+            const usuario = lista.find(u => u.email === email && u.senha === senha);
+
+            if (usuario) {
+                localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
                 window.location.href = 'inicio.html';
             } else {
-                // Mostrar mensagem de erro
-                document.getElementById('mensagemErro').classList.remove('hidden');
+                erro.querySelector('span').textContent = 'E-mail ou senha incorretos. Tente novamente.';
+                erro.classList.remove('hidden');
             }
-        });
+        }
     </script>
 </body>
 </html>

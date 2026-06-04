@@ -6,132 +6,94 @@
     <title>Cadastro - Plataforma de Estudos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primario: '#165DFF',
-                        secundario: '#36BFFA',
-                        sucesso: '#00B42A',
-                        aviso: '#FF7D00',
-                        erro: '#F53F3F',
-                        claro: '#F7F8FA',
-                        escuro: '#1D2129',
+                        primario: '#165DFF', secundario: '#36BFFA', sucesso: '#00B42A',
+                        aviso: '#FF7D00', erro: '#F53F3F', claro: '#F7F8FA', escuro: '#1D2129',
                     },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Nunito', 'system-ui', 'sans-serif'] }
                 }
             }
         }
     </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .conteudo-sombra {
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            }
-            .botao-efeito {
-                transition: all 0.3s ease;
-            }
-            .botao-efeito:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
-            }
-            .input-estilo {
-                transition: all 0.2s ease;
-            }
-            .input-estilo:focus {
-                border-color: #165DFF;
-                outline: none;
-                box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.2);
-            }
+    <style>
+        * { box-sizing: border-box; }
+        body { background: linear-gradient(135deg, #0f2f8f 0%, #165DFF 50%, #36BFFA 100%); min-height: 100vh; }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+        .card { animation: fadeUp 0.5s ease both; }
+        .input-campo {
+            width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb;
+            border-radius: 0.75rem; font-family: 'Nunito', sans-serif;
+            font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
+            background: #fafafa; color: #1D2129;
         }
+        .input-campo:focus { border-color: #165DFF; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(22,93,255,0.12); }
+        .input-campo::placeholder { color: #9ca3af; font-weight: 500; }
+        label { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #4b5563; margin-bottom: 0.4rem; }
     </style>
 </head>
-<body class="bg-claro min-h-screen font-sans text-escuro">
-    <!-- Cabeçalho -->
-    <header class="bg-primario text-white py-6 px-4">
-        <div class="max-w-6xl mx-auto flex items-center gap-3">
-            <i class="fa fa-graduation-cap text-3xl"></i>
-            <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
+<body class="font-sans text-escuro flex items-start justify-center py-8 px-4">
+
+    <div class="w-full max-w-lg card">
+        <!-- Logo -->
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center justify-center w-14 h-14 bg-white/20 rounded-2xl mb-3">
+                <i class="fa fa-graduation-cap text-white text-2xl"></i>
+            </div>
+            <h1 class="text-white text-2xl font-black">Plataforma de Estudos</h1>
+            <p class="text-blue-200 text-sm mt-1">Crie sua conta e comece a estudar</p>
         </div>
-    </header>
 
-    <!-- Conteúdo Principal -->
-    <main class="max-w-2xl mx-auto py-16 px-4">
-        <div class="bg-white rounded-2xl p-8 conteudo-sombra">
-            <div class="text-center mb-8">
-                <h2 class="text-[clamp(1.8rem,4vw,2.2rem)] font-bold mb-2">Criar Nova Conta</h2>
-                <p class="text-gray-600">Preencha todos os dados abaixo para começar a usar a plataforma</p>
-            </div>
-
-            <!-- Aviso do Teste Grátis -->
-            <div class="bg-primario/10 p-4 rounded-lg mb-6">
-                <p class="text-primario font-medium flex items-center gap-2">
-                    <i class="fa fa-gift"></i>
-                    Você ganha 3 dias grátis para testar todos os recursos!
-                </p>
-                <p class="text-gray-600 text-sm mt-1">Após esse período, será necessário ativar a assinatura para continuar usando.</p>
-            </div>
-
-            <!-- Formulário de Cadastro -->
-            <form id="formCadastro" class="space-y-6">
-                <!-- Nome Completo -->
+        <!-- Card do formulário -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-2xl">
+            <!-- Banner teste grátis -->
+            <div class="bg-gradient-to-r from-primario/10 to-secundario/10 border border-primario/20 rounded-2xl p-4 mb-6 flex items-start gap-3">
+                <div class="w-9 h-9 bg-primario rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="fa fa-gift text-white text-sm"></i>
+                </div>
                 <div>
-                    <label for="nome" class="block text-gray-700 font-medium mb-2">Nome Completo</label>
-                    <input 
-                        type="text" 
-                        id="nome" 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
-                        placeholder="Digite seu nome completo"
-                        required
-                    >
+                    <p class="font-black text-primario text-sm">3 dias grátis para testar!</p>
+                    <p class="text-gray-500 text-xs mt-0.5">Acesso total a todos os recursos. Sem precisar de cartão.</p>
+                </div>
+            </div>
+
+            <h2 class="text-xl font-black text-escuro mb-5">Criar Nova Conta</h2>
+
+            <div id="erroGeral" class="hidden bg-red-50 border border-red-200 text-erro rounded-xl p-3 text-sm font-semibold mb-4"></div>
+
+            <div class="space-y-4">
+                <!-- Nome -->
+                <div>
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" class="input-campo" placeholder="Digite seu nome completo">
                 </div>
 
                 <!-- Data de Nascimento -->
                 <div>
-                    <label for="nascimento" class="block text-gray-700 font-medium mb-2">Data de Nascimento</label>
-                    <input 
-                        type="date" 
-                        id="nascimento" 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
-                        required
-                    >
+                    <label for="nascimento">Data de Nascimento</label>
+                    <input type="date" id="nascimento" class="input-campo">
                 </div>
 
                 <!-- E-mail -->
                 <div>
-                    <label for="email" class="block text-gray-700 font-medium mb-2">E-mail</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
-                        placeholder="seuemail@exemplo.com"
-                        required
-                    >
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" class="input-campo" placeholder="seuemail@exemplo.com">
                 </div>
 
-                <!-- Telefone para Contato -->
+                <!-- Telefone -->
                 <div>
-                    <label for="telefone" class="block text-gray-700 font-medium mb-2">Telefone para Contato</label>
-                    <input 
-                        type="tel" 
-                        id="telefone" 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
-                        placeholder="(00) 00000-0000"
-                        required
-                    >
+                    <label for="telefone">Telefone para Contato</label>
+                    <input type="tel" id="telefone" class="input-campo" placeholder="(00) 00000-0000">
                 </div>
 
-                <!-- Série / Ano -->
+                <!-- Série -->
                 <div>
-                    <label for="serie" class="block text-gray-700 font-medium mb-2">Série / Ano que estuda</label>
-                    <select 
-                        id="serie" 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
-                        required
-                    >
+                    <label for="serie">Série / Ano que estuda</label>
+                    <select id="serie" class="input-campo">
                         <option value="">Selecione a série</option>
                         <option value="5ano">5º Ano do Ensino Fundamental</option>
                         <option value="6ano">6º Ano do Ensino Fundamental</option>
@@ -146,138 +108,157 @@
 
                 <!-- Escola -->
                 <div>
-                    <label for="escola" class="block text-gray-700 font-medium mb-2">Nome da Escola</label>
-                    <input 
-                        type="text" 
-                        id="escola" 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
-                        placeholder="Digite o nome da sua escola"
-                        required
-                    >
+                    <label for="escola">Nome da Escola</label>
+                    <input type="text" id="escola" class="input-campo" placeholder="Digite o nome da sua escola">
                 </div>
 
-                <!-- Senha -->
+                <!-- Tipo de usuário -->
                 <div>
-                    <label for="senha" class="block text-gray-700 font-medium mb-2">Senha</label>
-                    <input 
-                        type="password" 
-                        id="senha" 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
-                        placeholder="Digite sua senha (mínimo 6 caracteres)"
-                        minlength="6"
-                        required
-                    >
-                </div>
-
-                <!-- Confirmar Senha -->
-                <div>
-                    <label for="confirmarSenha" class="block text-gray-700 font-medium mb-2">Confirmar Senha</label>
-                    <input 
-                        type="password" 
-                        id="confirmarSenha" 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo"
-                        placeholder="Digite novamente sua senha"
-                        minlength="6"
-                        required
-                    >
-                    <p id="erroSenha" class="text-erro text-sm mt-1 hidden">As senhas não são iguais!</p>
-                </div>
-
-                <!-- Tipo de Usuário -->
-                <div>
-                    <label class="block text-gray-700 font-medium mb-2">Tipo de Usuário</label>
-                    <div class="flex gap-4 flex-wrap">
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="tipoUsuario" value="aluno" class="w-4 h-4 text-primario" checked>
-                            <span>Aluno</span>
+                    <label>Tipo de Usuário</label>
+                    <div class="grid grid-cols-2 gap-3 mt-1">
+                        <label class="flex items-center gap-2 p-3 border-2 border-primario bg-primario/5 rounded-xl cursor-pointer" id="labelAluno">
+                            <input type="radio" name="tipoUsuario" value="aluno" checked onchange="selecionarTipo(this)" class="accent-primario">
+                            <div>
+                                <p class="font-black text-xs text-primario">Aluno</p>
+                                <p class="text-gray-400 text-xs">Estudante</p>
+                            </div>
                         </label>
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="tipoUsuario" value="responsavel" class="w-4 h-4 text-primario">
-                            <span>Responsável / Pai</span>
+                        <label class="flex items-center gap-2 p-3 border-2 border-gray-200 rounded-xl cursor-pointer" id="labelResponsavel">
+                            <input type="radio" name="tipoUsuario" value="responsavel" onchange="selecionarTipo(this)" class="accent-primario">
+                            <div>
+                                <p class="font-black text-xs text-gray-600">Responsável</p>
+                                <p class="text-gray-400 text-xs">Pai / Mãe</p>
+                            </div>
                         </label>
                     </div>
                 </div>
 
-                <!-- Botão de Cadastro -->
-                <button 
-                    type="submit"
-                    class="w-full bg-primario text-white py-3 px-4 rounded-lg font-medium botao-efeito hover:bg-primario/90"
-                >
+                <!-- Senha -->
+                <div>
+                    <label for="senha">Senha</label>
+                    <div class="relative">
+                        <input type="password" id="senha" class="input-campo pr-12" placeholder="Mínimo 6 caracteres">
+                        <button type="button" onclick="toggleSenha('senha','olhoSenha')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            <i id="olhoSenha" class="fa fa-eye-slash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Confirmar Senha -->
+                <div>
+                    <label for="confirmarSenha">Confirmar Senha</label>
+                    <div class="relative">
+                        <input type="password" id="confirmarSenha" class="input-campo pr-12" placeholder="Repita sua senha">
+                        <button type="button" onclick="toggleSenha('confirmarSenha','olhoConfirmar')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            <i id="olhoConfirmar" class="fa fa-eye-slash"></i>
+                        </button>
+                    </div>
+                    <p id="erroSenha" class="text-erro text-xs font-bold mt-1 hidden">⚠ As senhas não são iguais!</p>
+                </div>
+
+                <!-- Botão cadastrar -->
+                <button onclick="cadastrar()" class="w-full bg-primario text-white py-3.5 rounded-xl font-black text-base mt-2 hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200">
                     Cadastrar e Acessar
                 </button>
-            </form>
+            </div>
 
-            <!-- Link para login -->
-            <div class="text-center mt-6 pt-6 border-t border-gray-200">
-                <p class="text-gray-600">Já tem uma conta? 
-                    <a href="login.html" class="text-primario font-medium hover:underline">Fazer login</a>
+            <div class="text-center mt-5 pt-5 border-t border-gray-100">
+                <p class="text-gray-500 text-sm">Já tem uma conta?
+                    <a href="login.html" class="text-primario font-black hover:underline ml-1">Fazer login</a>
                 </p>
             </div>
         </div>
-    </main>
 
-    <!-- Rodapé -->
-    <footer class="bg-escuro text-white py-6 px-4 mt-16">
-        <div class="max-w-6xl mx-auto text-center">
-            <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
-        </div>
-    </footer>
+        <p class="text-blue-200 text-xs text-center mt-4">&copy; 2024 Plataforma de Estudos</p>
+    </div>
 
     <script>
-        // Quando o formulário for enviado
-        document.getElementById('formCadastro').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const senha = document.getElementById('senha').value;
-            const confirmarSenha = document.getElementById('confirmarSenha').value;
-
-            // Verifica se as senhas são iguais
-            if (senha !== confirmarSenha) {
-                document.getElementById('erroSenha').classList.remove('hidden');
-                return;
+        function toggleSenha(campoId, iconeId) {
+            const campo = document.getElementById(campoId);
+            const icone = document.getElementById(iconeId);
+            if (campo.type === 'password') {
+                campo.type = 'text';
+                icone.className = 'fa fa-eye';
             } else {
-                document.getElementById('erroSenha').classList.add('hidden');
+                campo.type = 'password';
+                icone.className = 'fa fa-eye-slash';
+            }
+        }
+
+        function selecionarTipo(radio) {
+            document.getElementById('labelAluno').className = 'flex items-center gap-2 p-3 border-2 border-gray-200 rounded-xl cursor-pointer';
+            document.getElementById('labelResponsavel').className = 'flex items-center gap-2 p-3 border-2 border-gray-200 rounded-xl cursor-pointer';
+            document.getElementById('labelAluno').querySelector('p').className = 'font-black text-xs text-gray-600';
+
+            const labelId = radio.value === 'aluno' ? 'labelAluno' : 'labelResponsavel';
+            const label = document.getElementById(labelId);
+            label.className = 'flex items-center gap-2 p-3 border-2 border-primario bg-primario/5 rounded-xl cursor-pointer';
+            label.querySelector('p').className = 'font-black text-xs text-primario';
+        }
+
+        function cadastrar() {
+            const nome = document.getElementById('nome').value.trim();
+            const nascimento = document.getElementById('nascimento').value;
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const telefone = document.getElementById('telefone').value.trim();
+            const serie = document.getElementById('serie').value;
+            const escola = document.getElementById('escola').value.trim();
+            const senha = document.getElementById('senha').value;
+            const confirmar = document.getElementById('confirmarSenha').value;
+            const tipo = document.querySelector('input[name="tipoUsuario"]:checked').value;
+            const erroGeral = document.getElementById('erroGeral');
+            const erroSenha = document.getElementById('erroSenha');
+
+            erroGeral.classList.add('hidden');
+            erroSenha.classList.add('hidden');
+
+            if (!nome || !nascimento || !email || !telefone || !serie || !escola || !senha || !confirmar) {
+                erroGeral.textContent = 'Por favor, preencha todos os campos.';
+                erroGeral.classList.remove('hidden');
+                erroGeral.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+            if (senha.length < 6) {
+                erroGeral.textContent = 'A senha deve ter pelo menos 6 caracteres.';
+                erroGeral.classList.remove('hidden');
+                return;
+            }
+            if (senha !== confirmar) {
+                erroSenha.classList.remove('hidden');
+                return;
             }
 
-            // Dados para o teste gratuito de 3 dias
-            const dataAtual = new Date();
-            const dataFimTeste = new Date(dataAtual.getTime() + 3 * 24 * 60 * 60 * 1000);
+            // Verificar e-mail duplicado
+            const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+            if (lista.find(u => u.email === email)) {
+                erroGeral.textContent = 'Este e-mail já está cadastrado. Faça login.';
+                erroGeral.classList.remove('hidden');
+                return;
+            }
 
-            // Pegar todos os dados do formulário
-            const dadosUsuario = {
-                nome: document.getElementById('nome').value,
-                nascimento: document.getElementById('nascimento').value,
-                email: document.getElementById('email').value.toLowerCase(), // Converter para minúsculo para não ter erro
-                telefone: document.getElementById('telefone').value,
-                serie: document.getElementById('serie').value,
-                escola: document.getElementById('escola').value,
-                senha: senha,
-                tipo: document.querySelector('input[name="tipoUsuario"]:checked').value,
-                logado: true,
-                statusAssinatura: 'teste',
-                dataInicioTeste: dataAtual.toISOString(),
-                dataFimTeste: dataFimTeste.toISOString(),
-                dataAssinatura: null,
-                planoAssinatura: null,
-                valorAssinatura: null
+            const agora = new Date();
+            const fimTeste = new Date(agora.getTime() + 3 * 24 * 60 * 60 * 1000);
+
+            const labelSerie = {
+                '5ano':'5º Ano', '6ano':'6º Ano', '7ano':'7º Ano', '8ano':'8º Ano', '9ano':'9º Ano',
+                '1medio':'1º Médio', '2medio':'2º Médio', '3medio':'3º Médio'
             };
 
-            // 👇 Correção: Salvar corretamente no armazenamento
-            // Primeiro pegamos todos os usuários já cadastrados, se existirem
-            let todosUsuarios = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
-            
-            // Adicionamos o novo usuário na lista
-            todosUsuarios.push(dadosUsuario);
-            
-            // Salvamos a lista atualizada
-            localStorage.setItem('listaUsuarios', JSON.stringify(todosUsuarios));
+            const usuario = {
+                nome, nascimento, email, telefone,
+                serie, serieLabel: labelSerie[serie] || serie,
+                escola, senha, tipo, logado: true,
+                statusAssinatura: 'teste',
+                dataInicioTeste: agora.toISOString(),
+                dataFimTeste: fimTeste.toISOString(),
+                dataAssinatura: null, planoAssinatura: null, valorAssinatura: null
+            };
 
-            // Salvar também o usuário atual para login
-            localStorage.setItem('usuarioLogado', JSON.stringify(dadosUsuario));
-
-            // Redirecionar para a página inicial
+            lista.push(usuario);
+            localStorage.setItem('listaUsuarios', JSON.stringify(lista));
+            localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
             window.location.href = 'inicio.html';
-        });
+        }
     </script>
 </body>
 </html>
