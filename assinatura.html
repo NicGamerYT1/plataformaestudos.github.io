@@ -6,357 +6,702 @@
     <title>Assinatura - Plataforma de Estudos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primario: '#165DFF',
-                        secundario: '#36BFFA',
-                        sucesso: '#00B42A',
-                        aviso: '#FF7D00',
-                        erro: '#F53F3F',
-                        claro: '#F7F8FA',
-                        escuro: '#1D2129',
+                        primario: '#165DFF', secundario: '#36BFFA', sucesso: '#00B42A',
+                        aviso: '#FF7D00', erro: '#F53F3F', claro: '#F7F8FA', escuro: '#1D2129',
                     },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Nunito', 'system-ui', 'sans-serif'] }
                 }
             }
         }
     </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .conteudo-sombra {
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            }
-            .plano-destaque {
-                border: 2px solid #165DFF;
-                transform: scale(1.05);
-            }
-            .plano {
-                transition: all 0.3s ease;
-            }
-            .plano:hover {
-                transform: translateY(-5px);
-            }
-            .botao-efeito {
-                transition: all 0.3s ease;
-            }
-            .botao-efeito:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.3);
-            }
-            .input-estilo {
-                transition: all 0.2s ease;
-            }
-            .input-estilo:focus {
-                border-color: #165DFF;
-                outline: none;
-                box-shadow: 0 0 0 2px rgba(22, 93, 255, 0.2);
-            }
+    <style>
+        * { box-sizing: border-box; }
+        body { background: #F0F4FF; }
+        .menu-lateral { transition: transform 0.3s cubic-bezier(.4,0,.2,1); }
+
+        @keyframes fadeUp { from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);} }
+        .anim { animation: fadeUp 0.45s ease both; }
+
+        /* Planos */
+        .plano-card {
+            background: white; border-radius: 1.5rem;
+            box-shadow: 0 4px 24px rgba(22,93,255,0.07);
+            border: 2px solid transparent;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            position: relative;
         }
+        .plano-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(22,93,255,0.14); }
+        .plano-destaque { border-color: #165DFF !important; }
+        .plano-selecionado { border-color: #00B42A !important; box-shadow: 0 0 0 4px rgba(0,180,42,0.12); }
+
+        /* Input cartão */
+        .input-campo {
+            width:100%; padding:0.75rem 1rem; border:2px solid #e5e7eb;
+            border-radius:0.75rem; font-family:'Nunito',sans-serif;
+            font-size:0.9rem; font-weight:700; transition:all 0.2s;
+            background:#fafafa; color:#1D2129; letter-spacing:0.01em;
+        }
+        .input-campo:focus { border-color:#165DFF; outline:none; background:#fff; box-shadow:0 0 0 3px rgba(22,93,255,0.1); }
+        .input-campo::placeholder { color:#9ca3af; font-weight:500; letter-spacing:normal; }
+        label { display:block; font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; color:#6b7280; margin-bottom:0.4rem; }
+
+        /* Bandeiras */
+        .bandeira { display:none; }
+        .bandeira.visivel { display:inline-block; }
+
+        /* Steps do pagamento */
+        .step { display:flex; align-items:center; gap:0.5rem; font-size:0.8rem; font-weight:800; color:#9ca3af; }
+        .step.ativo { color:#165DFF; }
+        .step.concluido { color:#00B42A; }
+        .step-num { width:1.6rem; height:1.6rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:900; background:#e5e7eb; color:#6b7280; flex-shrink:0; }
+        .step.ativo .step-num { background:#165DFF; color:white; }
+        .step.concluido .step-num { background:#00B42A; color:white; }
+
+        /* Modal confirmação */
+        #modalConfirmacao { transition: opacity 0.2s ease; }
+
+        /* Progresso fake */
+        @keyframes progresso { from{width:0%} to{width:100%} }
+        .barra-progresso { animation: progresso 2s ease forwards; }
     </style>
 </head>
-<body class="bg-claro min-h-screen font-sans text-escuro">
-    <!-- Cabeçalho -->
-    <header class="bg-primario text-white py-6 px-4">
-        <div class="max-w-6xl mx-auto flex items-center justify-between">
+<body class="min-h-screen font-sans text-escuro flex">
+
+    <!-- CABEÇALHO -->
+    <header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20 shadow-lg">
+        <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <i class="fa fa-graduation-cap text-3xl"></i>
-                <h1 class="text-2xl font-bold">Plataforma de Estudos</h1>
-            </div>
-            <div id="areaUsuario" class="flex items-center gap-4">
-                <span id="nomeUsuario" class="font-medium"></span>
-                <button onclick="sairDaConta()" class="bg-white text-primario px-4 py-2 rounded-lg font-medium botao-efeito">
-                    Sair
+                <button class="md:hidden text-white text-xl p-1" onclick="toggleMenu()">
+                    <i class="fa fa-bars"></i>
                 </button>
+                <i class="fa fa-graduation-cap text-2xl"></i>
+                <h1 class="text-lg md:text-xl font-bold">Plataforma de Estudos</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <span id="nomeUsuario" class="font-semibold text-sm hidden sm:inline"></span>
+                <button onclick="sairDaConta()" class="bg-white text-primario px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-50 transition-colors">Sair</button>
             </div>
         </div>
     </header>
 
-    <!-- Menu de Navegação -->
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-wrap">
-                <a href="inicio.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
-                    <i class="fa fa-home"></i> Início
-                </a>
-                <a href="materias.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
-                    <i class="fa fa-book"></i> Matérias
-                </a>
-                <a href="desempenho.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
-                    <i class="fa fa-bar-chart"></i> Meu Desempenho
-                </a>
-                <a href="assinatura.html" class="aba-ativa py-4 px-6 flex items-center gap-2">
-                    <i class="fa fa-credit-card"></i> Assinatura
-                </a>
-                <a href="perfil.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
-                    <i class="fa fa-user"></i> Perfil
-                </a>
-                <a href="pais.html" class="py-4 px-6 flex items-center gap-2 text-gray-600 hover:text-primario transition-all">
-                    <i class="fa fa-users"></i> Pais / Responsáveis
-                </a>
-            </div>
-        </div>
-    </nav>
+    <!-- MENU LATERAL -->
+    <aside id="menuLateral" class="menu-lateral fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-100 pt-6 z-30 overflow-y-auto -translate-x-full md:translate-x-0 shadow-xl md:shadow-none">
+        <nav class="px-4">
+            <ul class="space-y-1">
+                <li><a href="inicio.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-home w-5 text-center"></i> Início</a></li>
+                <li><a href="materias.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-book w-5 text-center"></i> Matérias</a></li>
+                <li><a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-tasks w-5 text-center"></i> Atividades</a></li>
+                <li><a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-bar-chart w-5 text-center"></i> Meu Desempenho</a></li>
+                <li><a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primario/10 text-primario font-bold text-sm"><i class="fa fa-credit-card w-5 text-center"></i> Assinatura</a></li>
+                <li><a href="perfil.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-user w-5 text-center"></i> Perfil</a></li>
+                <li><a href="pais.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-users w-5 text-center"></i> Pais / Responsáveis</a></li>
+            </ul>
+        </nav>
+    </aside>
 
-    <!-- Conteúdo Principal -->
-    <main class="max-w-6xl mx-auto py-10 px-4">
-        <!-- Aviso de Status da Conta -->
-        <div id="avisoStatus" class="mb-8 rounded-lg p-5 text-center"></div>
+    <div id="fundoMenu" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden" onclick="toggleMenu()"></div>
 
-        <!-- Título da página -->
-        <div class="text-center mb-12">
-            <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-3">Escolha seu plano</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">Acesse todos os materiais, exercícios e recursos exclusivos. Teste grátis por 3 dias!</p>
-        </div>
+    <!-- CONTEÚDO -->
+    <main class="w-full md:ml-64 mt-16 pb-16">
 
-        <!-- Planos de Assinatura -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <!-- Plano Básico -->
-            <div class="plano bg-white rounded-2xl p-8 conteudo-sombra text-center">
-                <h3 class="text-xl font-bold mb-2">Plano Básico</h3>
-                <p class="text-gray-600 mb-6">Ideal para começar a estudar</p>
-                <div class="mb-6">
-                    <span class="text-4xl font-bold text-escuro">R$ 19,90</span>
-                    <span class="text-gray-500">/mês</span>
-                </div>
-                <ul class="text-left space-y-3 mb-8">
-                    <li class="flex items-center gap-2">
-                        <i class="fa fa-check text-sucesso"></i>
-                        <span>Acesso a todas as matérias</span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="fa fa-check text-sucesso"></i>
-                        <span>Exercícios e atividades</span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="fa fa-check text-sucesso"></i>
-                        <span>Material em PDF para baixar</span>
-                    </li>
-                    <li class="flex items-center gap-2 text-gray-400">
-                        <i class="fa fa-times"></i>
-                        <span>Aulas em vídeo</span>
-                    </li>
-                    <li class="flex items-center gap-2 text-gray-400">
-                        <i class="fa fa-times"></i>
-                        <span>Relatórios de desempenho</span>
-                    </li>
-                </ul>
-                <button onclick="selecionarPlano('basico', 19.90)" class="w-full py-3 px-4 rounded-lg font-medium botao-efeito border-2 border-primario text-primario hover:bg-primario hover:text-white">
-                    Escolher Plano
-                </button>
-            </div>
-
-            <!-- Plano Premium (Destaque) -->
-            <div class="plano plano-destaque bg-white rounded-2xl p-8 conteudo-sombra text-center relative">
-                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-sucesso text-white px-6 py-1 rounded-full text-sm font-medium">
-                    Mais Popular
-                </div>
-                <h3 class="text-xl font-bold mb-2">Plano Premium</h3>
-                <p class="text-gray-600 mb-6">Tudo o que você precisa para se destacar</p>
-                <div class="mb-6">
-                    <span class="text-4xl font-bold text-escuro">R$ 34,90</span>
-                    <span class="text-gray-500">/mês</span>
-                </div>
-                <ul class="text-left space-y-3 mb-8">
-                    <li class="flex items-center gap-2">
-                        <i class="fa fa-check text-sucesso"></i>
-                        <span>Tudo do Plano Básico</span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="fa fa-check text-sucesso"></i>
-                        <span>Aulas em vídeo</span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="fa fa-check text-sucesso"></i>
-                        <span>Relatórios de desempenho</span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="fa fa-check text-sucesso"></i>
-                        <span>Atendimento especializado</span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="fa fa-check text-sucesso"></i>
-                        <span>Conteúdos exclusivos</span>
-                    </li>
-                </ul>
-                <button onclick="selecionarPlano('premium', 34.90)" class="w-full py-3 px-4 rounded-lg font-medium botao-efeito bg-primario text-white hover:bg-primario/90">
-                    Escolher Plano
-                </button>
-            </div>
-
-            <!-- Plano Família -->
-            <div class="plano bg-white rounded-2xl p-8 conteudo-sombra text-center">
-                <h3 class="text-xl font-bold mb-2">Plano Família</h3>
-                <p class="text-gray-600 mb-6">Até 3 contas inclusas</p>
-                <div class="mb-6">
-                    <span class="text-4xl font-bold text-escuro">R$ 59,90</span>
-                    <span class="text-gray-500">/mês</span>
-                </div>
-                <ul class="text-left space-y-3 mb-8">
-                    <li class="flex items-center gap-2">
-                        <i class="fa fa-check text-sucesso"></i>
-                        <span>Tudo do Plano Premium</span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="fa fa-check text-sucesso"></i>
-                        <span>Até 3 contas de usuários</span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="fa fa-check text-sucesso"></i>
-                        <span>Acesso para responsáveis</span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="fa fa-check text-sucesso"></i>
-                        <span>Relatórios para pais</span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="fa fa-check text-sucesso"></i>
-                        <span>Descontos em materiais</span>
-                    </li>
-                </ul>
-                <button onclick="selecionarPlano('familia', 59.90)" class="w-full py-3 px-4 rounded-lg font-medium botao-efeito border-2 border-secundario text-secundario hover:bg-secundario hover:text-white">
-                    Escolher Plano
-                </button>
+        <!-- Banner topo -->
+        <div class="bg-gradient-to-r from-primario to-blue-700 text-white px-4 sm:px-8 py-8 sm:py-10 anim">
+            <div class="max-w-4xl relative z-10">
+                <p class="text-blue-200 text-xs font-bold uppercase tracking-widest mb-1">💳 Planos e Preços</p>
+                <h2 class="text-2xl sm:text-3xl font-black mb-2">Escolha seu plano</h2>
+                <p class="text-blue-100 text-sm max-w-xl">Acesso completo a matérias, exercícios interativos e muito mais. Cancele quando quiser.</p>
             </div>
         </div>
 
-        <!-- Formulário de Pagamento -->
-        <div id="formularioPagamento" class="hidden max-w-2xl mx-auto bg-white rounded-2xl p-8 conteudo-sombra mb-16">
-            <h3 class="text-2xl font-bold text-center mb-6">Dados de Pagamento</h3>
-            <p class="text-center text-gray-600 mb-8">Plano selecionado: <span id="nomePlano" class="font-medium"></span> - Valor: R$ <span id="valorPlano"></span></p>
+        <div class="px-3 sm:px-6 md:px-8 pt-8 max-w-5xl mx-auto">
 
-            <form id="formPagamento" class="space-y-6">
-                <!-- Nome no Cartão -->
-                <div>
-                    <label class="block text-gray-700 font-medium mb-2">Nome impresso no cartão</label>
-                    <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo" placeholder="Como aparece no cartão" required>
-                </div>
+            <!-- Aviso status -->
+            <div id="avisoStatus" class="mb-6 rounded-2xl p-4 text-sm font-bold hidden anim"></div>
 
-                <!-- Número do Cartão -->
-                <div>
-                    <label class="block text-gray-700 font-medium mb-2">Número do Cartão</label>
-                    <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo" placeholder="0000 0000 0000 0000" maxlength="19" required>
-                </div>
+            <!-- Steps -->
+            <div id="stepsContainer" class="flex items-center gap-3 sm:gap-6 mb-8 anim overflow-x-auto pb-1">
+                <div class="step ativo" id="step1"><span class="step-num">1</span><span class="whitespace-nowrap">Escolher Plano</span></div>
+                <i class="fa fa-angle-right text-gray-300 flex-shrink-0"></i>
+                <div class="step" id="step2"><span class="step-num">2</span><span class="whitespace-nowrap">Pagamento</span></div>
+                <i class="fa fa-angle-right text-gray-300 flex-shrink-0"></i>
+                <div class="step" id="step3"><span class="step-num">3</span><span class="whitespace-nowrap">Confirmação</span></div>
+            </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <!-- Validade -->
-                    <div>
-                        <label class="block text-gray-700 font-medium mb-2">Validade (Mês/Ano)</label>
-                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo" placeholder="MM/AA" maxlength="5" required>
+            <!-- ===== ETAPA 1: PLANOS ===== -->
+            <div id="etapaPlanos">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+
+                    <!-- Básico -->
+                    <div class="plano-card p-6 anim" style="animation-delay:0.05s">
+                        <h3 class="text-lg font-black mb-1">Plano Básico</h3>
+                        <p class="text-gray-400 text-xs mb-4">Ideal para começar a estudar</p>
+                        <div class="mb-5">
+                            <span class="text-3xl font-black text-escuro">R$ 19,90</span>
+                            <span class="text-gray-400 text-sm">/mês</span>
+                        </div>
+                        <ul class="space-y-2.5 mb-6 text-sm">
+                            <li class="flex items-center gap-2"><i class="fa fa-check text-sucesso w-4"></i><span>Acesso a todas as matérias</span></li>
+                            <li class="flex items-center gap-2"><i class="fa fa-check text-sucesso w-4"></i><span>Exercícios e atividades</span></li>
+                            <li class="flex items-center gap-2"><i class="fa fa-check text-sucesso w-4"></i><span>Material em PDF</span></li>
+                            <li class="flex items-center gap-2 text-gray-300"><i class="fa fa-times w-4"></i><span>Aulas em vídeo</span></li>
+                            <li class="flex items-center gap-2 text-gray-300"><i class="fa fa-times w-4"></i><span>Relatórios de desempenho</span></li>
+                        </ul>
+                        <button onclick="selecionarPlano('Básico', 19.90)" class="w-full py-2.5 rounded-xl font-black text-sm border-2 border-primario text-primario hover:bg-primario hover:text-white transition-all">
+                            Escolher Plano
+                        </button>
                     </div>
 
-                    <!-- Código de Segurança -->
-                    <div>
-                        <label class="block text-gray-700 font-medium mb-2">Código CVV</label>
-                        <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-estilo" placeholder="123" maxlength="3" required>
+                    <!-- Premium (destaque) -->
+                    <div class="plano-card plano-destaque p-6 anim" style="animation-delay:0.1s">
+                        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-sucesso text-white px-4 py-1 rounded-full text-xs font-black whitespace-nowrap">
+                            ⭐ Mais Popular
+                        </div>
+                        <h3 class="text-lg font-black mb-1">Plano Premium</h3>
+                        <p class="text-gray-400 text-xs mb-4">Tudo para se destacar</p>
+                        <div class="mb-5">
+                            <span class="text-3xl font-black text-escuro">R$ 34,90</span>
+                            <span class="text-gray-400 text-sm">/mês</span>
+                        </div>
+                        <ul class="space-y-2.5 mb-6 text-sm">
+                            <li class="flex items-center gap-2"><i class="fa fa-check text-sucesso w-4"></i><span>Tudo do Plano Básico</span></li>
+                            <li class="flex items-center gap-2"><i class="fa fa-check text-sucesso w-4"></i><span>Aulas em vídeo</span></li>
+                            <li class="flex items-center gap-2"><i class="fa fa-check text-sucesso w-4"></i><span>Relatórios de desempenho</span></li>
+                            <li class="flex items-center gap-2"><i class="fa fa-check text-sucesso w-4"></i><span>Atendimento especializado</span></li>
+                            <li class="flex items-center gap-2"><i class="fa fa-check text-sucesso w-4"></i><span>Conteúdos exclusivos</span></li>
+                        </ul>
+                        <button onclick="selecionarPlano('Premium', 34.90)" class="w-full py-2.5 rounded-xl font-black text-sm bg-primario text-white hover:bg-blue-700 transition-all shadow-lg shadow-blue-200">
+                            Escolher Plano
+                        </button>
+                    </div>
+
+                    <!-- Família -->
+                    <div class="plano-card p-6 anim" style="animation-delay:0.15s">
+                        <h3 class="text-lg font-black mb-1">Plano Família</h3>
+                        <p class="text-gray-400 text-xs mb-4">Até 3 contas inclusas</p>
+                        <div class="mb-5">
+                            <span class="text-3xl font-black text-escuro">R$ 59,90</span>
+                            <span class="text-gray-400 text-sm">/mês</span>
+                        </div>
+                        <ul class="space-y-2.5 mb-6 text-sm">
+                            <li class="flex items-center gap-2"><i class="fa fa-check text-sucesso w-4"></i><span>Tudo do Plano Premium</span></li>
+                            <li class="flex items-center gap-2"><i class="fa fa-check text-sucesso w-4"></i><span>Até 3 contas</span></li>
+                            <li class="flex items-center gap-2"><i class="fa fa-check text-sucesso w-4"></i><span>Acesso para responsáveis</span></li>
+                            <li class="flex items-center gap-2"><i class="fa fa-check text-sucesso w-4"></i><span>Relatórios para pais</span></li>
+                            <li class="flex items-center gap-2"><i class="fa fa-check text-sucesso w-4"></i><span>Desconto em materiais</span></li>
+                        </ul>
+                        <button onclick="selecionarPlano('Família', 59.90)" class="w-full py-2.5 rounded-xl font-black text-sm border-2 border-secundario text-secundario hover:bg-secundario hover:text-white transition-all">
+                            Escolher Plano
+                        </button>
                     </div>
                 </div>
 
-                <!-- Botão Finalizar -->
-                <button type="submit" class="w-full bg-sucesso text-white py-3 px-4 rounded-lg font-medium botao-efeito hover:bg-sucesso/90">
-                    Finalizar Assinatura
-                </button>
-            </form>
-        </div>
+                <!-- Garantia -->
+                <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-6 text-center text-xs text-gray-400 font-bold anim" style="animation-delay:0.2s">
+                    <span><i class="fa fa-shield text-sucesso mr-1"></i> Pagamento 100% seguro</span>
+                    <span><i class="fa fa-lock text-sucesso mr-1"></i> Dados criptografados</span>
+                    <span><i class="fa fa-refresh text-sucesso mr-1"></i> Cancele a qualquer momento</span>
+                </div>
+            </div>
 
-        <!-- Mensagem de Confirmação -->
-        <div id="confirmacaoAssinatura" class="hidden max-w-2xl mx-auto bg-sucesso/10 border border-sucesso rounded-2xl p-8 text-center">
-            <i class="fa fa-check-circle text-sucesso text-5xl mb-4"></i>
-            <h3 class="text-2xl font-bold text-sucesso mb-2">Assinatura Ativada!</h3>
-            <p class="text-gray-600">Obrigado por assinar! Agora você tem acesso liberado a todo o conteúdo da plataforma.</p>
-            <a href="inicio.html" class="inline-block mt-6 bg-primario text-white px-6 py-2 rounded-lg botao-efeito">Voltar ao Início</a>
+            <!-- ===== ETAPA 2: PAGAMENTO ===== -->
+            <div id="etapaPagamento" class="hidden max-w-2xl mx-auto">
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden anim">
+
+                    <!-- Resumo do plano -->
+                    <div class="bg-gradient-to-r from-primario to-blue-700 p-5 text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-blue-200 text-xs font-bold uppercase tracking-wide">Plano selecionado</p>
+                                <p id="resumoPlano" class="text-xl font-black mt-0.5"></p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-blue-200 text-xs font-bold uppercase tracking-wide">Valor</p>
+                                <p id="resumoValor" class="text-2xl font-black mt-0.5"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-5 sm:p-6">
+                        <!-- Método de pagamento -->
+                        <div class="mb-5">
+                            <p class="text-xs font-black text-gray-400 uppercase tracking-wide mb-3">Método de Pagamento</p>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button onclick="selecionarMetodo('credito')" id="btnCredito"
+                                    class="metodo-btn p-2.5 rounded-xl border-2 border-primario bg-primario/5 text-center transition-all">
+                                    <i class="fa fa-credit-card text-primario text-lg block mb-1"></i>
+                                    <span class="text-xs font-black text-primario">Crédito</span>
+                                </button>
+                                <button onclick="selecionarMetodo('debito')" id="btnDebito"
+                                    class="metodo-btn p-2.5 rounded-xl border-2 border-gray-200 text-center transition-all hover:border-primario">
+                                    <i class="fa fa-credit-card text-gray-400 text-lg block mb-1"></i>
+                                    <span class="text-xs font-bold text-gray-500">Débito</span>
+                                </button>
+                                <button onclick="selecionarMetodo('pix')" id="btnPix"
+                                    class="metodo-btn p-2.5 rounded-xl border-2 border-gray-200 text-center transition-all hover:border-primario">
+                                    <i class="fa fa-bolt text-gray-400 text-lg block mb-1"></i>
+                                    <span class="text-xs font-bold text-gray-500">PIX</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Formulário Cartão -->
+                        <div id="formCartao" class="space-y-4">
+                            <!-- Nome -->
+                            <div>
+                                <label>Nome impresso no cartão</label>
+                                <input type="text" id="nomeCartao" class="input-campo" placeholder="Como aparece no cartão">
+                            </div>
+
+                            <!-- Número do cartão -->
+                            <div>
+                                <label>Número do Cartão</label>
+                                <div class="relative">
+                                    <input type="text" id="numeroCartao" class="input-campo pr-24"
+                                        placeholder="0000 0000 0000 0000" maxlength="19"
+                                        oninput="formatarCartao(this)" onkeyup="detectarBandeira(this.value)">
+                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                                        <img id="bandVisa" class="bandeira h-5" src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa">
+                                        <img id="bandMaster" class="bandeira h-5" src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Master">
+                                        <img id="bandElo" class="bandeira h-5" src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Elo_logo.svg" alt="Elo">
+                                        <i id="bandGeneric" class="fa fa-credit-card text-gray-300 text-xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <!-- Validade -->
+                                <div>
+                                    <label>Validade</label>
+                                    <input type="text" id="validadeCartao" class="input-campo"
+                                        placeholder="MM/AA" maxlength="5"
+                                        oninput="formatarValidade(this)">
+                                </div>
+                                <!-- CVV -->
+                                <div>
+                                    <label>CVV <span class="normal-case font-normal text-gray-400">(3 dígitos)</span></label>
+                                    <div class="relative">
+                                        <input type="text" id="cvvCartao" class="input-campo pr-10"
+                                            placeholder="•••" maxlength="3"
+                                            oninput="this.value=this.value.replace(/\D/g,'')">
+                                        <i class="fa fa-question-circle absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 cursor-help" title="3 dígitos no verso do cartão"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Parcelas (só crédito) -->
+                            <div id="camposParcelas">
+                                <label>Parcelamento</label>
+                                <select id="parcelas" class="input-campo">
+                                    <option value="1">1x sem juros</option>
+                                    <option value="2">2x sem juros</option>
+                                    <option value="3">3x sem juros</option>
+                                    <option value="6">6x sem juros</option>
+                                    <option value="12">12x sem juros</option>
+                                </select>
+                            </div>
+
+                            <!-- Erro -->
+                            <div id="erroCartao" class="hidden bg-red-50 border border-red-200 text-erro rounded-xl p-3 text-sm font-bold flex items-center gap-2">
+                                <i class="fa fa-exclamation-circle"></i><span></span>
+                            </div>
+
+                            <button onclick="processarPagamento()" id="btnPagar"
+                                class="w-full bg-sucesso text-white py-3.5 rounded-xl font-black text-base hover:bg-green-600 transition-colors shadow-lg shadow-green-200 flex items-center justify-center gap-2">
+                                <i class="fa fa-lock"></i> Finalizar Assinatura
+                            </button>
+                        </div>
+
+                        <!-- PIX -->
+                        <div id="formPix" class="hidden text-center py-4">
+                            <div class="bg-gray-50 rounded-2xl p-6 mb-4">
+                                <!-- QR Code fake com SVG -->
+                                <div class="w-40 h-40 mx-auto bg-white border-4 border-escuro rounded-xl flex items-center justify-center mb-3 shadow">
+                                    <svg width="120" height="120" viewBox="0 0 120 120">
+                                        <rect width="120" height="120" fill="white"/>
+                                        <!-- Padrão de QR Code simulado -->
+                                        <rect x="5" y="5" width="40" height="40" fill="none" stroke="#1D2129" stroke-width="4"/>
+                                        <rect x="12" y="12" width="26" height="26" fill="#1D2129"/>
+                                        <rect x="75" y="5" width="40" height="40" fill="none" stroke="#1D2129" stroke-width="4"/>
+                                        <rect x="82" y="12" width="26" height="26" fill="#1D2129"/>
+                                        <rect x="5" y="75" width="40" height="40" fill="none" stroke="#1D2129" stroke-width="4"/>
+                                        <rect x="12" y="82" width="26" height="26" fill="#1D2129"/>
+                                        <rect x="55" y="5" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="63" y="5" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="55" y="13" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="63" y="21" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="55" y="29" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="55" y="55" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="63" y="55" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="71" y="55" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="79" y="55" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="87" y="55" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="95" y="55" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="103" y="55" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="55" y="63" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="71" y="63" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="87" y="63" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="103" y="63" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="55" y="71" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="63" y="71" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="79" y="71" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="95" y="71" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="55" y="79" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="71" y="79" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="87" y="79" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="103" y="79" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="55" y="87" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="63" y="87" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="79" y="87" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="95" y="87" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="55" y="95" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="71" y="103" width="6" height="6" fill="#1D2129"/>
+                                        <rect x="87" y="103" width="6" height="6" fill="#1D2129"/>
+                                    </svg>
+                                </div>
+                                <p class="text-xs text-gray-500 font-bold mb-3">Escaneie o QR Code com seu app bancário</p>
+                                <div class="bg-white border border-gray-200 rounded-xl px-4 py-2 text-xs font-black text-gray-600 break-all">
+                                    00020126580014BR.GOV.BCB.PIX0136plataforma-estudos@pix.com.br5204000053039865802BR5920Plataforma de Estudos6009SAO PAULO62070503***6304ABCD
+                                </div>
+                                <button onclick="copiarPix()" class="mt-3 text-primario text-xs font-black hover:underline flex items-center gap-1 mx-auto">
+                                    <i class="fa fa-copy"></i> Copiar código PIX
+                                </button>
+                            </div>
+                            <div class="text-sm text-gray-500 font-semibold mb-4">
+                                <i class="fa fa-clock-o mr-1 text-aviso"></i> Este código expira em <strong class="text-aviso" id="tempoPixContador">10:00</strong>
+                            </div>
+                            <button onclick="simularPagamentoPix()" class="w-full bg-sucesso text-white py-3 rounded-xl font-black text-sm hover:bg-green-600 transition-colors shadow-lg shadow-green-200">
+                                <i class="fa fa-check mr-1"></i> Já realizei o pagamento
+                            </button>
+                        </div>
+
+                        <button onclick="voltarPlanos()" class="w-full mt-3 text-xs text-gray-400 font-bold hover:text-gray-600 transition-colors">
+                            ← Voltar e trocar plano
+                        </button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 
-    <!-- Rodapé -->
-    <footer class="bg-escuro text-white py-6 px-4 mt-16">
-        <div class="max-w-6xl mx-auto text-center">
-            <p>&copy; 2024 Plataforma de Estudos. Todos os direitos reservados.</p>
+    <!-- MODAL PROCESSANDO -->
+    <div id="modalProcessando" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-50 flex items-center justify-center">
+                <i class="fa fa-credit-card text-primario text-2xl" id="iconeProcessando"></i>
+            </div>
+            <h3 id="tituloProcessando" class="text-lg font-black mb-2">Processando pagamento...</h3>
+            <p id="subProcessando" class="text-gray-400 text-sm mb-4">Por favor, aguarde. Estamos verificando seus dados.</p>
+            <div class="bg-gray-100 rounded-full h-2 overflow-hidden">
+                <div id="barraProc" class="h-2 bg-primario rounded-full barra-progresso" style="width:0%"></div>
+            </div>
         </div>
-    </footer>
+    </div>
+
+    <!-- MODAL CONFIRMAÇÃO -->
+    <div id="modalConfirmacao" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl">
+            <div class="text-6xl mb-3">🎉</div>
+            <h3 class="text-2xl font-black text-sucesso mb-2">Assinatura Ativada!</h3>
+            <p id="textoConfirmacao" class="text-gray-500 text-sm mb-2"></p>
+            <p class="text-gray-400 text-xs mb-6">Um e-mail de confirmação foi enviado para você.</p>
+            <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-6 text-left">
+                <p class="text-xs font-black text-gray-500 uppercase tracking-wide mb-2">Detalhes da assinatura</p>
+                <div class="space-y-1 text-sm">
+                    <div class="flex justify-between"><span class="text-gray-400">Plano</span><span id="confPlano" class="font-black"></span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Valor</span><span id="confValor" class="font-black text-sucesso"></span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">Próx. cobrança</span><span id="confProxima" class="font-black"></span></div>
+                </div>
+            </div>
+            <a href="inicio.html" class="block w-full bg-primario text-white py-3 rounded-xl font-black text-sm hover:bg-blue-700 transition-colors">
+                <i class="fa fa-home mr-1"></i> Ir para o Início
+            </a>
+        </div>
+    </div>
 
     <script>
-        let planoEscolhido = '';
-        let valorEscolhido = 0;
+        let planoAtual = '', valorAtual = 0, metodoAtual = 'credito';
+        let timerPix = null;
 
-        // Verificar login e status da assinatura
-        function verificarStatus() {
-            const usuarioSalvo = localStorage.getItem('usuarioLogado');
-            if (!usuarioSalvo) {
-                window.location.href = 'login.html';
-                return;
-            }
-
-            const dadosUsuario = JSON.parse(usuarioSalvo);
-            document.getElementById('nomeUsuario').textContent = dadosUsuario.nome;
-
-            // Verificar se o teste já venceu
-            const dataAtual = new Date();
-            const dataFimTeste = new Date(dadosUsuario.dataFimTeste);
-
-            let aviso = document.getElementById('avisoStatus');
-
-            if (dadosUsuario.statusAssinatura === 'ativa') {
-                aviso.className = 'mb-8 rounded-lg p-5 text-center bg-sucesso/10 text-sucesso';
-                aviso.innerHTML = `<i class="fa fa-check-circle"></i> Sua assinatura está ativa! Acesso liberado a todo o conteúdo.`;
-            } else if (dataAtual < dataFimTeste) {
-                const diasRestantes = Math.ceil((dataFimTeste - dataAtual) / (1000 * 60 * 60 * 24));
-                aviso.className = 'mb-8 rounded-lg p-5 text-center bg-primario/10 text-primario';
-                aviso.innerHTML = `<i class="fa fa-gift"></i> Você está no período de teste! Faltam ${diasRestantes} dias para acabar.`;
-            } else {
-                // Teste vencido
-                dadosUsuario.statusAssinatura = 'expirada';
-                localStorage.setItem('usuarioLogado', JSON.stringify(dadosUsuario));
-                
-                aviso.className = 'mb-8 rounded-lg p-5 text-center bg-erro/10 text-erro';
-                aviso.innerHTML = `<i class="fa fa-lock"></i> <strong>Teste gratuito encerrado!</strong> Para continuar estudando, escolha um plano abaixo e ative sua assinatura.`;
-            }
+        // ===== MENU =====
+        function toggleMenu() {
+            document.getElementById('menuLateral').classList.toggle('-translate-x-full');
+            document.getElementById('fundoMenu').classList.toggle('hidden');
         }
-
-        function selecionarPlano(nome, valor) {
-            planoEscolhido = nome;
-            valorEscolhido = valor;
-            document.getElementById('nomePlano').textContent = nome.charAt(0).toUpperCase() + nome.slice(1);
-            document.getElementById('valorPlano').textContent = valor.toFixed(2);
-            document.getElementById('formularioPagamento').classList.remove('hidden');
-            window.scrollTo({top: document.getElementById('formularioPagamento').offsetTop, behavior: 'smooth'});
-        }
-
-        // Processar pagamento
-        document.getElementById('formPagamento').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            // Atualizar dados do usuário
-            const usuarioSalvo = JSON.parse(localStorage.getItem('usuarioLogado'));
-            usuarioSalvo.statusAssinatura = 'ativa';
-            usuarioSalvo.planoAssinatura = planoEscolhido;
-            usuarioSalvo.valorAssinatura = valorEscolhido;
-            usuarioSalvo.dataAssinatura = new Date().toISOString();
-
-            // Salvar alterações
-            localStorage.setItem('usuarioLogado', JSON.stringify(usuarioSalvo));
-
-            // Atualizar também na lista geral
-            let listaUsuarios = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
-            let index = listaUsuarios.findIndex(u => u.email === usuarioSalvo.email);
-            if (index !== -1) listaUsuarios[index] = usuarioSalvo;
-            localStorage.setItem('listaUsuarios', JSON.stringify(listaUsuarios));
-
-            // Mostrar confirmação
-            document.getElementById('formularioPagamento').classList.add('hidden');
-            document.getElementById('confirmacaoAssinatura').classList.remove('hidden');
-        });
-
         function sairDaConta() {
             localStorage.removeItem('usuarioLogado');
             window.location.href = 'login.html';
         }
 
-        window.onload = verificarStatus;
+        // ===== STATUS =====
+        function verificarStatus() {
+            const salvo = localStorage.getItem('usuarioLogado');
+            if (!salvo) { window.location.href = 'login.html'; return; }
+            const u = JSON.parse(salvo);
+            document.getElementById('nomeUsuario').textContent = u.nome;
+
+            const aviso = document.getElementById('avisoStatus');
+            const agora = new Date();
+            const fim = new Date(u.dataFimTeste);
+
+            if (u.statusAssinatura === 'ativa') {
+                aviso.className = 'mb-6 rounded-2xl p-4 text-sm font-bold bg-green-50 border border-green-200 text-sucesso flex items-center gap-2';
+                aviso.innerHTML = `<i class="fa fa-check-circle text-lg"></i><span>Sua assinatura <strong>${u.planoAssinatura}</strong> está ativa! Próxima cobrança: <strong>${proximaCobranca()}</strong></span>`;
+                aviso.classList.remove('hidden');
+            } else if (agora < fim) {
+                const dias = Math.ceil((fim - agora) / 86400000);
+                aviso.className = 'mb-6 rounded-2xl p-4 text-sm font-bold bg-blue-50 border border-blue-200 text-primario flex items-center gap-2';
+                aviso.innerHTML = `<i class="fa fa-gift text-lg"></i><span>Você está no período de teste gratuito! Faltam <strong>${dias} dia${dias!==1?'s':''}</strong>. Assine agora para não perder o acesso.</span>`;
+                aviso.classList.remove('hidden');
+            } else {
+                u.statusAssinatura = 'expirada';
+                localStorage.setItem('usuarioLogado', JSON.stringify(u));
+                aviso.className = 'mb-6 rounded-2xl p-4 text-sm font-bold bg-red-50 border border-red-200 text-erro flex items-center gap-2';
+                aviso.innerHTML = `<i class="fa fa-lock text-lg"></i><span>Seu período de teste expirou! Escolha um plano abaixo para reativar o acesso.</span>`;
+                aviso.classList.remove('hidden');
+            }
+        }
+
+        function proximaCobranca() {
+            const d = new Date(); d.setMonth(d.getMonth() + 1);
+            return d.toLocaleDateString('pt-BR');
+        }
+
+        // ===== SELECIONAR PLANO =====
+        function selecionarPlano(nome, valor) {
+            planoAtual = nome; valorAtual = valor;
+            document.getElementById('etapaPlanos').classList.add('hidden');
+            document.getElementById('etapaPagamento').classList.remove('hidden');
+            document.getElementById('resumoPlano').textContent = 'Plano ' + nome;
+            document.getElementById('resumoValor').textContent = 'R$ ' + valor.toFixed(2) + '/mês';
+            setStep(2);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function voltarPlanos() {
+            document.getElementById('etapaPagamento').classList.add('hidden');
+            document.getElementById('etapaPlanos').classList.remove('hidden');
+            setStep(1);
+            if (timerPix) clearInterval(timerPix);
+        }
+
+        // ===== MÉTODO DE PAGAMENTO =====
+        function selecionarMetodo(metodo) {
+            metodoAtual = metodo;
+            ['credito','debito','pix'].forEach(m => {
+                const btn = document.getElementById('btn'+m.charAt(0).toUpperCase()+m.slice(1));
+                btn.className = 'metodo-btn p-2.5 rounded-xl border-2 border-gray-200 text-center transition-all hover:border-primario';
+                btn.querySelector('i').className = btn.querySelector('i').className.replace('text-primario','text-gray-400');
+                btn.querySelector('span').className = 'text-xs font-bold text-gray-500';
+            });
+            const btnAtivo = document.getElementById('btn'+metodo.charAt(0).toUpperCase()+metodo.slice(1));
+            btnAtivo.className = 'metodo-btn p-2.5 rounded-xl border-2 border-primario bg-primario/5 text-center transition-all';
+            btnAtivo.querySelector('i').className = btnAtivo.querySelector('i').className.replace('text-gray-400','text-primario');
+            btnAtivo.querySelector('span').className = 'text-xs font-black text-primario';
+
+            if (metodo === 'pix') {
+                document.getElementById('formCartao').classList.add('hidden');
+                document.getElementById('formPix').classList.remove('hidden');
+                iniciarTimerPix();
+            } else {
+                document.getElementById('formCartao').classList.remove('hidden');
+                document.getElementById('formPix').classList.add('hidden');
+                document.getElementById('camposParcelas').style.display = metodo === 'credito' ? 'block' : 'none';
+                if (timerPix) clearInterval(timerPix);
+            }
+        }
+
+        // ===== FORMATAÇÕES =====
+        function formatarCartao(input) {
+            let v = input.value.replace(/\D/g,'').substring(0,16);
+            input.value = v.replace(/(.{4})/g,'$1 ').trim();
+        }
+
+        function formatarValidade(input) {
+            let v = input.value.replace(/\D/g,'');
+            if (v.length >= 2) v = v.substring(0,2)+'/'+v.substring(2,4);
+            input.value = v;
+        }
+
+        function detectarBandeira(val) {
+            const n = val.replace(/\s/g,'');
+            document.getElementById('bandVisa').classList.remove('visivel');
+            document.getElementById('bandMaster').classList.remove('visivel');
+            document.getElementById('bandElo').classList.remove('visivel');
+            document.getElementById('bandGeneric').style.display = 'inline';
+
+            if (/^4/.test(n)) {
+                document.getElementById('bandVisa').classList.add('visivel');
+                document.getElementById('bandGeneric').style.display = 'none';
+            } else if (/^5[1-5]|^2[2-7]/.test(n)) {
+                document.getElementById('bandMaster').classList.add('visivel');
+                document.getElementById('bandGeneric').style.display = 'none';
+            } else if (/^(401178|401179|438935|457631|457632|504175|627780|636297|636369|65003[1-3]|6500[0-3]\d|65004\d|65005[01]|65040[5-9]|6504[1-3]\d|6504[8-9]\d|6505[0-3]\d|6505[4-7]\d|65072[0-7]|6509[0-1]\d|65092[0-6]|65500\d|6550[1-2]\d|65503[1-3]|6550[4-8]\d|65509\d)/.test(n)) {
+                document.getElementById('bandElo').classList.add('visivel');
+                document.getElementById('bandGeneric').style.display = 'none';
+            }
+        }
+
+        // ===== VALIDAR CARTÃO =====
+        function validarCartao() {
+            const nome = document.getElementById('nomeCartao').value.trim();
+            const num  = document.getElementById('numeroCartao').value.replace(/\s/g,'');
+            const val  = document.getElementById('validadeCartao').value;
+            const cvv  = document.getElementById('cvvCartao').value;
+            const erro = document.getElementById('erroCartao');
+            erro.classList.add('hidden');
+
+            if (!nome || nome.split(' ').length < 2) {
+                mostrarErroCartao('Digite o nome completo como está no cartão.'); return false;
+            }
+            if (num.length < 16) {
+                mostrarErroCartao('Número do cartão inválido. Verifique os 16 dígitos.'); return false;
+            }
+            if (!luhn(num)) {
+                mostrarErroCartao('Número do cartão inválido.'); return false;
+            }
+            if (!/^\d{2}\/\d{2}$/.test(val)) {
+                mostrarErroCartao('Validade inválida. Use o formato MM/AA.'); return false;
+            }
+            const [mes, ano] = val.split('/').map(Number);
+            const agora = new Date();
+            const expiry = new Date(2000+ano, mes-1, 1);
+            if (mes < 1 || mes > 12 || expiry < new Date(agora.getFullYear(), agora.getMonth(), 1)) {
+                mostrarErroCartao('Cartão expirado ou data inválida.'); return false;
+            }
+            if (cvv.length < 3) {
+                mostrarErroCartao('CVV inválido. São 3 dígitos no verso do cartão.'); return false;
+            }
+            return true;
+        }
+
+        // Algoritmo de Luhn para validar cartão
+        function luhn(n) {
+            let s = 0, alt = false;
+            for (let i = n.length-1; i >= 0; i--) {
+                let d = parseInt(n[i]);
+                if (alt) { d *= 2; if (d > 9) d -= 9; }
+                s += d; alt = !alt;
+            }
+            return s % 10 === 0;
+        }
+
+        function mostrarErroCartao(msg) {
+            const el = document.getElementById('erroCartao');
+            el.querySelector('span').textContent = msg;
+            el.classList.remove('hidden');
+        }
+
+        // ===== PROCESSAR PAGAMENTO =====
+        function processarPagamento() {
+            if (!validarCartao()) return;
+
+            const modal = document.getElementById('modalProcessando');
+            const barra = document.getElementById('barraProc');
+            modal.classList.remove('hidden');
+
+            // Reinicia barra
+            barra.style.width = '0%';
+            barra.style.animation = 'none';
+            void barra.offsetWidth;
+            barra.style.animation = 'progresso 2.5s ease forwards';
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                ativarAssinatura();
+            }, 2600);
+        }
+
+        function simularPagamentoPix() {
+            if (timerPix) clearInterval(timerPix);
+            const modal = document.getElementById('modalProcessando');
+            document.getElementById('tituloProcessando').textContent = 'Confirmando PIX...';
+            document.getElementById('subProcessando').textContent = 'Verificando o pagamento recebido.';
+            const barra = document.getElementById('barraProc');
+            modal.classList.remove('hidden');
+            barra.style.width = '0%';
+            barra.style.animation = 'none';
+            void barra.offsetWidth;
+            barra.style.animation = 'progresso 1.5s ease forwards';
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                ativarAssinatura();
+            }, 1600);
+        }
+
+        function copiarPix() {
+            const codigo = '00020126580014BR.GOV.BCB.PIX0136plataforma-estudos@pix.com.br5204000053039865802BR5920Plataforma de Estudos6009SAO PAULO62070503***6304ABCD';
+            navigator.clipboard.writeText(codigo).then(() => {
+                alert('Código PIX copiado!');
+            }).catch(() => {
+                alert('Código: ' + codigo);
+            });
+        }
+
+        // ===== ATIVAR ASSINATURA =====
+        function ativarAssinatura() {
+            const u = JSON.parse(localStorage.getItem('usuarioLogado'));
+            u.statusAssinatura = 'ativa';
+            u.planoAssinatura = planoAtual;
+            u.valorAssinatura = valorAtual;
+            u.dataAssinatura = new Date().toISOString();
+
+            localStorage.setItem('usuarioLogado', JSON.stringify(u));
+
+            const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+            const idx = lista.findIndex(x => x.email === u.email);
+            if (idx !== -1) lista[idx] = u;
+            localStorage.setItem('listaUsuarios', JSON.stringify(lista));
+
+            // Preencher modal
+            const prox = new Date(); prox.setMonth(prox.getMonth()+1);
+            document.getElementById('textoConfirmacao').textContent = `Plano ${planoAtual} ativado com sucesso!`;
+            document.getElementById('confPlano').textContent = 'Plano ' + planoAtual;
+            document.getElementById('confValor').textContent = 'R$ ' + valorAtual.toFixed(2) + '/mês';
+            document.getElementById('confProxima').textContent = prox.toLocaleDateString('pt-BR');
+            document.getElementById('modalConfirmacao').classList.remove('hidden');
+            setStep(3);
+        }
+
+        // ===== TIMER PIX =====
+        function iniciarTimerPix() {
+            let seg = 600;
+            if (timerPix) clearInterval(timerPix);
+            timerPix = setInterval(() => {
+                seg--;
+                const m = Math.floor(seg/60).toString().padStart(2,'0');
+                const s = (seg%60).toString().padStart(2,'0');
+                const el = document.getElementById('tempoPixContador');
+                if (el) el.textContent = `${m}:${s}`;
+                if (seg <= 0) {
+                    clearInterval(timerPix);
+                    if (el) el.textContent = 'expirado';
+                }
+            }, 1000);
+        }
+
+        // ===== STEPS =====
+        function setStep(n) {
+            [1,2,3].forEach(i => {
+                const el = document.getElementById('step'+i);
+                el.className = 'step';
+                if (i < n) el.classList.add('concluido');
+                else if (i === n) el.classList.add('ativo');
+                if (i < n) el.querySelector('.step-num').innerHTML = '<i class="fa fa-check" style="font-size:0.7rem"></i>';
+                else el.querySelector('.step-num').textContent = i;
+            });
+        }
+
+        window.onload = () => {
+            verificarStatus();
+            selecionarMetodo('credito');
+        };
     </script>
 </body>
 </html>
