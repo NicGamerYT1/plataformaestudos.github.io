@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Português - 7º Ano</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primario: '#165DFF', secundario: '#36BFFA', sucesso: '#00B42A',
+          aviso: '#FF7D00', erro: '#F53F3F', claro: '#F7F8FA', escuro: '#1D2129',
+        },
+        fontFamily: {
+          sans: ['Nunito', 'system-ui', 'sans-serif'],
+          serif: ['Lora', 'Georgia', 'serif'],
+        },
+      }
+    }
+  }
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body { background: #F0F4FF; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .anim-1 { animation: fadeUp 0.55s ease both; }
+  .anim-2 { animation: fadeUp 0.55s 0.10s ease both; }
+  .anim-3 { animation: fadeUp 0.55s 0.18s ease both; }
+  .anim-4 { animation: fadeUp 0.55s 0.26s ease both; }
+  .anim-5 { animation: fadeUp 0.55s 0.34s ease both; }
+  .anim-6 { animation: fadeUp 0.55s 0.42s ease both; }
+  .anim-7 { animation: fadeUp 0.55s 0.50s ease both; }
+  .anim-8 { animation: fadeUp 0.55s 0.58s ease both; }
+
+  .hero-banner {
+    background: linear-gradient(135deg, #165DFF 0%, #0A3DBF 60%, #1a1a4e 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 80% 20%, rgba(54,191,250,0.25) 0%, transparent 50%),
+                      radial-gradient(circle at 10% 80%, rgba(255,125,0,0.15) 0%, transparent 45%);
+  }
+  .hero-banner::after {
+    content: '"Ler"';
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: clamp(6rem, 18vw, 14rem);
+    color: rgba(255,255,255,0.04);
+    position: absolute;
+    right: -1rem;
+    bottom: -2rem;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .topico-card {
+    background: #ffffff;
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    box-shadow: 0 4px 24px rgba(22,93,255,0.07);
+    border: 1.5px solid transparent;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .topico-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 5px;
+    height: 100%;
+    border-radius: 4px 0 0 4px;
+  }
+  .topico-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(22,93,255,0.14);
+    border-color: rgba(22,93,255,0.18);
+  }
+
+  .accent-blue::before   { background: #165DFF; }
+  .accent-cyan::before   { background: #36BFFA; }
+  .accent-orange::before { background: #FF7D00; }
+  .accent-green::before  { background: #00B42A; }
+  .accent-red::before    { background: #F53F3F; }
+  .accent-purple::before { background: #7C3AED; }
+
+  .card-icon {
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+  }
+
+  .tag-ano {
+    display: inline-block;
+    padding: 0.25rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .menu-lateral { transition: transform 0.3s cubic-bezier(.4,0,.2,1); }
+  html { scroll-behavior: smooth; }
+
+  .lista-topico li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #4B5563;
+    line-height: 1.6;
+  }
+  .lista-topico li::before {
+    content: '→';
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-weight: 700;
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body class="min-h-screen font-sans text-escuro flex">
+
+<!-- CABEÇALHO FIXO -->
+<header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20 shadow-lg">
+  <div class="flex items-center justify-between max-w-full">
+    <div class="flex items-center gap-3">
+      <button id="botaoMenu" class="md:hidden text-white text-xl p-1" onclick="toggleMenu()">
+        <i class="fa fa-bars"></i>
+      </button>
+      <i class="fa fa-graduation-cap text-2xl"></i>
+      <h1 class="text-lg md:text-xl font-bold tracking-tight">Plataforma de Estudos</h1>
+    </div>
+    <div class="flex items-center gap-3">
+      <span id="nomeUsuario" class="font-semibold text-sm md:text-base hidden sm:inline"></span>
+      <button onclick="sairDaConta()" class="bg-white text-primario px-3 py-1.5 rounded-lg text-xs md:text-sm font-bold hover:bg-blue-50 transition-colors">
+        Sair
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- MENU LATERAL -->
+<aside id="menuLateral" class="menu-lateral fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-100 pt-6 z-30 overflow-y-auto -translate-x-full md:translate-x-0 shadow-xl md:shadow-none">
+  <div class="mx-4 mb-5 px-4 py-3 bg-blue-50 rounded-xl border border-blue-100">
+    <p class="text-xs text-primario font-bold uppercase tracking-wider mb-0.5">Você está em</p>
+    <p class="text-sm font-bold text-escuro">Português · 7º Ano</p>
+  </div>
+  <nav class="px-4">
+    <ul class="space-y-1">
+      <li><a href="inicio.html"     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-home w-5 text-center"></i> Início</a></li>
+      <li><a href="materias.html"   class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-book w-5 text-center"></i> Matérias</a></li>
+      <li><a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-tasks w-5 text-center"></i> Atividades</a></li>
+      <li><a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-bar-chart w-5 text-center"></i> Meu Desempenho</a></li>
+      <li><a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-credit-card w-5 text-center"></i> Assinatura</a></li>
+      <li><a href="perfil.html"     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-user w-5 text-center"></i> Perfil</a></li>
+      <li><a href="pais.html"       class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-users w-5 text-center"></i> Pais / Responsáveis</a></li>
+    </ul>
+
+    <div class="mt-6 pt-5 border-t border-gray-100">
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-widest px-4 mb-3">Outros anos</p>
+      <div class="flex flex-wrap gap-2 px-4">
+        <a href="portugues_5ano.html" class="tag-ano bg-gray-100 text-gray-600 hover:bg-primario hover:text-white">5º</a>
+        <a href="portugues_6ano.html" class="tag-ano bg-gray-100 text-gray-600 hover:bg-primario hover:text-white">6º</a>
+        <a href="portugues_7ano.html" class="tag-ano bg-primario text-white">7º</a>
+        <a href="portugues_8ano.html" class="tag-ano bg-gray-100 text-gray-600 hover:bg-primario hover:text-white">8º</a>
+        <a href="portugues_9ano.html" class="tag-ano bg-gray-100 text-gray-600 hover:bg-primario hover:text-white">9º</a>
+      </div>
+    </div>
+  </nav>
+</aside>
+
+<!-- Overlay -->
+<div id="fundoMenu" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden" onclick="toggleMenu()"></div>
+
+<!-- CONTEÚDO PRINCIPAL -->
+<main class="w-full md:ml-64 mt-16 pb-16">
+
+  <!-- Hero Banner -->
+  <div class="hero-banner text-white px-4 sm:px-8 md:px-12 py-8 sm:py-12 md:py-20 anim-1">
+    <div class="max-w-4xl relative z-10">
+      <div class="hidden sm:flex items-center gap-2 mb-4 opacity-80">
+        <a href="materias.html" class="text-sm font-semibold hover:underline flex items-center gap-1">
+          <i class="fa fa-book text-xs"></i> Matérias
+        </a>
+        <i class="fa fa-angle-right text-xs"></i>
+        <span class="text-sm font-semibold">Língua Portuguesa</span>
+        <i class="fa fa-angle-right text-xs"></i>
+        <span class="text-sm font-bold text-secundario">7º Ano</span>
+      </div>
+      <a href="materias.html" class="sm:hidden inline-flex items-center gap-1.5 text-xs font-bold text-blue-200 mb-4 hover:text-white transition-colors">
+        <i class="fa fa-arrow-left"></i> Voltar para Matérias
+      </a>
+
+      <h2 class="font-sans font-black text-[clamp(1.6rem,7vw,3.5rem)] leading-tight mb-3">
+        Língua Portuguesa
+        <span class="block text-secundario font-serif italic font-semibold text-[clamp(1rem,4.5vw,2.4rem)] mt-1">7º Ano do Ensino Fundamental</span>
+      </h2>
+      <p class="text-blue-100 text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed">
+        Todos os temas do 7º ano organizados e explicados com clareza. Escolha um tópico e comece a estudar agora!
+      </p>
+
+      <div class="flex gap-3 mt-6 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible">
+        <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/20 flex-shrink-0">
+          <p class="text-xs font-bold text-blue-200 uppercase tracking-wider whitespace-nowrap">Tópicos</p>
+          <p class="text-xl font-black">6</p>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/20 flex-shrink-0">
+          <p class="text-xs font-bold text-blue-200 uppercase tracking-wider whitespace-nowrap">Exercícios</p>
+          <p class="text-xl font-black">30+</p>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2.5 border border-white/20 flex-shrink-0">
+          <p class="text-xs font-bold text-blue-200 uppercase tracking-wider whitespace-nowrap">Nível</p>
+          <p class="text-xl font-black">7º Ano</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tópicos -->
+  <div class="px-3 sm:px-6 md:px-10 pt-8 sm:pt-12 max-w-6xl mx-auto">
+
+    <div class="flex items-center gap-3 mb-6 sm:mb-8 anim-2">
+      <div class="w-1 h-8 bg-primario rounded-full"></div>
+      <h3 class="text-xl sm:text-2xl md:text-3xl font-black text-escuro">Temas Principais</h3>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+
+      <!-- Tópico 1: Morfologia Avançada -->
+      <div class="topico-card accent-blue anim-2">
+        <div class="card-icon bg-blue-50 text-primario">
+          <i class="fa fa-cubes"></i>
+        </div>
+        <h4 class="text-lg font-black mb-3 text-escuro">Morfologia: Classes de Palavras</h4>
+        <ul class="lista-topico space-y-1.5 mb-5">
+          <li>Pronomes pessoais: retos e oblíquos</li>
+          <li>Pronomes de tratamento e possessivos</li>
+          <li>Pronomes demonstrativos, indefinidos e relativos</li>
+          <li>Verbos: regulares, irregulares e auxiliares</li>
+          <li>Locução verbal e verbos de ligação</li>
+        </ul>
+        <a href="#" class="inline-flex items-center gap-2 text-primario font-bold text-sm hover:gap-3 transition-all">
+          Ver materiais <i class="fa fa-arrow-right text-xs"></i>
+        </a>
+      </div>
+
+      <!-- Tópico 2: Sintaxe -->
+      <div class="topico-card accent-cyan anim-3">
+        <div class="card-icon bg-cyan-50 text-secundario">
+          <i class="fa fa-sitemap"></i>
+        </div>
+        <h4 class="text-lg font-black mb-3 text-escuro">Sintaxe: Termos da Oração</h4>
+        <ul class="lista-topico space-y-1.5 mb-5">
+          <li>Sujeito simples, composto e oculto</li>
+          <li>Predicado verbal, nominal e verbo-nominal</li>
+          <li>Complemento verbal: objeto direto e indireto</li>
+          <li>Complemento nominal e agente da passiva</li>
+          <li>Adjuntos adnominal e adverbial</li>
+          <li>Aposto e vocativo</li>
+        </ul>
+        <a href="#" class="inline-flex items-center gap-2 text-secundario font-bold text-sm hover:gap-3 transition-all">
+          Ver materiais <i class="fa fa-arrow-right text-xs"></i>
+        </a>
+      </div>
+
+      <!-- Tópico 3: Semântica -->
+      <div class="topico-card accent-orange anim-4">
+        <div class="card-icon bg-orange-50 text-aviso">
+          <i class="fa fa-exchange"></i>
+        </div>
+        <h4 class="text-lg font-black mb-3 text-escuro">Semântica e Figuras de Linguagem</h4>
+        <ul class="lista-topico space-y-1.5 mb-5">
+          <li>Denotação e conotação</li>
+          <li>Metáfora, comparação e metonímia</li>
+          <li>Personificação e hipérbole</li>
+          <li>Eufemismo, ironia e antítese</li>
+          <li>Aliteração e assonância</li>
+          <li>Campo semântico e família de palavras</li>
+        </ul>
+        <a href="#" class="inline-flex items-center gap-2 text-aviso font-bold text-sm hover:gap-3 transition-all">
+          Ver materiais <i class="fa fa-arrow-right text-xs"></i>
+        </a>
+      </div>
+
+      <!-- Tópico 4: Ortografia e Acentuação -->
+      <div class="topico-card accent-green anim-5">
+        <div class="card-icon bg-green-50 text-sucesso">
+          <i class="fa fa-check-square-o"></i>
+        </div>
+        <h4 class="text-lg font-black mb-3 text-escuro">Ortografia e Acentuação</h4>
+        <ul class="lista-topico space-y-1.5 mb-5">
+          <li>Regras do Novo Acordo Ortográfico</li>
+          <li>Uso do hífen: regras atualizadas</li>
+          <li>Acento nas oxítonas, paroxítonas e proparoxítonas</li>
+          <li>Ditongos abertos e hiatos</li>
+          <li>Uso de maiúsculas e minúsculas</li>
+          <li>Casos especiais: porque, porquê, por que, por quê</li>
+        </ul>
+        <a href="#" class="inline-flex items-center gap-2 text-sucesso font-bold text-sm hover:gap-3 transition-all">
+          Ver materiais <i class="fa fa-arrow-right text-xs"></i>
+        </a>
+      </div>
+
+      <!-- Tópico 5: Gêneros Textuais -->
+      <div class="topico-card accent-red anim-6">
+        <div class="card-icon bg-red-50 text-erro">
+          <i class="fa fa-align-left"></i>
+        </div>
+        <h4 class="text-lg font-black mb-3 text-escuro">Gêneros Textuais e Produção</h4>
+        <ul class="lista-topico space-y-1.5 mb-5">
+          <li>Conto, crônica e novela: características</li>
+          <li>Textos argumentativos e dissertativos</li>
+          <li>Artigo de opinião e editorial</li>
+          <li>Texto de divulgação científica</li>
+          <li>Inferências e leitura de implícitos</li>
+          <li>Coesão: conectivos e referenciação</li>
+        </ul>
+        <a href="#" class="inline-flex items-center gap-2 text-erro font-bold text-sm hover:gap-3 transition-all">
+          Ver materiais <i class="fa fa-arrow-right text-xs"></i>
+        </a>
+      </div>
+
+      <!-- Tópico 6: Literatura -->
+      <div class="topico-card accent-purple anim-7">
+        <div class="card-icon bg-purple-50 text-purple-600">
+          <i class="fa fa-book"></i>
+        </div>
+        <h4 class="text-lg font-black mb-3 text-escuro">Literatura e Poesia</h4>
+        <ul class="lista-topico space-y-1.5 mb-5">
+          <li>Elementos da narrativa: narrador, tempo, espaço</li>
+          <li>Personagens: protagonista, antagonista e secundários</li>
+          <li>Tipos de narrador: 1ª e 3ª pessoa</li>
+          <li>Estrutura do poema: verso, estrofe e rima</li>
+          <li>Ritmo e métrica na poesia</li>
+          <li>Autores brasileiros do período moderno</li>
+        </ul>
+        <a href="#" class="inline-flex items-center gap-2 text-purple-600 font-bold text-sm hover:gap-3 transition-all">
+          Ver materiais <i class="fa fa-arrow-right text-xs"></i>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Navegação entre anos -->
+    <div class="mt-10 sm:mt-14 mb-4 anim-8">
+      <div class="flex items-center gap-3 mb-4 sm:mb-5">
+        <div class="w-1 h-8 bg-primario rounded-full"></div>
+        <h3 class="text-lg sm:text-xl font-black text-escuro">Estudar em outro ano</h3>
+      </div>
+      <div class="flex flex-wrap gap-2 sm:gap-3">
+        <a href="portugues_5ano.html" class="tag-ano bg-white text-gray-700 border border-gray-200 hover:bg-primario hover:text-white hover:border-primario text-sm py-2 px-4 sm:px-5 shadow-sm">5º Ano</a>
+        <a href="portugues_6ano.html" class="tag-ano bg-white text-gray-700 border border-gray-200 hover:bg-primario hover:text-white hover:border-primario text-sm py-2 px-4 sm:px-5 shadow-sm">6º Ano</a>
+        <a href="portugues_7ano.html" class="tag-ano bg-primario text-white shadow-md shadow-blue-200 text-sm py-2 px-4 sm:px-5">
+          <i class="fa fa-star mr-1 text-yellow-300 text-xs"></i> 7º Ano
+        </a>
+        <a href="portugues_8ano.html" class="tag-ano bg-white text-gray-700 border border-gray-200 hover:bg-primario hover:text-white hover:border-primario text-sm py-2 px-4 sm:px-5 shadow-sm">8º Ano</a>
+        <a href="portugues_9ano.html" class="tag-ano bg-white text-gray-700 border border-gray-200 hover:bg-primario hover:text-white hover:border-primario text-sm py-2 px-4 sm:px-5 shadow-sm">9º Ano</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Rodapé -->
+<footer class="md:ml-64 bg-escuro text-white py-5 px-4 mt-4">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+    <div class="flex items-center gap-2">
+      <i class="fa fa-graduation-cap text-primario text-lg"></i>
+      <span class="font-bold text-sm">Plataforma de Estudos</span>
+    </div>
+    <p class="text-gray-400 text-xs">&copy; 2024 · Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('menuLateral').classList.toggle('-translate-x-full');
+    document.getElementById('fundoMenu').classList.toggle('hidden');
+  }
+
+  function sairDaConta() {
+    localStorage.removeItem('usuarioLogado');
+    window.location.href = 'login.html';
+  }
+
+  const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
+  if (usuario.nome) {
+    document.getElementById('nomeUsuario').textContent = usuario.nome;
+  }
+</script>
+
+</body>
+</html>
