@@ -1,466 +1,133 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Desempenho - Plataforma de Estudos</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primario: '#165DFF', secundario: '#36BFFA', sucesso: '#00B42A',
-                        aviso: '#FF7D00', erro: '#F53F3F', claro: '#F7F8FA', escuro: '#1D2129',
-                    },
-                    fontFamily: { sans: ['Nunito', 'system-ui', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
-    <style>
-        * { box-sizing: border-box; }
-        body { background: #F0F4FF; }
-        .menu-lateral { transition: transform 0.3s cubic-bezier(.4,0,.2,1); }
-
-        @keyframes fadeUp { from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);} }
-        .anim { animation: fadeUp 0.45s ease both; }
-
-        /* Hero */
-        .hero-bg {
-            background: linear-gradient(135deg, #165DFF 0%, #0A3DBF 60%, #1a1a4e 100%);
-            position: relative; overflow: hidden;
-        }
-        .hero-bg::before {
-            content: '';
-            position: absolute; inset: 0;
-            background: radial-gradient(circle at 80% 20%, rgba(54,191,250,0.2) 0%, transparent 55%),
-                        radial-gradient(circle at 10% 85%, rgba(255,125,0,0.12) 0%, transparent 45%);
-        }
-
-        /* Stat card */
-        .stat-card {
-            background: white; border-radius: 1.25rem;
-            box-shadow: 0 4px 20px rgba(22,93,255,0.07);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(22,93,255,0.13); }
-
-        /* Barra de progresso animada */
-        .barra-fill {
-            height: 100%; border-radius: 9999px;
-            transition: width 1.2s cubic-bezier(.4,0,.2,1);
-        }
-
-        /* Badge de nível */
-        .badge-nivel { display:inline-flex; align-items:center; gap:0.35rem; padding:0.25rem 0.75rem; border-radius:9999px; font-size:0.72rem; font-weight:800; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Desempenho - Plataforma de Estudos</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+<script src="acesso.js"></script>
+<script>
+  tailwind.config={theme:{extend:{colors:{primario:'#165DFF',secundario:'#36BFFA',sucesso:'#00B42A',aviso:'#FF7D00',erro:'#F53F3F',claro:'#F7F8FA',escuro:'#1D2129'},fontFamily:{sans:['Nunito','system-ui','sans-serif']}}}}
+</script>
+<style>
+  *{box-sizing:border-box;}body{background:#F0F4FF;}
+  .menu-lateral{transition:transform 0.3s cubic-bezier(.4,0,.2,1);}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}.anim{animation:fadeUp 0.45s ease both;}
+  .hero-bg{background:linear-gradient(135deg,#165DFF 0%,#0A3DBF 60%,#1a1a4e 100%);position:relative;overflow:hidden;}
+  .hero-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(54,191,250,0.2) 0%,transparent 55%),radial-gradient(circle at 10% 85%,rgba(255,125,0,0.12) 0%,transparent 45%);}
+  .stat-card{background:white;border-radius:1.25rem;box-shadow:0 4px 20px rgba(22,93,255,0.07);transition:transform 0.2s ease,box-shadow 0.2s ease;}
+  .stat-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(22,93,255,0.13);}
+  .barra-fill{height:100%;border-radius:9999px;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
+  .badge-nivel{display:inline-flex;align-items:center;gap:0.35rem;padding:0.25rem 0.75rem;border-radius:9999px;font-size:0.72rem;font-weight:800;}
+</style>
 </head>
 <body class="min-h-screen font-sans text-escuro flex">
 
-    <!-- CABEÇALHO -->
-    <header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20 shadow-lg">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <button class="md:hidden text-white text-xl p-1" onclick="toggleMenu()">
-                    <i class="fa fa-bars"></i>
-                </button>
-                <i class="fa fa-graduation-cap text-2xl"></i>
-                <h1 class="text-lg md:text-xl font-bold">Plataforma de Estudos</h1>
-            </div>
-            <div class="flex items-center gap-3">
-                <span id="nomeUsuario" class="font-semibold text-sm hidden sm:inline"></span>
-                <button onclick="sairDaConta()" class="bg-white text-primario px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-50 transition-colors">Sair</button>
-            </div>
-        </div>
-    </header>
+<header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20 shadow-lg">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <button class="md:hidden text-white text-xl p-1" onclick="toggleMenu()"><i class="fa fa-bars"></i></button>
+      <i class="fa fa-graduation-cap text-2xl"></i>
+      <h1 class="text-lg md:text-xl font-bold">Plataforma de Estudos</h1>
+    </div>
+    <div class="flex items-center gap-3">
+      <span id="nomeUsuario" class="font-semibold text-sm hidden sm:inline"></span>
+      <button onclick="sairDaConta()" class="bg-white text-primario px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-50 transition-colors">Sair</button>
+    </div>
+  </div>
+</header>
 
-    <!-- MENU LATERAL -->
-    <aside id="menuLateral" class="menu-lateral fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-100 pt-6 z-30 overflow-y-auto -translate-x-full md:translate-x-0 shadow-xl md:shadow-none">
-        <nav class="px-4">
-            <ul class="space-y-1">
-                <li><a href="inicio.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-home w-5 text-center"></i> Início</a></li>
-                <li><a href="materias.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-book w-5 text-center"></i> Matérias</a></li>
-                <li><a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-tasks w-5 text-center"></i> Atividades</a></li>
-                <li><a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primario/10 text-primario font-bold text-sm"><i class="fa fa-bar-chart w-5 text-center"></i> Meu Desempenho</a></li>
-                <li><a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-credit-card w-5 text-center"></i> Assinatura</a></li>
-                <li><a href="perfil.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-user w-5 text-center"></i> Perfil</a></li>
-                <li><a href="pais.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-users w-5 text-center"></i> Pais / Responsáveis</a></li>
-            </ul>
-        </nav>
-    </aside>
+<aside id="menuLateral" class="menu-lateral fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-100 pt-6 z-30 overflow-y-auto -translate-x-full md:translate-x-0 shadow-xl md:shadow-none">
+  <nav class="px-4"><ul class="space-y-1">
+    <li><a href="inicio.html"     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-home w-5 text-center"></i> Início</a></li>
+    <li><a href="materias.html"   class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-book w-5 text-center"></i> Matérias</a></li>
+    <li><a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-tasks w-5 text-center"></i> Atividades</a></li>
+    <li><a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primario/10 text-primario font-bold text-sm"><i class="fa fa-bar-chart w-5 text-center"></i> Meu Desempenho</a></li>
+    <li><a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-credit-card w-5 text-center"></i> Assinatura</a></li>
+    <li><a href="perfil.html"     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-user w-5 text-center"></i> Perfil</a></li>
+    <li><a href="pais.html"       class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-users w-5 text-center"></i> Pais / Responsáveis</a></li>
+  </ul></nav>
+</aside>
+<div id="fundoMenu" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden" onclick="toggleMenu()"></div>
 
-    <div id="fundoMenu" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden" onclick="toggleMenu()"></div>
+<main class="w-full md:ml-64 mt-16 pb-16">
+  <div class="hero-bg text-white px-4 sm:px-8 py-8 sm:py-10 anim">
+    <div class="max-w-4xl relative z-10">
+      <p class="text-blue-200 text-xs font-bold uppercase tracking-widest mb-1">📊 Relatório de Estudos</p>
+      <h2 class="text-2xl sm:text-3xl font-black mb-2">Meu Desempenho</h2>
+      <p class="text-blue-100 text-sm max-w-xl">Acompanhe seu progresso, veja seus pontos fortes e as áreas que precisam de mais atenção.</p>
+    </div>
+  </div>
 
-    <!-- CONTEÚDO -->
-    <main class="w-full md:ml-64 mt-16 pb-16">
+  <div class="px-3 sm:px-6 md:px-8 pt-8 max-w-6xl mx-auto">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 mb-8 anim" style="animation-delay:0.05s">
+      <div class="stat-card p-4 sm:p-5 text-center"><div class="w-11 h-11 bg-blue-50 text-primario rounded-xl flex items-center justify-center mx-auto mb-3"><i class="fa fa-book text-xl"></i></div><p class="text-2xl sm:text-3xl font-black text-escuro">28</p><p class="text-gray-400 text-xs font-bold mt-1">Conteúdos acessados</p></div>
+      <div class="stat-card p-4 sm:p-5 text-center"><div class="w-11 h-11 bg-green-50 text-sucesso rounded-xl flex items-center justify-center mx-auto mb-3"><i class="fa fa-check-circle text-xl"></i></div><p class="text-2xl sm:text-3xl font-black text-escuro">85%</p><p class="text-gray-400 text-xs font-bold mt-1">Aproveitamento</p></div>
+      <div class="stat-card p-4 sm:p-5 text-center"><div class="w-11 h-11 bg-cyan-50 text-secundario rounded-xl flex items-center justify-center mx-auto mb-3"><i class="fa fa-clock-o text-xl"></i></div><p class="text-2xl sm:text-3xl font-black text-escuro">42h</p><p class="text-gray-400 text-xs font-bold mt-1">Tempo estudado</p></div>
+      <div class="stat-card p-4 sm:p-5 text-center"><div class="w-11 h-11 bg-orange-50 text-aviso rounded-xl flex items-center justify-center mx-auto mb-3"><i class="fa fa-tasks text-xl"></i></div><p class="text-2xl sm:text-3xl font-black text-escuro">16</p><p class="text-gray-400 text-xs font-bold mt-1">Atividades feitas</p></div>
+    </div>
 
-        <!-- Hero -->
-        <div class="hero-bg text-white px-4 sm:px-8 py-8 sm:py-10 anim">
-            <div class="max-w-4xl relative z-10">
-                <p class="text-blue-200 text-xs font-bold uppercase tracking-widest mb-1">📊 Relatório de Estudos</p>
-                <h2 class="text-2xl sm:text-3xl font-black mb-2">Meu Desempenho</h2>
-                <p class="text-blue-100 text-sm max-w-xl">Acompanhe seu progresso, veja seus pontos fortes e as áreas que precisam de mais atenção.</p>
-            </div>
-        </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-8 anim" style="animation-delay:0.1s">
+      <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm"><h3 class="font-black text-base mb-4 flex items-center gap-2"><i class="fa fa-bar-chart text-primario"></i> Desempenho por Matéria</h3><div class="h-64 sm:h-72"><canvas id="graficoMaterias"></canvas></div></div>
+      <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm"><h3 class="font-black text-base mb-4 flex items-center gap-2"><i class="fa fa-line-chart text-primario"></i> Evolução Mensal</h3><div class="h-64 sm:h-72"><canvas id="graficoEvolucao"></canvas></div></div>
+    </div>
 
-        <div class="px-3 sm:px-6 md:px-8 pt-8 max-w-6xl mx-auto">
+    <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm mb-8 anim" style="animation-delay:0.15s">
+      <h3 class="font-black text-base mb-5 flex items-center gap-2"><i class="fa fa-graduation-cap text-primario"></i> Progresso por Área</h3>
+      <div class="space-y-4" id="barrasProgresso"></div>
+    </div>
 
-            <!-- Cards de resumo -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 mb-8 anim" style="animation-delay:0.05s">
-                <div class="stat-card p-4 sm:p-5 text-center">
-                    <div class="w-11 h-11 bg-blue-50 text-primario rounded-xl flex items-center justify-center mx-auto mb-3">
-                        <i class="fa fa-book text-xl"></i>
-                    </div>
-                    <p class="text-2xl sm:text-3xl font-black text-escuro">28</p>
-                    <p class="text-gray-400 text-xs font-bold mt-1">Conteúdos acessados</p>
-                </div>
-                <div class="stat-card p-4 sm:p-5 text-center">
-                    <div class="w-11 h-11 bg-green-50 text-sucesso rounded-xl flex items-center justify-center mx-auto mb-3">
-                        <i class="fa fa-check-circle text-xl"></i>
-                    </div>
-                    <p class="text-2xl sm:text-3xl font-black text-escuro">85%</p>
-                    <p class="text-gray-400 text-xs font-bold mt-1">Aproveitamento</p>
-                </div>
-                <div class="stat-card p-4 sm:p-5 text-center">
-                    <div class="w-11 h-11 bg-cyan-50 text-secundario rounded-xl flex items-center justify-center mx-auto mb-3">
-                        <i class="fa fa-clock-o text-xl"></i>
-                    </div>
-                    <p class="text-2xl sm:text-3xl font-black text-escuro">42h</p>
-                    <p class="text-gray-400 text-xs font-bold mt-1">Tempo estudado</p>
-                </div>
-                <div class="stat-card p-4 sm:p-5 text-center">
-                    <div class="w-11 h-11 bg-orange-50 text-aviso rounded-xl flex items-center justify-center mx-auto mb-3">
-                        <i class="fa fa-tasks text-xl"></i>
-                    </div>
-                    <p class="text-2xl sm:text-3xl font-black text-escuro">16</p>
-                    <p class="text-gray-400 text-xs font-bold mt-1">Atividades feitas</p>
-                </div>
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8 anim" style="animation-delay:0.2s">
+      <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border-l-4 border-sucesso">
+        <h3 class="font-black text-base mb-4 flex items-center gap-2"><i class="fa fa-trophy text-aviso"></i> Pontos Fortes</h3>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3"><div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa fa-check text-sucesso text-xs"></i></div><div><p class="font-black text-sm">Ciências — 92%</p><p class="text-gray-400 text-xs mt-0.5">Ótimo desempenho em natureza e meio ambiente.</p></div></li>
+          <li class="flex items-start gap-3"><div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa fa-check text-sucesso text-xs"></i></div><div><p class="font-black text-sm">Português — 90%</p><p class="text-gray-400 text-xs mt-0.5">Boa compreensão de textos e gramática.</p></div></li>
+          <li class="flex items-start gap-3"><div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa fa-check text-sucesso text-xs"></i></div><div><p class="font-black text-sm">Geografia — 86%</p><p class="text-gray-400 text-xs mt-0.5">Bom conhecimento de regiões e clima.</p></div></li>
+        </ul>
+      </div>
+      <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border-l-4 border-aviso">
+        <h3 class="font-black text-base mb-4 flex items-center gap-2"><i class="fa fa-lightbulb-o text-aviso"></i> Áreas para Melhorar</h3>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3"><div class="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa fa-arrow-up text-aviso text-xs"></i></div><div><p class="font-black text-sm">Matemática — 78%</p><p class="text-gray-400 text-xs mt-0.5">Pratique mais frações e álgebra.</p></div></li>
+          <li class="flex items-start gap-3"><div class="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa fa-arrow-up text-aviso text-xs"></i></div><div><p class="font-black text-sm">Inglês — 70%</p><p class="text-gray-400 text-xs mt-0.5">Foque em vocabulário e verbos irregulares.</p></div></li>
+          <li class="flex items-start gap-3"><div class="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><i class="fa fa-arrow-up text-aviso text-xs"></i></div><div><p class="font-black text-sm">História — 82%</p><p class="text-gray-400 text-xs mt-0.5">Revise os períodos históricos do Brasil.</p></div></li>
+        </ul>
+      </div>
+    </div>
 
-            <!-- Gráficos -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-8 anim" style="animation-delay:0.1s">
-                <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm">
-                    <h3 class="font-black text-base mb-4 flex items-center gap-2">
-                        <i class="fa fa-bar-chart text-primario"></i> Desempenho por Matéria
-                    </h3>
-                    <div class="h-64 sm:h-72">
-                        <canvas id="graficoMaterias"></canvas>
-                    </div>
-                </div>
-                <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm">
-                    <h3 class="font-black text-base mb-4 flex items-center gap-2">
-                        <i class="fa fa-line-chart text-primario"></i> Evolução Mensal
-                    </h3>
-                    <div class="h-64 sm:h-72">
-                        <canvas id="graficoEvolucao"></canvas>
-                    </div>
-                </div>
-            </div>
+    <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm anim" style="animation-delay:0.25s">
+      <h3 class="font-black text-base mb-5 flex items-center gap-2"><i class="fa fa-history text-primario"></i> Atividades Recentes</h3>
+      <div class="space-y-3">
+        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl"><div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0"><i class="fa fa-calculator text-primario"></i></div><div class="flex-1 min-w-0"><p class="font-black text-sm">Operações Básicas</p><p class="text-gray-400 text-xs">Matemática · 5º Ano</p></div><div class="text-right flex-shrink-0"><span class="badge-nivel bg-green-100 text-sucesso">100% ✅</span><p class="text-gray-400 text-xs mt-1">há 1 dia</p></div></div>
+        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl"><div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0"><i class="fa fa-book text-erro"></i></div><div class="flex-1 min-w-0"><p class="font-black text-sm">Interpretação de Texto</p><p class="text-gray-400 text-xs">Português · 6º Ano</p></div><div class="text-right flex-shrink-0"><span class="badge-nivel bg-green-100 text-sucesso">80% ✅</span><p class="text-gray-400 text-xs mt-1">há 2 dias</p></div></div>
+        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl"><div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0"><i class="fa fa-flask text-sucesso"></i></div><div class="flex-1 min-w-0"><p class="font-black text-sm">Corpo Humano</p><p class="text-gray-400 text-xs">Ciências · 7º Ano</p></div><div class="text-right flex-shrink-0"><span class="badge-nivel bg-green-100 text-sucesso">100% ✅</span><p class="text-gray-400 text-xs mt-1">há 3 dias</p></div></div>
+        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl"><div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0"><i class="fa fa-history text-aviso"></i></div><div class="flex-1 min-w-0"><p class="font-black text-sm">Períodos Históricos</p><p class="text-gray-400 text-xs">História · 8º Ano</p></div><div class="text-right flex-shrink-0"><span class="badge-nivel bg-orange-100 text-aviso">60% ⚠️</span><p class="text-gray-400 text-xs mt-1">há 4 dias</p></div></div>
+        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl"><div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0"><i class="fa fa-language text-purple-600"></i></div><div class="flex-1 min-w-0"><p class="font-black text-sm">Vocabulário em Inglês</p><p class="text-gray-400 text-xs">Inglês · 5º Ano</p></div><div class="text-right flex-shrink-0"><span class="badge-nivel bg-orange-100 text-aviso">60% ⚠️</span><p class="text-gray-400 text-xs mt-1">há 5 dias</p></div></div>
+      </div>
+    </div>
+  </div>
+</main>
 
-            <!-- Barras de progresso por matéria -->
-            <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm mb-8 anim" style="animation-delay:0.15s">
-                <h3 class="font-black text-base mb-5 flex items-center gap-2">
-                    <i class="fa fa-graduation-cap text-primario"></i> Progresso por Área
-                </h3>
-                <div class="space-y-4" id="barrasProgresso">
-                    <!-- Gerado pelo JS -->
-                </div>
-            </div>
+<script>
+  const materias=[{nome:'Ciências',pct:92,cor:'#22C55E'},{nome:'Português',pct:90,cor:'#EF4444'},{nome:'Geografia',pct:86,cor:'#10B981'},{nome:'História',pct:82,cor:'#F59E0B'},{nome:'Matemática',pct:78,cor:'#3B82F6'},{nome:'Inglês',pct:70,cor:'#8B5CF6'}];
 
-            <!-- Pontos fortes e a melhorar -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8 anim" style="animation-delay:0.2s">
-                <!-- Pontos fortes -->
-                <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border-l-4 border-sucesso">
-                    <h3 class="font-black text-base mb-4 flex items-center gap-2">
-                        <i class="fa fa-trophy text-aviso"></i> Pontos Fortes
-                    </h3>
-                    <ul class="space-y-3">
-                        <li class="flex items-start gap-3">
-                            <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <i class="fa fa-check text-sucesso text-xs"></i>
-                            </div>
-                            <div>
-                                <p class="font-black text-sm">Ciências — 92%</p>
-                                <p class="text-gray-400 text-xs mt-0.5">Ótimo desempenho em natureza e meio ambiente.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <i class="fa fa-check text-sucesso text-xs"></i>
-                            </div>
-                            <div>
-                                <p class="font-black text-sm">Português — 90%</p>
-                                <p class="text-gray-400 text-xs mt-0.5">Boa compreensão de textos e gramática.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <i class="fa fa-check text-sucesso text-xs"></i>
-                            </div>
-                            <div>
-                                <p class="font-black text-sm">Geografia — 86%</p>
-                                <p class="text-gray-400 text-xs mt-0.5">Bom conhecimento de regiões e clima.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+  window.onload = function() {
+    const u = verificarAcesso();
+    if (!u) return;
+    preencherNome();
 
-                <!-- Áreas para melhorar -->
-                <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border-l-4 border-aviso">
-                    <h3 class="font-black text-base mb-4 flex items-center gap-2">
-                        <i class="fa fa-lightbulb-o text-aviso"></i> Áreas para Melhorar
-                    </h3>
-                    <ul class="space-y-3">
-                        <li class="flex items-start gap-3">
-                            <div class="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <i class="fa fa-arrow-up text-aviso text-xs"></i>
-                            </div>
-                            <div>
-                                <p class="font-black text-sm">Matemática — 78%</p>
-                                <p class="text-gray-400 text-xs mt-0.5">Pratique mais frações e álgebra.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <div class="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <i class="fa fa-arrow-up text-aviso text-xs"></i>
-                            </div>
-                            <div>
-                                <p class="font-black text-sm">Inglês — 70%</p>
-                                <p class="text-gray-400 text-xs mt-0.5">Foque em vocabulário e verbos irregulares.</p>
-                            </div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <div class="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <i class="fa fa-arrow-up text-aviso text-xs"></i>
-                            </div>
-                            <div>
-                                <p class="font-black text-sm">História — 82%</p>
-                                <p class="text-gray-400 text-xs mt-0.5">Revise os períodos históricos do Brasil.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+    const container=document.getElementById('barrasProgresso');
+    materias.forEach(m=>{container.innerHTML+=`<div><div class="flex justify-between items-center mb-1.5"><span class="font-black text-sm">${m.nome}</span><span class="font-black text-sm" style="color:${m.cor}">${m.pct}%</span></div><div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden"><div class="barra-fill h-full rounded-full" style="width:0%;background:${m.cor}" data-pct="${m.pct}"></div></div></div>`;});
+    setTimeout(()=>{document.querySelectorAll('.barra-fill').forEach(b=>{b.style.width=b.dataset.pct+'%';});},300);
 
-            <!-- Atividades recentes -->
-            <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm anim" style="animation-delay:0.25s">
-                <h3 class="font-black text-base mb-5 flex items-center gap-2">
-                    <i class="fa fa-history text-primario"></i> Atividades Recentes
-                </h3>
-                <div class="space-y-3">
-                    <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                        <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <i class="fa fa-calculator text-primario"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="font-black text-sm">Operações Básicas</p>
-                            <p class="text-gray-400 text-xs">Matemática · 5º Ano</p>
-                        </div>
-                        <div class="text-right flex-shrink-0">
-                            <span class="badge-nivel bg-green-100 text-sucesso">100% ✅</span>
-                            <p class="text-gray-400 text-xs mt-1">há 1 dia</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                        <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <i class="fa fa-book text-erro"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="font-black text-sm">Interpretação de Texto</p>
-                            <p class="text-gray-400 text-xs">Português · 6º Ano</p>
-                        </div>
-                        <div class="text-right flex-shrink-0">
-                            <span class="badge-nivel bg-green-100 text-sucesso">80% ✅</span>
-                            <p class="text-gray-400 text-xs mt-1">há 2 dias</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                        <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <i class="fa fa-flask text-sucesso"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="font-black text-sm">Corpo Humano</p>
-                            <p class="text-gray-400 text-xs">Ciências · 7º Ano</p>
-                        </div>
-                        <div class="text-right flex-shrink-0">
-                            <span class="badge-nivel bg-green-100 text-sucesso">100% ✅</span>
-                            <p class="text-gray-400 text-xs mt-1">há 3 dias</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                        <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <i class="fa fa-history text-aviso"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="font-black text-sm">Períodos Históricos</p>
-                            <p class="text-gray-400 text-xs">História · 8º Ano</p>
-                        </div>
-                        <div class="text-right flex-shrink-0">
-                            <span class="badge-nivel bg-orange-100 text-aviso">60% ⚠️</span>
-                            <p class="text-gray-400 text-xs mt-1">há 4 dias</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-                        <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <i class="fa fa-language text-purple-600"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="font-black text-sm">Vocabulário em Inglês</p>
-                            <p class="text-gray-400 text-xs">Inglês · 5º Ano</p>
-                        </div>
-                        <div class="text-right flex-shrink-0">
-                            <span class="badge-nivel bg-orange-100 text-aviso">60% ⚠️</span>
-                            <p class="text-gray-400 text-xs mt-1">há 5 dias</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    new Chart(document.getElementById('graficoMaterias'),{type:'bar',data:{labels:materias.map(m=>m.nome),datasets:[{label:'Desempenho (%)',data:materias.map(m=>m.pct),backgroundColor:materias.map(m=>m.cor+'cc'),borderColor:materias.map(m=>m.cor),borderWidth:2,borderRadius:8,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%',font:{family:'Nunito',weight:'700',size:11}},grid:{color:'#f3f4f6'}},x:{ticks:{font:{family:'Nunito',weight:'700',size:11}},grid:{display:false}}}}});
 
-        </div>
-    </main>
-
-    <script>
-        // Menu
-        function toggleMenu() {
-            document.getElementById('menuLateral').classList.toggle('-translate-x-full');
-            document.getElementById('fundoMenu').classList.toggle('hidden');
-        }
-        function sairDaConta() {
-            localStorage.removeItem('usuarioLogado');
-            window.location.href = 'login.html';
-        }
-
-        // Carregar nome
-        const u = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
-        if (u.nome) document.getElementById('nomeUsuario').textContent = u.nome;
-        else window.location.href = 'login.html';
-
-        // ===== BARRAS DE PROGRESSO =====
-        const materias = [
-            { nome: 'Ciências',   pct: 92, cor: '#22C55E' },
-            { nome: 'Português',  pct: 90, cor: '#EF4444' },
-            { nome: 'Geografia',  pct: 86, cor: '#10B981' },
-            { nome: 'História',   pct: 82, cor: '#F59E0B' },
-            { nome: 'Matemática', pct: 78, cor: '#3B82F6' },
-            { nome: 'Inglês',     pct: 70, cor: '#8B5CF6' },
-        ];
-
-        const container = document.getElementById('barrasProgresso');
-        materias.forEach(m => {
-            container.innerHTML += `
-                <div>
-                    <div class="flex justify-between items-center mb-1.5">
-                        <span class="font-black text-sm">${m.nome}</span>
-                        <span class="font-black text-sm" style="color:${m.cor}">${m.pct}%</span>
-                    </div>
-                    <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                        <div class="barra-fill h-full rounded-full" style="width:0%; background:${m.cor}" data-pct="${m.pct}"></div>
-                    </div>
-                </div>`;
-        });
-
-        // Animar barras após render
-        setTimeout(() => {
-            document.querySelectorAll('.barra-fill').forEach(b => {
-                b.style.width = b.dataset.pct + '%';
-            });
-        }, 300);
-
-        // ===== GRÁFICO MATÉRIAS (barras) =====
-        new Chart(document.getElementById('graficoMaterias'), {
-            type: 'bar',
-            data: {
-                labels: materias.map(m => m.nome),
-                datasets: [{
-                    label: 'Desempenho (%)',
-                    data: materias.map(m => m.pct),
-                    backgroundColor: materias.map(m => m.cor + 'cc'),
-                    borderColor: materias.map(m => m.cor),
-                    borderWidth: 2,
-                    borderRadius: 8,
-                    borderSkipped: false,
-                }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: {
-                        min: 0, max: 100,
-                        ticks: { callback: v => v + '%', font: { family: 'Nunito', weight: '700', size: 11 } },
-                        grid: { color: '#f3f4f6' }
-                    },
-                    x: {
-                        ticks: { font: { family: 'Nunito', weight: '700', size: 11 } },
-                        grid: { display: false }
-                    }
-                }
-            }
-        });
-
-        // ===== GRÁFICO EVOLUÇÃO (linha) =====
-        new Chart(document.getElementById('graficoEvolucao'), {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-                datasets: [
-                    {
-                        label: 'Aproveitamento',
-                        data: [60, 68, 72, 78, 82, 85],
-                        borderColor: '#165DFF',
-                        backgroundColor: 'rgba(22,93,255,0.08)',
-                        borderWidth: 3,
-                        pointBackgroundColor: '#165DFF',
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                        fill: true,
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Atividades concluídas',
-                        data: [4, 6, 7, 9, 13, 16],
-                        borderColor: '#00B42A',
-                        backgroundColor: 'rgba(0,180,42,0.06)',
-                        borderWidth: 2,
-                        borderDash: [5, 4],
-                        pointBackgroundColor: '#00B42A',
-                        pointRadius: 4,
-                        fill: true,
-                        tension: 0.4,
-                        yAxisID: 'y2'
-                    }
-                ]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: { font: { family: 'Nunito', weight: '700', size: 11 }, boxWidth: 12, padding: 16 }
-                    }
-                },
-                scales: {
-                    y: {
-                        min: 0, max: 100,
-                        ticks: { callback: v => v + '%', font: { family: 'Nunito', weight: '700', size: 11 } },
-                        grid: { color: '#f3f4f6' }
-                    },
-                    y2: {
-                        position: 'right',
-                        min: 0, max: 20,
-                        ticks: { font: { family: 'Nunito', weight: '700', size: 11 } },
-                        grid: { display: false }
-                    },
-                    x: {
-                        ticks: { font: { family: 'Nunito', weight: '700', size: 11 } },
-                        grid: { display: false }
-                    }
-                }
-            }
-        });
-    </script>
+    new Chart(document.getElementById('graficoEvolucao'),{type:'line',data:{labels:['Jan','Fev','Mar','Abr','Mai','Jun'],datasets:[{label:'Aproveitamento',data:[60,68,72,78,82,85],borderColor:'#165DFF',backgroundColor:'rgba(22,93,255,0.08)',borderWidth:3,pointBackgroundColor:'#165DFF',pointRadius:5,fill:true,tension:0.4},{label:'Atividades concluídas',data:[4,6,7,9,13,16],borderColor:'#00B42A',backgroundColor:'rgba(0,180,42,0.06)',borderWidth:2,borderDash:[5,4],pointBackgroundColor:'#00B42A',pointRadius:4,fill:true,tension:0.4,yAxisID:'y2'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{family:'Nunito',weight:'700',size:11},boxWidth:12,padding:16}}},scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%',font:{family:'Nunito',weight:'700',size:11}},grid:{color:'#f3f4f6'}},y2:{position:'right',min:0,max:20,ticks:{font:{family:'Nunito',weight:'700',size:11}},grid:{display:false}},x:{ticks:{font:{family:'Nunito',weight:'700',size:11}},grid:{display:false}}}}});
+  };
+</script>
 </body>
 </html>

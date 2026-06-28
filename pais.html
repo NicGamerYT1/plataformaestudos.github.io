@@ -1,287 +1,187 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma de Estudos | Pais e Responsáveis</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#165DFF',
-                        secondary: '#36BFFA',
-                        success: '#10B981',
-                        warning: '#F59E0B',
-                        dark: '#1E293B',
-                        light: '#F8FAFC'
-                    }
-                }
-            }
-        }
-    </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .tab-active {
-                @apply border-b-2 border-primary text-primary font-medium;
-            }
-            .card-shadow {
-                @apply shadow-sm hover:shadow transition-shadow duration-300;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pais e Responsáveis - Plataforma de Estudos</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="acesso.js"></script>
+<script>
+  tailwind.config={theme:{extend:{colors:{primario:'#165DFF',secundario:'#36BFFA',sucesso:'#00B42A',aviso:'#FF7D00',erro:'#F53F3F',escuro:'#1D2129'},fontFamily:{sans:['Nunito','system-ui','sans-serif']}}}}
+</script>
+<style>
+  *{box-sizing:border-box;}body{background:#F0F4FF;}
+  .menu-lateral{transition:transform 0.3s cubic-bezier(.4,0,.2,1);}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}.anim{animation:fadeUp 0.45s ease both;}
+  .hero-bg{background:linear-gradient(135deg,#165DFF 0%,#0A3DBF 60%,#1a1a4e 100%);position:relative;overflow:hidden;}
+  .hero-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(54,191,250,0.2) 0%,transparent 55%);}
+  .tab-btn{padding:0.75rem 0.25rem;font-size:0.85rem;font-weight:700;color:#6b7280;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;}
+  .tab-btn.ativo{color:#165DFF;border-bottom-color:#165DFF;}
+  .barra-fill{height:100%;border-radius:9999px;transition:width 1s ease;}
+  .stat-card{background:white;border-radius:1.25rem;padding:1.25rem;box-shadow:0 4px 20px rgba(22,93,255,0.07);}
+</style>
 </head>
-<body class="bg-gray-50 font-sans text-dark">
+<body class="min-h-screen font-sans text-escuro flex">
 
-    <!-- CABEÇALHO E MENU RESPONSIVO -->
-    <header class="bg-primary text-white shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <button id="menuBtn" class="text-white text-xl p-2 rounded-lg hover:bg-primary/80 transition-colors">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                    <div class="flex items-center gap-2">
-                        <i class="fa fa-graduation-cap text-2xl"></i>
-                        <div>
-                            <h1 class="text-lg font-bold leading-tight">Plataforma de Estudos</h1>
-                            <p id="nomeAlunoCabecalho" class="text-xs text-blue-100">Carregando...</p>
-                        </div>
-                    </div>
-                </div>
-                <a href="#" class="bg-white text-primary px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">Sair</a>
-            </div>
+<header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20 shadow-lg">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <button class="md:hidden text-white text-xl p-1" onclick="toggleMenu()"><i class="fa fa-bars"></i></button>
+      <i class="fa fa-graduation-cap text-2xl"></i>
+      <h1 class="text-lg md:text-xl font-bold">Plataforma de Estudos</h1>
+    </div>
+    <div class="flex items-center gap-3">
+      <span id="nomeUsuario" class="font-semibold text-sm hidden sm:inline"></span>
+      <button onclick="sairDaConta()" class="bg-white text-primario px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-50 transition-colors">Sair</button>
+    </div>
+  </div>
+</header>
+
+<aside id="menuLateral" class="menu-lateral fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-100 pt-6 z-30 overflow-y-auto -translate-x-full md:translate-x-0 shadow-xl md:shadow-none">
+  <nav class="px-4"><ul class="space-y-1">
+    <li><a href="inicio.html"     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-home w-5 text-center"></i> Início</a></li>
+    <li><a href="materias.html"   class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-book w-5 text-center"></i> Matérias</a></li>
+    <li><a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-tasks w-5 text-center"></i> Atividades</a></li>
+    <li><a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-bar-chart w-5 text-center"></i> Meu Desempenho</a></li>
+    <li><a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-credit-card w-5 text-center"></i> Assinatura</a></li>
+    <li><a href="perfil.html"     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-user w-5 text-center"></i> Perfil</a></li>
+    <li><a href="pais.html"       class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primario/10 text-primario font-bold text-sm"><i class="fa fa-users w-5 text-center"></i> Pais / Responsáveis</a></li>
+  </ul></nav>
+</aside>
+<div id="fundoMenu" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden" onclick="toggleMenu()"></div>
+
+<main class="w-full md:ml-64 mt-16 pb-16">
+  <div class="hero-bg text-white px-4 sm:px-8 py-8 sm:py-10 anim">
+    <div class="max-w-4xl relative z-10">
+      <p class="text-blue-200 text-xs font-bold uppercase tracking-widest mb-1">👨‍👩‍👧 Área Familiar</p>
+      <h2 class="text-2xl sm:text-3xl font-black mb-2">Pais e Responsáveis</h2>
+      <p class="text-blue-100 text-sm max-w-xl">Acompanhe o progresso, veja as notas e mantenha-se presente na jornada educacional do seu filho.</p>
+    </div>
+  </div>
+
+  <div class="px-3 sm:px-6 md:px-8 pt-6 max-w-5xl mx-auto">
+    <!-- Abas -->
+    <div class="border-b border-gray-200 mb-6 overflow-x-auto anim">
+      <div class="flex gap-6 min-w-max">
+        <button class="tab-btn ativo" onclick="mudarAba('dados',this)">Dados do Aluno</button>
+        <button class="tab-btn" onclick="mudarAba('progresso',this)">Progresso</button>
+        <button class="tab-btn" onclick="mudarAba('materias',this)">Matérias</button>
+        <button class="tab-btn" onclick="mudarAba('comunicacao',this)">Comunicação</button>
+      </div>
+    </div>
+
+    <!-- ABA: DADOS -->
+    <div id="aba-dados">
+      <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm mb-5 anim">
+        <h3 id="tituloBoasVindas" class="text-xl font-black mb-2">Olá!</h3>
+        <p class="text-gray-500 text-sm mb-5">Bem-vindo à área de acompanhamento. Aqui você monitora o desempenho do seu filho na plataforma.</p>
+        <div id="avisoTeste" class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-5 hidden">
+          <p class="text-primario font-bold flex items-center gap-2 text-sm"><i class="fa fa-gift"></i> Período de teste ativo! <span id="textoTeste" class="font-black"></span></p>
         </div>
-
-        <!-- MENU MOBILE (ESCONDIDO POR PADRÃO) -->
-        <nav id="mobileMenu" class="hidden bg-white text-dark border-t">
-            <div class="container mx-auto px-4 py-3 flex flex-col gap-2">
-                <a href="index.html" class="p-3 rounded-lg hover:bg-gray-100 flex items-center gap-2">
-                    <i class="fa fa-home"></i> Início
-                </a>
-                <a href="cursos.html" class="p-3 rounded-lg hover:bg-gray-100 flex items-center gap-2">
-                    <i class="fa fa-book"></i> Cursos
-                </a>
-                <a href="materiais.html" class="p-3 rounded-lg hover:bg-gray-100 flex items-center gap-2">
-                    <i class="fa fa-file-text"></i> Materiais
-                </a>
-                <a href="comunidade.html" class="p-3 rounded-lg hover:bg-gray-100 flex items-center gap-2">
-                    <i class="fa fa-users"></i> Comunidade
-                </a>
-                <a href="sobre.html" class="p-3 rounded-lg hover:bg-gray-100 flex items-center gap-2">
-                    <i class="fa fa-info-circle"></i> Sobre
-                </a>
-                <a href="pais-responsaveis.html" class="p-3 rounded-lg bg-blue-50 text-primary font-medium flex items-center gap-2">
-                    <i class="fa fa-user-friends"></i> Pais e Responsáveis
-                </a>
-            </div>
-        </nav>
-    </header>
-
-    <!-- CONTEÚDO PRINCIPAL -->
-    <main class="container mx-auto px-4 py-5">
-
-        <!-- TÍTULO DA PÁGINA -->
-        <div class="mb-6">
-            <h2 class="text-[clamp(1.5rem,4vw,2rem)] font-bold text-dark mb-1">Pais e Responsáveis</h2>
-            <p class="text-gray-500">Acompanhamento completo do desenvolvimento do aluno</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="stat-card text-center"><i class="fa fa-calendar text-primario text-2xl mb-1 block"></i><p class="text-xs text-gray-400 font-bold">Dias de Teste</p><p id="diasTeste" class="text-2xl font-black text-primario mt-1">—</p></div>
+          <div class="stat-card text-center"><i class="fa fa-book text-sucesso text-2xl mb-1 block"></i><p class="text-xs text-gray-400 font-bold">Matérias</p><p class="text-2xl font-black text-sucesso mt-1">12</p></div>
+          <div class="stat-card text-center"><i class="fa fa-check-circle text-aviso text-2xl mb-1 block"></i><p class="text-xs text-gray-400 font-bold">Atividades</p><p class="text-2xl font-black text-aviso mt-1">18</p></div>
+          <div class="stat-card text-center"><i class="fa fa-star text-purple-500 text-2xl mb-1 block"></i><p class="text-xs text-gray-400 font-bold">Média Geral</p><p class="text-2xl font-black text-purple-500 mt-1">8,5</p></div>
         </div>
-
-        <!-- ABAS DE NAVEGAÇÃO -->
-        <div class="border-b border-gray-200 mb-6 overflow-x-auto">
-            <div class="flex gap-6 min-w-max">
-                <button class="tab-btn tab-active py-3 px-1" data-tab="dados">Dados do Aluno</button>
-                <button class="tab-btn text-gray-500 py-3 px-1" data-tab="progresso">Progresso</button>
-                <button class="tab-btn text-gray-500 py-3 px-1" data-tab="materias">Matérias</button>
-                <button class="tab-btn text-gray-500 py-3 px-1" data-tab="comunicacao">Comunicação</button>
-            </div>
+      </div>
+      <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm anim" style="animation-delay:0.08s">
+        <h3 class="font-black text-base mb-4">Dados do Aluno</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+          <div><p class="text-gray-400 font-bold uppercase tracking-wide text-xs mb-0.5">Nome</p><p id="dNome" class="font-bold text-escuro">—</p></div>
+          <div><p class="text-gray-400 font-bold uppercase tracking-wide text-xs mb-0.5">E-mail</p><p id="dEmail" class="font-bold text-escuro break-all">—</p></div>
+          <div><p class="text-gray-400 font-bold uppercase tracking-wide text-xs mb-0.5">Série / Ano</p><p id="dSerie" class="font-bold text-escuro">—</p></div>
+          <div><p class="text-gray-400 font-bold uppercase tracking-wide text-xs mb-0.5">Escola</p><p id="dEscola" class="font-bold text-escuro">—</p></div>
+          <div><p class="text-gray-400 font-bold uppercase tracking-wide text-xs mb-0.5">Status da Conta</p><p id="dStatus" class="font-bold">—</p></div>
+          <div><p class="text-gray-400 font-bold uppercase tracking-wide text-xs mb-0.5">Plano</p><p id="dPlano" class="font-bold text-escuro">—</p></div>
         </div>
+      </div>
+    </div>
 
-        <!-- CONTEÚDO DAS ABAS -->
-
-        <!-- ABA 1: DADOS DO ALUNO -->
-        <div class="tab-content" id="dados">
-            <div class="bg-white rounded-xl p-5 card-shadow mb-5">
-                <h3 id="tituloBoasVindas" class="text-xl font-bold text-dark mb-4">Olá, Aluno!</h3>
-                <p class="text-gray-600 mb-5">Bem-vindo à sua plataforma de estudos. Aqui você encontra todo o material necessário para aprender e se destacar.</p>
-
-                <!-- PERÍODO DE TESTE -->
-                <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-5">
-                    <p class="text-blue-700 flex items-center gap-2 text-lg">
-                        <i class="fa fa-gift"></i> Você está no período de teste!
-                        <span id="textoTeste" class="font-bold ml-2">Faltam 2 dias para acabar.</span>
-                    </p>
-                </div>
-
-                <!-- CARDS DE INFORMAÇÕES -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-blue-50 rounded-xl p-5 card-shadow">
-                        <i class="fa fa-calendar text-3xl text-primary mb-2"></i>
-                        <h4 class="text-gray-600 text-sm">Dias de Teste</h4>
-                        <p id="diasTeste" class="text-3xl font-bold text-primary mt-1">2</p>
-                    </div>
-
-                    <div class="bg-green-50 rounded-xl p-5 card-shadow">
-                        <i class="fa fa-book text-3xl text-success mb-2"></i>
-                        <h4 class="text-gray-600 text-sm">Matérias Disponíveis</h4>
-                        <p id="qtdMaterias" class="text-3xl font-bold text-success mt-1">12</p>
-                    </div>
-
-                    <div class="bg-orange-50 rounded-xl p-5 card-shadow">
-                        <i class="fa fa-check-circle text-3xl text-warning mb-2"></i>
-                        <h4 class="text-gray-600 text-sm">Atividades Concluídas</h4>
-                        <p id="atividadesFeitas" class="text-3xl font-bold text-warning mt-1">18</p>
-                    </div>
-
-                    <div class="bg-purple-50 rounded-xl p-5 card-shadow">
-                        <i class="fa fa-star text-3xl text-purple-600 mb-2"></i>
-                        <h4 class="text-gray-600 text-sm">Média Geral</h4>
-                        <p id="mediaGeral" class="text-3xl font-bold text-purple-600 mt-1">8,5</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- DADOS PESSOAIS -->
-            <div class="bg-white rounded-xl p-5 card-shadow">
-                <h3 class="text-lg font-bold text-dark mb-4">Dados Pessoais</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <p class="text-gray-500 text-sm">Nome Completo</p>
-                        <p id="nomeCompleto" class="font-medium">Seu Nome Aqui</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500 text-sm">Data de Nascimento</p>
-                        <p id="dataNascimento" class="font-medium">__/__/____</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500 text-sm">Série/Turma</p>
-                        <p id="serieTurma" class="font-medium">__º Ano - Turma __</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500 text-sm">Ano Letivo</p>
-                        <p id="anoLetivo" class="font-medium">2025</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500 text-sm">Responsável Legal</p>
-                        <p id="responsavel" class="font-medium">Pais/Responsáveis Cadastrados</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500 text-sm">Contato</p>
-                        <p id="contato" class="font-medium">(XX) XXXXX-XXXX</p>
-                    </div>
-                </div>
-            </div>
+    <!-- ABA: PROGRESSO -->
+    <div id="aba-progresso" class="hidden">
+      <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm anim">
+        <h3 class="font-black text-base mb-5">Progresso de Aprendizado</h3>
+        <div class="space-y-5">
+          <div><div class="flex justify-between mb-1.5"><span class="font-black text-sm">Progresso Geral</span><span class="font-black text-sm text-primario">65%</span></div><div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden"><div class="barra-fill bg-primario" style="width:0%" data-pct="65"></div></div></div>
+          <div><div class="flex justify-between mb-1.5"><span class="font-black text-sm">Atividades Entregues</span><span class="font-black text-sm text-sucesso">22 / 30</span></div><div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden"><div class="barra-fill bg-sucesso" style="width:0%" data-pct="73"></div></div></div>
+          <div><div class="flex justify-between mb-1.5"><span class="font-black text-sm">Média de Notas</span><span class="font-black text-sm text-aviso">8,2</span></div><div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden"><div class="barra-fill bg-aviso" style="width:0%" data-pct="82"></div></div></div>
         </div>
-
-        <!-- ABA 2: PROGRESSO -->
-        <div class="tab-content hidden" id="progresso">
-            <div class="bg-white rounded-xl p-5 card-shadow mb-5">
-                <h3 class="text-xl font-bold text-dark mb-4">Progresso de Aprendizado</h3>
-
-                <div class="space-y-5">
-                    <div>
-                        <div class="flex justify-between mb-2">
-                            <span class="font-medium">Progresso Geral</span>
-                            <span id="progressoGeralTexto" class="font-bold text-primary">65%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-3">
-                            <div id="progressoGeralBarra" class="bg-primary h-3 rounded-full" style="width: 65%"></div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between mb-2">
-                            <span class="font-medium">Atividades Entregues</span>
-                            <span id="atividadesTexto" class="font-bold text-success">22 / 30</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-3">
-                            <div id="atividadesBarra" class="bg-success h-3 rounded-full" style="width: 73%"></div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between mb-2">
-                            <span class="font-medium">Média de Notas</span>
-                            <span id="mediaTexto" class="font-bold text-warning">8,2</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-3">
-                            <div id="mediaBarra" class="bg-warning h-3 rounded-full" style="width: 82%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 mt-6">
-                    <div class="text-center p-4 bg-gray-50 rounded-lg">
-                        <p id="qtMateriasTotal" class="text-2xl font-bold text-primary">12</p>
-                        <p class="text-sm text-gray-500">Matérias</p>
-                    </div>
-                    <div class="text-center p-4 bg-gray-50 rounded-lg">
-                        <p id="qtAtividadesTotal" class="text-2xl font-bold text-success">18</p>
-                        <p class="text-sm text-gray-500">Atividades</p>
-                    </div>
-                </div>
-            </div>
+        <div class="grid grid-cols-2 gap-4 mt-6">
+          <div class="text-center p-4 bg-blue-50 rounded-xl"><p class="text-2xl font-black text-primario">12</p><p class="text-xs text-gray-500 font-bold mt-1">Matérias totais</p></div>
+          <div class="text-center p-4 bg-green-50 rounded-xl"><p class="text-2xl font-black text-sucesso">18</p><p class="text-xs text-gray-500 font-bold mt-1">Atividades feitas</p></div>
         </div>
+      </div>
+    </div>
 
-        <!-- ABA 3: MATÉRIAS -->
-        <div class="tab-content hidden" id="materias">
-            <div class="bg-white rounded-xl p-5 card-shadow">
-                <h3 class="text-xl font-bold text-dark mb-4">Matérias e Desempenho</h3>
+    <!-- ABA: MATÉRIAS -->
+    <div id="aba-materias" class="hidden">
+      <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm anim">
+        <h3 class="font-black text-base mb-5">Desempenho por Matéria</h3>
+        <div class="space-y-3">
+          <div class="border border-gray-100 rounded-xl p-4"><div class="flex justify-between items-center mb-1.5"><span class="font-black text-sm">Matemática</span><span class="bg-green-100 text-sucesso px-2.5 py-0.5 rounded-full text-xs font-black">9,0</span></div><div class="w-full bg-gray-100 rounded-full h-2"><div class="bg-sucesso h-2 rounded-full" style="width:90%"></div></div></div>
+          <div class="border border-gray-100 rounded-xl p-4"><div class="flex justify-between items-center mb-1.5"><span class="font-black text-sm">Português</span><span class="bg-green-100 text-sucesso px-2.5 py-0.5 rounded-full text-xs font-black">8,5</span></div><div class="w-full bg-gray-100 rounded-full h-2"><div class="bg-sucesso h-2 rounded-full" style="width:85%"></div></div></div>
+          <div class="border border-gray-100 rounded-xl p-4"><div class="flex justify-between items-center mb-1.5"><span class="font-black text-sm">Ciências</span><span class="bg-orange-100 text-aviso px-2.5 py-0.5 rounded-full text-xs font-black">7,8</span></div><div class="w-full bg-gray-100 rounded-full h-2"><div class="bg-aviso h-2 rounded-full" style="width:78%"></div></div></div>
+          <div class="border border-gray-100 rounded-xl p-4"><div class="flex justify-between items-center mb-1.5"><span class="font-black text-sm">História</span><span class="bg-green-100 text-sucesso px-2.5 py-0.5 rounded-full text-xs font-black">8,8</span></div><div class="w-full bg-gray-100 rounded-full h-2"><div class="bg-sucesso h-2 rounded-full" style="width:88%"></div></div></div>
+          <div class="border border-gray-100 rounded-xl p-4"><div class="flex justify-between items-center mb-1.5"><span class="font-black text-sm">Geografia</span><span class="bg-orange-100 text-aviso px-2.5 py-0.5 rounded-full text-xs font-black">7,5</span></div><div class="w-full bg-gray-100 rounded-full h-2"><div class="bg-aviso h-2 rounded-full" style="width:75%"></div></div></div>
+          <div class="border border-gray-100 rounded-xl p-4"><div class="flex justify-between items-center mb-1.5"><span class="font-black text-sm">Inglês</span><span class="bg-green-100 text-sucesso px-2.5 py-0.5 rounded-full text-xs font-black">8,0</span></div><div class="w-full bg-gray-100 rounded-full h-2"><div class="bg-sucesso h-2 rounded-full" style="width:80%"></div></div></div>
+        </div>
+      </div>
+    </div>
 
-                <div class="space-y-4">
-                    <div class="border border-gray-100 rounded-lg p-4">
-                        <div class="flex justify-between items-center">
-                            <span class="font-medium">Matemática</span>
-                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-bold">9,0</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                            <div class="bg-green-500 h-2 rounded-full" style="width: 90%"></div>
-                        </div>
-                    </div>
+    <!-- ABA: COMUNICAÇÃO -->
+    <div id="aba-comunicacao" class="hidden">
+      <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm anim">
+        <h3 class="font-black text-base mb-4">Comunicação com a Escola</h3>
+        <div class="space-y-3 mb-6">
+          <div class="flex items-start gap-3 p-4 bg-blue-50 rounded-xl"><div class="w-9 h-9 bg-primario rounded-xl flex items-center justify-center flex-shrink-0"><i class="fa fa-bullhorn text-white text-sm"></i></div><div><p class="font-black text-sm">Reunião de Pais e Mestres</p><p class="text-gray-500 text-xs mt-0.5">Próxima reunião agendada para 15/07/2025 às 19h00.</p><p class="text-primario text-xs font-bold mt-1">há 2 dias</p></div></div>
+          <div class="flex items-start gap-3 p-4 bg-green-50 rounded-xl"><div class="w-9 h-9 bg-sucesso rounded-xl flex items-center justify-center flex-shrink-0"><i class="fa fa-check text-white text-sm"></i></div><div><p class="font-black text-sm">Atividade de Matemática Entregue</p><p class="text-gray-500 text-xs mt-0.5">O aluno entregou a atividade com nota 9,0.</p><p class="text-sucesso text-xs font-bold mt-1">há 3 dias</p></div></div>
+          <div class="flex items-start gap-3 p-4 bg-orange-50 rounded-xl"><div class="w-9 h-9 bg-aviso rounded-xl flex items-center justify-center flex-shrink-0"><i class="fa fa-exclamation text-white text-sm"></i></div><div><p class="font-black text-sm">Lembrete: Prova de Ciências</p><p class="text-gray-500 text-xs mt-0.5">A prova de ciências será realizada na próxima semana.</p><p class="text-aviso text-xs font-bold mt-1">há 5 dias</p></div></div>
+        </div>
+        <div class="border-t border-gray-100 pt-5">
+          <h4 class="font-black text-sm mb-3">Enviar Mensagem</h4>
+          <textarea class="w-full border-2 border-gray-200 rounded-xl p-3 text-sm font-semibold focus:outline-none focus:border-primario resize-none" rows="3" placeholder="Digite sua mensagem para a escola..."></textarea>
+          <button class="mt-2 bg-primario text-white px-5 py-2.5 rounded-xl font-black text-sm hover:bg-blue-700 transition-colors"><i class="fa fa-send mr-1"></i> Enviar</button>
+        </div>
+      </div>
+    </div>
 
-                    <div class="border border-gray-100 rounded-lg p-4">
-                        <div class="flex justify-between items-center">
-                            <span class="font-medium">Português</span>
-                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-bold">8,5</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                            <div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
-                        </div>
-                    </div>
+  </div>
+</main>
 
-                    <div class="border border-gray-100 rounded-lg p-4">
-                        <div class="flex justify-between items-center">
-                            <span class="font-medium">Ciências</span>
-                            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-bold">7,8</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 78%"></div>
-                        </div>
-                    </div>
+<script>
+  const labelSerie={'5ano':'5º Ano','6ano':'6º Ano','7ano':'7º Ano','8ano':'8º Ano','9ano':'9º Ano','1medio':'1º Médio','2medio':'2º Médio','3medio':'3º Médio'};
 
-                    <div class="border border-gray-100 rounded-lg p-4">
-                        <div class="flex justify-between items-center">
-                            <span class="font-medium">História</span>
-                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-bold">8,8</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                            <div class="bg-green-500 h-2 rounded-full" style="width: 88%"></div>
-                        </div>
-                    </div>
+  function mudarAba(id, btn) {
+    document.querySelectorAll('[id^="aba-"]').forEach(el=>el.classList.add('hidden'));
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('ativo'));
+    document.getElementById('aba-'+id).classList.remove('hidden');
+    btn.classList.add('ativo');
+    if(id==='progresso') setTimeout(()=>document.querySelectorAll('.barra-fill').forEach(b=>b.style.width=b.dataset.pct+'%'),100);
+  }
 
-                    <div class="border border-gray-100 rounded-lg p-4">
-                        <div class="flex justify-between items-center">
-                            <span class="font-medium">Geografia</span>
-                            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-bold">7,5</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 75%"></div>
-                        </div>
-                    </div>
+  window.onload = function() {
+    const u = verificarAcesso();
+    if (!u) return;
+    preencherNome();
 
-                    <div class="border border-gray-100 rounded-lg p-4">
-                        <div class="flex justify-between items-center">
-                            <span class="font-medium">Inglês</span>
-                            <span class="bg-green
+    document.getElementById('tituloBoasVindas').textContent = `Olá, ${u.nome}!`;
+    document.getElementById('dNome').textContent = u.nome||'—';
+    document.getElementById('dEmail').textContent = u.email||'—';
+    document.getElementById('dSerie').textContent = labelSerie[u.serie]||u.serie||'—';
+    document.getElementById('dEscola').textContent = u.escola||'—';
+
+    const agora=new Date(), fim=new Date(u.dataFimTeste);
+    const dias=Math.max(0,Math.ceil((fim-agora)/(1000*60*60*24)));
+    document.getElementById('diasTeste').textContent = u.statusAssinatura==='ativa'?'∞':dias;
+
+    const dStatus=document.getElementById('dStatus');
+    if(u.statusAssinatura==='ativa'){dStatus.className='font-bold text-sucesso';dStatus.textContent='Assinatura Ativa ✅';document.getElementById('dPlano').textContent=u.planoAssinatura||'—';}
+    else if(u.statusAssinatura==='expirada'){dStatus.className='font-bold text-erro';dStatus.textContent='Expirado ❌';document.getElementById('dPlano').textContent='—';}
+    else{dStatus.className='font-bold text-aviso';dStatus.textContent=`Teste — ${dias} dias restantes`;document.getElementById('dPlano').textContent='Gratuito';const av=document.getElementById('avisoTeste');av.classList.remove('hidden');document.getElementById('textoTeste').textContent=`Faltam ${dias} dia${dias!==1?'s':''}.`;}
+  };
+</script>
+</body>
+</html>
