@@ -112,7 +112,10 @@
       width: 46px; height: 54px;
       border: 2px solid #e5e7eb; border-radius: 12px;
       text-align: center; font-size: 1.4rem; font-weight: 900;
-      font-family: 'Nunito', sans-serif; color: #1D2129;
+      font-family: 'Nunito', sans-serif;
+      color: #1D2129 !important;
+      -webkit-text-fill-color: #1D2129;
+      caret-color: #165DFF;
       background: #fafafa; transition: all 0.2s;
       padding: 0;
     }
@@ -206,12 +209,12 @@
       <div id="alertaOTP" class="alert alert-erro" style="margin-top:1rem"><i class="fa fa-exclamation-circle"></i><span id="alertaOTPTxt"></span></div>
 
       <div class="otp-wrap">
-        <input class="otp-box" id="d1" maxlength="1" type="text" inputmode="numeric">
-        <input class="otp-box" id="d2" maxlength="1" type="text" inputmode="numeric">
-        <input class="otp-box" id="d3" maxlength="1" type="text" inputmode="numeric">
-        <input class="otp-box" id="d4" maxlength="1" type="text" inputmode="numeric">
-        <input class="otp-box" id="d5" maxlength="1" type="text" inputmode="numeric">
-        <input class="otp-box" id="d6" maxlength="1" type="text" inputmode="numeric">
+        <input class="otp-box" id="d1" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-box" id="d2" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-box" id="d3" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-box" id="d4" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-box" id="d5" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-box" id="d6" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
       </div>
 
       <div class="timer-txt">O código expira em <span class="timer-num" id="timerOTP">05:00</span></div>
@@ -412,17 +415,29 @@
   // ── Caixinhas OTP ─────────────────────────────────────
   function configurarCaixinhas() {
     const ids = ['d1','d2','d3','d4','d5','d6'];
+
+    function tratarValor(el, i) {
+      const limpo = el.value.replace(/\D/g,'').slice(-1);
+      el.value = limpo;
+      if (limpo && i < ids.length-1) document.getElementById(ids[i+1]).focus();
+      const todos = ids.map(id => document.getElementById(id).value).join('');
+      if (todos.length === 6) verificarCodigo();
+    }
+
     ids.forEach((id, i) => {
       const el = document.getElementById(id);
-      el.addEventListener('input', () => {
-        el.value = el.value.replace(/\D/g,'').slice(-1);
-        if (el.value && i < ids.length-1) document.getElementById(ids[i+1]).focus();
-        if (i === ids.length-1 && el.value) verificarCodigo();
-      });
+      el.setAttribute('autocomplete', i === 0 ? 'one-time-code' : 'off');
+
+      el.addEventListener('input', () => tratarValor(el, i));
+      el.addEventListener('keyup', () => tratarValor(el, i));
+
       el.addEventListener('keydown', e => {
         if (e.key === 'Backspace' && !el.value && i > 0) document.getElementById(ids[i-1]).focus();
         if (e.key === 'Enter') verificarCodigo();
       });
+
+      el.addEventListener('click', () => el.select());
+
       el.addEventListener('paste', e => {
         e.preventDefault();
         const txt = (e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
