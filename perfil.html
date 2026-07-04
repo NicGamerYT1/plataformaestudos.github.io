@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil - Plataforma de Estudos</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#F0F4FF;color:#1D2129;min-height:100vh;display:flex;}
+
+/* ── Header ── */
+header{position:fixed;top:0;left:0;right:0;background:#165DFF;color:#fff;padding:1rem;z-index:20;box-shadow:0 4px 16px rgba(22,93,255,0.3);display:flex;align-items:center;justify-content:space-between;}
+.header-esq{display:flex;align-items:center;gap:0.75rem;}
+.header-esq h1{font-size:1.1rem;font-weight:900;}
+.btn-menu{background:none;border:none;color:#fff;font-size:1.25rem;cursor:pointer;padding:0.25rem;display:none;}
+.btn-sair{background:#fff;color:#165DFF;border:none;padding:0.4rem 0.85rem;border-radius:8px;font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:900;cursor:pointer;}
+.btn-sair:hover{background:#eff6ff;}
+#nomeHeader{font-size:0.85rem;font-weight:700;}
+
+/* ── Menu lateral ── */
+aside{position:fixed;top:64px;left:0;width:256px;height:calc(100vh - 64px);background:#fff;border-right:1px solid #f0f0f0;padding:1.5rem 1rem;overflow-y:auto;z-index:15;transition:transform 0.3s ease;box-shadow:2px 0 8px rgba(0,0,0,0.04);}
+aside nav ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+aside nav a{display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;border-radius:12px;text-decoration:none;color:#6b7280;font-weight:700;font-size:0.875rem;transition:all 0.2s;}
+aside nav a:hover{background:rgba(22,93,255,0.08);color:#165DFF;}
+aside nav a.ativo{background:rgba(22,93,255,0.1);color:#165DFF;font-weight:900;}
+aside nav a i{width:18px;text-align:center;}
+.fundo-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:14;}
+
+/* ── Conteúdo ── */
+main{margin-left:256px;margin-top:64px;padding:2rem 1.5rem;width:100%;max-width:900px;}
+
+/* ── Avatar ── */
+.avatar-area{display:flex;align-items:flex-end;gap:1.25rem;margin-bottom:2rem;flex-wrap:wrap;}
+.avatar-circulo{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#165DFF,#36BFFA);display:flex;align-items:center;justify-content:center;color:#fff;font-size:2.5rem;font-weight:900;box-shadow:0 8px 24px rgba(22,93,255,0.25);flex-shrink:0;position:relative;}
+.avatar-check{position:absolute;bottom:0;right:0;width:26px;height:26px;background:#00B42A;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:#fff;}
+.avatar-info h2{font-size:1.75rem;font-weight:900;}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:0.72rem;font-weight:900;}
+.badge-azul{background:rgba(22,93,255,0.1);color:#165DFF;}
+.badge-verde{background:#f0fdf4;color:#00B42A;}
+.badge-laranja{background:#fff7ed;color:#FF7D00;}
+.badge-vermelho{background:#fff1f0;color:#F53F3F;}
+
+/* ── Grid ── */
+.grid{display:grid;grid-template-columns:1fr 320px;gap:1.25rem;}
+
+/* ── Card ── */
+.card{background:#fff;border-radius:20px;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);margin-bottom:1.25rem;}
+.card-titulo{font-size:0.95rem;font-weight:900;display:flex;align-items:center;gap:8px;margin-bottom:1rem;}
+.card-titulo i{color:#165DFF;}
+.card-titulo.vermelho i{color:#F53F3F;}
+
+/* ── Info items ── */
+.info-item{display:flex;align-items:flex-start;gap:0.875rem;padding:0.875rem 0;border-bottom:1px solid #f3f4f6;}
+.info-item:last-child{border-bottom:none;}
+.info-icone{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;}
+.ic-azul{background:#eff6ff;color:#165DFF;}
+.ic-vermelho{background:#fff1f0;color:#F53F3F;}
+.ic-verde{background:#f0fdf4;color:#00B42A;}
+.ic-laranja{background:#fff7ed;color:#FF7D00;}
+.ic-roxo{background:#f5f3ff;color:#7c3aed;}
+.ic-ciano{background:#ecfeff;color:#0891b2;}
+.info-label{font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;}
+.info-valor{font-size:0.875rem;font-weight:700;color:#1D2129;margin-top:2px;word-break:break-all;}
+
+/* ── Editar ── */
+.btn-editar{background:none;border:none;color:#165DFF;font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:5px;}
+.btn-editar:hover{text-decoration:underline;}
+.card-cabecalho{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+
+label.campo-label{display:block;font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:#6b7280;margin-bottom:4px;}
+.input{width:100%;padding:0.6rem 0.875rem;border:2px solid #e5e7eb;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.875rem;font-weight:700;color:#1D2129;background:#fafafa;transition:all 0.2s;}
+.input:focus{border-color:#165DFF;outline:none;background:#fff;box-shadow:0 0 0 3px rgba(22,93,255,0.1);}
+.input-travado{background:#f3f4f6 !important;color:#9ca3af !important;cursor:not-allowed !important;border-color:#e5e7eb !important;}
+.campo-aviso{font-size:0.72rem;color:#9ca3af;margin-top:4px;display:flex;align-items:center;gap:4px;}
+.campo-grupo{margin-bottom:0.875rem;}
+
+.btn-salvar{background:#165DFF;color:#fff;border:none;padding:0.6rem 1.25rem;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.875rem;font-weight:900;cursor:pointer;}
+.btn-salvar:hover{background:#1347cc;}
+.btn-cancelar{background:#f3f4f6;color:#6b7280;border:none;padding:0.6rem 1.25rem;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.875rem;font-weight:900;cursor:pointer;}
+.btn-cancelar:hover{background:#e5e7eb;}
+.acoes-edicao{display:flex;gap:0.75rem;margin-top:0.75rem;}
+.msg-salvo{color:#00B42A;font-size:0.85rem;font-weight:800;display:none;align-items:center;gap:6px;margin-top:8px;}
+.msg-salvo.show{display:flex;}
+
+/* ── Senha ── */
+.msg-erro{color:#F53F3F;font-size:0.78rem;font-weight:800;display:none;margin-top:4px;}
+.msg-erro.show{display:block;}
+.msg-sucesso{color:#00B42A;font-size:0.85rem;font-weight:800;display:none;align-items:center;gap:6px;margin-top:6px;}
+.msg-sucesso.show{display:flex;}
+.btn-senha{background:#1D2129;color:#fff;border:none;padding:0.6rem 1.25rem;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.875rem;font-weight:900;cursor:pointer;margin-top:0.5rem;}
+.btn-senha:hover{background:#374151;}
+
+/* ── Assinatura ── */
+.ass-linha{display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:8px;}
+.ass-label{color:#9ca3af;font-weight:600;}
+.ass-valor{font-weight:900;}
+.btn-planos{display:block;width:100%;background:#165DFF;color:#fff;border:none;padding:0.7rem;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.875rem;font-weight:900;cursor:pointer;text-align:center;text-decoration:none;margin-top:1rem;}
+.btn-planos:hover{background:#1347cc;}
+
+/* ── Zona de risco ── */
+.btn-excluir{width:100%;background:#fff;color:#F53F3F;border:2px solid #fecaca;padding:0.65rem;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.875rem;font-weight:900;cursor:pointer;}
+.btn-excluir:hover{background:#fff1f0;}
+
+/* ── Modal ── */
+.modal-fundo{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:50;align-items:center;justify-content:center;padding:1rem;}
+.modal-fundo.show{display:flex;}
+.modal{background:#fff;border-radius:20px;padding:2rem;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.25);}
+.modal h3{font-size:1.2rem;font-weight:900;margin:0.75rem 0 0.5rem;}
+.modal p{color:#6b7280;font-size:0.875rem;margin-bottom:1.25rem;}
+.modal-acoes{display:flex;gap:0.75rem;}
+.btn-confirmar{flex:1;background:#F53F3F;color:#fff;border:none;padding:0.7rem;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:900;cursor:pointer;}
+.btn-confirmar:hover{background:#dc2626;}
+.btn-modal-cancel{flex:1;background:#f3f4f6;color:#374151;border:none;padding:0.7rem;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:900;cursor:pointer;}
+.btn-modal-cancel:hover{background:#e5e7eb;}
+
+/* ── Responsivo ── */
+@media(max-width:900px){.grid{grid-template-columns:1fr;}}
+@media(max-width:768px){
+  aside{transform:translateX(-100%);}
+  aside.aberto{transform:translateX(0);}
+  .btn-menu{display:block;}
+  main{margin-left:0;padding:1.25rem 1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-esq">
+    <button class="btn-menu" onclick="toggleMenu()"><i class="fa fa-bars"></i></button>
+    <i class="fa fa-graduation-cap" style="font-size:1.4rem"></i>
+    <h1>Plataforma de Estudos</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:0.75rem">
+    <span id="nomeHeader"></span>
+    <button class="btn-sair" onclick="sairDaConta()">Sair</button>
+  </div>
+</header>
+
+<!-- MENU LATERAL -->
+<aside id="menuLateral">
+  <nav>
+    <ul>
+      <li><a href="inicio.html"><i class="fa fa-home"></i> Início</a></li>
+      <li><a href="materias.html"><i class="fa fa-book"></i> Matérias</a></li>
+      <li><a href="atividades.html"><i class="fa fa-tasks"></i> Atividades</a></li>
+      <li><a href="desempenho.html"><i class="fa fa-bar-chart"></i> Meu Desempenho</a></li>
+      <li><a href="assinatura.html"><i class="fa fa-credit-card"></i> Assinatura</a></li>
+      <li><a href="perfil.html" class="ativo"><i class="fa fa-user"></i> Perfil</a></li>
+      <li><a href="pais.html"><i class="fa fa-users"></i> Pais / Responsáveis</a></li>
+      <li><a href="configuracoes.html"><i class="fa fa-cog"></i> Configurações</a></li>
+    </ul>
+  </nav>
+</aside>
+<div class="fundo-menu" id="fundoMenu" onclick="toggleMenu()"></div>
+
+<!-- CONTEÚDO -->
+<main>
+
+  <!-- Avatar -->
+  <div class="avatar-area">
+    <div class="avatar-circulo" id="avatarCirculo">
+      ?
+      <div class="avatar-check"><i class="fa fa-check"></i></div>
+    </div>
+    <div class="avatar-info">
+      <h2 id="nomePerfilTitulo"></h2>
+      <div class="badges">
+        <span class="badge badge-azul" id="badgeTipo"></span>
+        <span class="badge" id="badgeStatus"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Coluna esquerda -->
+    <div>
+
+      <!-- Dados pessoais -->
+      <div class="card">
+        <div class="card-cabecalho">
+          <div class="card-titulo"><i class="fa fa-user"></i> Dados Pessoais</div>
+          <button class="btn-editar" id="btnEditar" onclick="toggleEdicao()"><i class="fa fa-pencil"></i> Editar</button>
+        </div>
+
+        <!-- Visualização -->
+        <div id="modoVisualizar">
+          <div class="info-item">
+            <div class="info-icone ic-azul"><i class="fa fa-user"></i></div>
+            <div><div class="info-label">Nome</div><div class="info-valor" id="vNome"></div></div>
+          </div>
+          <div class="info-item">
+            <div class="info-icone ic-vermelho"><i class="fa fa-envelope"></i></div>
+            <div><div class="info-label">E-mail</div><div class="info-valor" id="vEmail"></div></div>
+          </div>
+          <div class="info-item">
+            <div class="info-icone ic-verde"><i class="fa fa-phone"></i></div>
+            <div><div class="info-label">Telefone</div><div class="info-valor" id="vTelefone"></div></div>
+          </div>
+          <div class="info-item">
+            <div class="info-icone ic-laranja"><i class="fa fa-calendar"></i></div>
+            <div><div class="info-label">Data de Nascimento</div><div class="info-valor" id="vNascimento"></div></div>
+          </div>
+          <div class="info-item">
+            <div class="info-icone ic-roxo"><i class="fa fa-graduation-cap"></i></div>
+            <div><div class="info-label">Série / Ano</div><div class="info-valor" id="vSerie"></div></div>
+          </div>
+          <div class="info-item">
+            <div class="info-icone ic-ciano"><i class="fa fa-building"></i></div>
+            <div><div class="info-label">Escola</div><div class="info-valor" id="vEscola"></div></div>
+          </div>
+        </div>
+
+        <!-- Edição -->
+        <div id="modoEditar" style="display:none">
+          <div class="campo-grupo">
+            <label class="campo-label">Nome</label>
+            <input type="text" id="eNome" class="input">
+          </div>
+          <!-- E-MAIL TRAVADO -->
+          <div class="campo-grupo">
+            <label class="campo-label">E-mail</label>
+            <input type="email" id="eEmail" class="input input-travado" readonly disabled>
+            <div class="campo-aviso"><i class="fa fa-lock"></i> O e-mail não pode ser alterado</div>
+          </div>
+          <div class="campo-grupo">
+            <label class="campo-label">Telefone</label>
+            <input type="tel" id="eTelefone" class="input">
+          </div>
+          <!-- ESCOLA TRAVADA -->
+          <div class="campo-grupo">
+            <label class="campo-label">Escola</label>
+            <input type="text" id="eEscola" class="input input-travado" readonly disabled>
+            <div class="campo-aviso"><i class="fa fa-lock"></i> A escola não pode ser alterada</div>
+          </div>
+          <div class="acoes-edicao">
+            <button class="btn-salvar" onclick="salvarEdicao()"><i class="fa fa-save"></i> Salvar</button>
+            <button class="btn-cancelar" onclick="cancelarEdicao()">Cancelar</button>
+          </div>
+          <div class="msg-salvo" id="msgSalvo"><i class="fa fa-check-circle"></i> Dados salvos com sucesso!</div>
+        </div>
+      </div>
+
+      <!-- Alterar senha -->
+      <div class="card">
+        <div class="card-titulo"><i class="fa fa-lock"></i> Alterar Senha</div>
+        <div class="campo-grupo">
+          <label class="campo-label">Senha Atual</label>
+          <input type="password" id="senhaAtual" class="input" placeholder="Digite sua senha atual">
+        </div>
+        <div class="campo-grupo">
+          <label class="campo-label">Nova Senha</label>
+          <input type="password" id="novaSenha" class="input" placeholder="Mínimo 6 caracteres">
+        </div>
+        <div class="campo-grupo">
+          <label class="campo-label">Confirmar Nova Senha</label>
+          <input type="password" id="confirmarNovaSenha" class="input" placeholder="Repita a nova senha">
+        </div>
+        <div class="msg-erro" id="erroSenha"></div>
+        <div class="msg-sucesso" id="sucessoSenha"><i class="fa fa-check-circle"></i> Senha alterada com sucesso!</div>
+        <button class="btn-senha" onclick="alterarSenha()"><i class="fa fa-key"></i> Alterar Senha</button>
+      </div>
+
+    </div>
+
+    <!-- Coluna direita -->
+    <div>
+
+      <!-- Minha conta -->
+      <div class="card">
+        <div class="card-titulo"><i class="fa fa-star" style="color:#FF7D00"></i> Minha Conta</div>
+        <div id="infoAssinatura"></div>
+        <a href="assinatura.html" class="btn-planos"><i class="fa fa-credit-card"></i> Ver Planos</a>
+      </div>
+
+      <!-- Tipo usuário -->
+      <div class="card">
+        <div class="card-titulo"><i class="fa fa-id-card-o"></i> Tipo de Usuário</div>
+        <div id="infoTipo" style="font-size:0.875rem;color:#6b7280"></div>
+      </div>
+
+      <!-- Zona de risco -->
+      <div class="card">
+        <div class="card-titulo vermelho"><i class="fa fa-exclamation-triangle" style="color:#F53F3F"></i> <span style="color:#F53F3F">Zona de Risco</span></div>
+        <button class="btn-excluir" onclick="confirmarExclusao()"><i class="fa fa-trash"></i> Excluir minha conta</button>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- Modal exclusão -->
+<div class="modal-fundo" id="modalExclusao">
+  <div class="modal">
+    <div style="font-size:3rem">⚠️</div>
+    <h3>Excluir conta?</h3>
+    <p>Esta ação é irreversível. Todos os seus dados serão apagados permanentemente.</p>
+    <div class="modal-acoes">
+      <button class="btn-confirmar" onclick="excluirConta()">Sim, excluir</button>
+      <button class="btn-modal-cancel" onclick="fecharModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let usuario = null;
+
+const labelSerie = {'5ano':'5º Ano','6ano':'6º Ano','7ano':'7º Ano','8ano':'8º Ano','9ano':'9º Ano','1medio':'1º Médio','2medio':'2º Médio','3medio':'3º Médio'};
+
+function toggleMenu() {
+  document.getElementById('menuLateral').classList.toggle('aberto');
+  document.getElementById('fundoMenu').style.display =
+    document.getElementById('menuLateral').classList.contains('aberto') ? 'block' : 'none';
+}
+
+function sairDaConta() {
+  localStorage.removeItem('usuarioLogado');
+  window.location.href = 'login.html';
+}
+
+function formatarData(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('pt-BR');
+}
+
+function formatarNascimento(str) {
+  if (!str) return '—';
+  const [y,m,d] = str.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function carregarPerfil() {
+  const dados = localStorage.getItem('usuarioLogado');
+  if (!dados) { window.location.href = 'login.html'; return; }
+  usuario = JSON.parse(dados);
+
+  document.getElementById('nomeHeader').textContent = usuario.nome;
+  document.getElementById('avatarCirculo').childNodes[0].textContent = (usuario.nome||'?').charAt(0).toUpperCase();
+  document.getElementById('nomePerfilTitulo').textContent = usuario.nome;
+  document.getElementById('badgeTipo').innerHTML = '<i class="fa fa-user"></i> ' + (usuario.tipo === 'responsavel' ? 'Responsável' : 'Aluno');
+
+  const bs = document.getElementById('badgeStatus');
+  if (usuario.statusAssinatura === 'ativa') {
+    bs.className = 'badge badge-verde'; bs.innerHTML = '<i class="fa fa-check-circle"></i> Assinatura Ativa';
+  } else if (usuario.statusAssinatura === 'expirada') {
+    bs.className = 'badge badge-vermelho'; bs.innerHTML = '<i class="fa fa-times-circle"></i> Período Expirado';
+  } else {
+    bs.className = 'badge badge-laranja'; bs.innerHTML = '<i class="fa fa-clock-o"></i> Período de Teste';
+  }
+
+  document.getElementById('vNome').textContent      = usuario.nome || '—';
+  document.getElementById('vEmail').textContent     = usuario.email || '—';
+  document.getElementById('vTelefone').textContent  = usuario.telefone || '—';
+  document.getElementById('vNascimento').textContent= formatarNascimento(usuario.nascimento);
+  document.getElementById('vSerie').textContent     = labelSerie[usuario.serie] || usuario.serie || '—';
+  document.getElementById('vEscola').textContent    = usuario.escola || '—';
+
+  const ia = document.getElementById('infoAssinatura');
+  if (usuario.statusAssinatura === 'ativa') {
+    ia.innerHTML = `<div class="ass-linha"><span class="ass-label">Status</span><span class="ass-valor" style="color:#00B42A">Ativa ✅</span></div>
+    <div class="ass-linha"><span class="ass-label">Plano</span><span class="ass-valor">${usuario.planoAssinatura||'—'}</span></div>
+    <div class="ass-linha"><span class="ass-label">Desde</span><span class="ass-valor">${formatarData(usuario.dataAssinatura)}</span></div>`;
+  } else if (usuario.statusAssinatura === 'expirada') {
+    ia.innerHTML = `<p style="color:#F53F3F;font-weight:700;font-size:0.875rem"><i class="fa fa-lock"></i> Acesso expirado. Assine para continuar.</p>`;
+  } else {
+    const dias = Math.max(0, Math.ceil((new Date(usuario.dataFimTeste) - new Date()) / 86400000));
+    ia.innerHTML = `<div class="ass-linha"><span class="ass-label">Status</span><span class="ass-valor" style="color:#FF7D00">Teste Grátis</span></div>
+    <div class="ass-linha"><span class="ass-label">Dias restantes</span><span class="ass-valor" style="color:#FF7D00">${dias} dias</span></div>
+    <div class="ass-linha"><span class="ass-label">Expira em</span><span class="ass-valor">${formatarData(usuario.dataFimTeste)}</span></div>`;
+  }
+
+  document.getElementById('infoTipo').innerHTML = usuario.tipo === 'responsavel'
+    ? '<p style="font-weight:800">👨‍👩‍👧 Responsável / Pai</p><p style="font-size:0.78rem;color:#9ca3af;margin-top:4px">Você tem acesso à área de acompanhamento.</p>'
+    : '<p style="font-weight:800">🎓 Aluno</p><p style="font-size:0.78rem;color:#9ca3af;margin-top:4px">Você tem acesso a matérias, atividades e exercícios.</p>';
+}
+
+function toggleEdicao() {
+  document.getElementById('modoVisualizar').style.display = 'none';
+  document.getElementById('modoEditar').style.display = 'block';
+  document.getElementById('btnEditar').style.display = 'none';
+  document.getElementById('eNome').value     = usuario.nome || '';
+  document.getElementById('eEmail').value    = usuario.email || '';   // só exibe, não pode alterar
+  document.getElementById('eTelefone').value = usuario.telefone || '';
+  document.getElementById('eEscola').value   = usuario.escola || '';  // só exibe, não pode alterar
+}
+
+function cancelarEdicao() {
+  document.getElementById('modoVisualizar').style.display = 'block';
+  document.getElementById('modoEditar').style.display = 'none';
+  document.getElementById('btnEditar').style.display = 'flex';
+  document.getElementById('msgSalvo').classList.remove('show');
+}
+
+function salvarEdicao() {
+  usuario.nome     = document.getElementById('eNome').value.trim() || usuario.nome;
+  usuario.telefone = document.getElementById('eTelefone').value.trim() || usuario.telefone;
+  // ⚠️ E-mail e escola NÃO são alterados — travados por segurança
+
+  const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+  const idx = lista.findIndex(u => u.email === usuario.email);
+  if (idx !== -1) lista[idx] = { ...lista[idx], ...usuario };
+  localStorage.setItem('listaUsuarios', JSON.stringify(lista));
+  localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+
+  document.getElementById('msgSalvo').classList.add('show');
+  setTimeout(() => { cancelarEdicao(); carregarPerfil(); }, 1200);
+}
+
+function alterarSenha() {
+  const atual    = document.getElementById('senhaAtual').value;
+  const nova     = document.getElementById('novaSenha').value;
+  const confirmar= document.getElementById('confirmarNovaSenha').value;
+  const erro     = document.getElementById('erroSenha');
+  const sucesso  = document.getElementById('sucessoSenha');
+  erro.classList.remove('show'); sucesso.classList.remove('show');
+
+  if (atual !== usuario.senha)  { erro.textContent='⚠ Senha atual incorreta.'; erro.classList.add('show'); return; }
+  if (nova.length < 6)          { erro.textContent='⚠ Mínimo 6 caracteres.'; erro.classList.add('show'); return; }
+  if (nova !== confirmar)       { erro.textContent='⚠ As senhas não coincidem.'; erro.classList.add('show'); return; }
+
+  usuario.senha = nova;
+  const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+  const idx = lista.findIndex(u => u.email === usuario.email);
+  if (idx !== -1) lista[idx].senha = nova;
+  localStorage.setItem('listaUsuarios', JSON.stringify(lista));
+  localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+  document.getElementById('senhaAtual').value = '';
+  document.getElementById('novaSenha').value = '';
+  document.getElementById('confirmarNovaSenha').value = '';
+  sucesso.classList.add('show');
+}
+
+function confirmarExclusao() { document.getElementById('modalExclusao').classList.add('show'); }
+function fecharModal()       { document.getElementById('modalExclusao').classList.remove('show'); }
+
+function excluirConta() {
+  const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+  localStorage.setItem('listaUsuarios', JSON.stringify(lista.filter(u => u.email !== usuario.email)));
+  localStorage.removeItem('usuarioLogado');
+  window.location.href = 'cadastro.html';
+}
+
+carregarPerfil();
+</script>
+</body>
+</html>
