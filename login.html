@@ -6,50 +6,32 @@
   <title>Login - Plataforma de Estudos</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Nunito', sans-serif;
       background: linear-gradient(135deg, #0f2f8f 0%, #165DFF 50%, #36BFFA 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
+      min-height: 100vh; display: flex; align-items: center;
+      justify-content: center; padding: 2rem 1rem;
     }
     .wrapper { width: 100%; max-width: 420px; }
 
-    /* Logo */
     .logo-area { text-align: center; margin-bottom: 1.5rem; }
-    .logo-icon {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 64px; height: 64px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 16px; margin-bottom: 0.75rem;
-    }
+    .logo-icon { display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background: rgba(255,255,255,0.2); border-radius: 16px; margin-bottom: 0.75rem; }
     .logo-icon i { color: #fff; font-size: 2rem; }
     .logo-title { color: #fff; font-size: 1.5rem; font-weight: 900; }
     .logo-sub { color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 0.25rem; }
 
-    /* Card */
-    .card {
-      background: #fff;
-      border-radius: 24px;
-      padding: 2rem;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-      animation: fadeUp 0.5s ease both;
-    }
+    .card { background: #fff; border-radius: 24px; padding: 2rem; box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: fadeUp 0.5s ease both; }
     @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
 
     .card-title { font-size: 1.5rem; font-weight: 900; color: #1D2129; margin-bottom: 0.25rem; }
     .card-sub { font-size: 0.85rem; color: #9ca3af; margin-bottom: 1.5rem; }
 
-    /* Inputs */
     .field { margin-bottom: 1rem; }
     label { display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #4b5563; margin-bottom: 0.4rem; }
     .input-wrap { position: relative; }
-    .input-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.85rem; }
+    .input-wrap .icone { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.85rem; }
     input[type="email"], input[type="password"], input[type="text"] {
       width: 100%; padding: 0.75rem 1rem 0.75rem 2.75rem;
       border: 2px solid #e5e7eb; border-radius: 12px;
@@ -58,95 +40,24 @@
     }
     input:focus { border-color: #165DFF; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(22,93,255,0.12); }
     input::placeholder { color: #9ca3af; font-weight: 500; }
-    .toggle-senha {
-      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; cursor: pointer; color: #9ca3af; font-size: 0.9rem;
-    }
+    .toggle-senha { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9ca3af; font-size: 0.9rem; }
     .toggle-senha:hover { color: #4b5563; }
 
-    /* Botão principal */
-    .btn-primary {
-      width: 100%; padding: 0.9rem;
-      background: #165DFF; color: #fff;
-      border: none; border-radius: 12px;
-      font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 900;
-      cursor: pointer; transition: background 0.2s;
-      box-shadow: 0 6px 20px rgba(22,93,255,0.3);
-      margin-top: 0.5rem;
-    }
+    .btn-primary { width: 100%; padding: 0.9rem; background: #165DFF; color: #fff; border: none; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 900; cursor: pointer; transition: background 0.2s; box-shadow: 0 6px 20px rgba(22,93,255,0.3); margin-top: 0.5rem; }
     .btn-primary:hover { background: #1347cc; }
     .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
-    .btn-success { background: #00B42A; box-shadow: 0 6px 20px rgba(0,180,42,0.3); }
-    .btn-success:hover { background: #009422; }
 
-    /* Alertas */
-    .alert {
-      display: none; border-radius: 12px; padding: 0.75rem 1rem;
-      font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem;
-      align-items: center; gap: 0.5rem;
-    }
+    .alert { display: none; border-radius: 12px; padding: 0.75rem 1rem; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; align-items: center; gap: 0.5rem; }
     .alert.show { display: flex; }
     .alert-erro { background: #fff1f0; border: 1px solid #ffccc7; color: #F53F3F; }
     .alert-ok   { background: #f6ffed; border: 1px solid #b7eb8f; color: #00B42A; }
 
-    /* Divisor */
     .divisor { border-top: 1px solid #f3f4f6; margin: 1.25rem 0; }
     .link-area { text-align: center; font-size: 0.85rem; color: #9ca3af; }
     .link-area a { color: #165DFF; font-weight: 900; text-decoration: none; margin-left: 4px; }
     .link-area a:hover { text-decoration: underline; }
 
-    /* ── ETAPA 2 ── */
-    #etapa2 { display: none; }
-    .centro { text-align: center; }
-    .shield-icon {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 56px; height: 56px; background: #eff6ff; border-radius: 16px;
-      margin-bottom: 0.75rem;
-    }
-    .shield-icon i { color: #165DFF; font-size: 1.5rem; }
-    .email-mascara { color: #165DFF; font-weight: 900; font-size: 0.85rem; margin-top: 0.25rem; }
-
-    /* Caixinhas OTP */
-    .otp-wrap { display: flex; justify-content: center; gap: 8px; margin: 1.25rem 0; }
-    .otp-box {
-      width: 46px; height: 54px;
-      border: 2px solid #e5e7eb; border-radius: 12px;
-      text-align: center; font-size: 1.4rem; font-weight: 900;
-      font-family: 'Nunito', sans-serif;
-      color: #1D2129 !important;
-      -webkit-text-fill-color: #1D2129;
-      caret-color: #165DFF;
-      background: #fafafa; transition: all 0.2s;
-      padding: 0;
-    }
-    .otp-box:focus { border-color: #165DFF; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(22,93,255,0.12); }
-    .otp-erro { border-color: #F53F3F !important; }
-
-    .timer-txt { font-size: 0.8rem; color: #9ca3af; text-align: center; margin-bottom: 1rem; }
-    .timer-num { font-weight: 900; color: #FF7D00; }
-
-    .btn-reenviar {
-      background: none; border: none; cursor: pointer;
-      color: #165DFF; font-family: 'Nunito', sans-serif;
-      font-size: 0.85rem; font-weight: 900; width: 100%; text-align: center;
-      margin-top: 0.5rem; padding: 0.5rem;
-    }
-    .btn-reenviar:disabled { opacity: 0.4; cursor: not-allowed; }
-    .btn-voltar {
-      background: none; border: none; cursor: pointer;
-      color: #9ca3af; font-family: 'Nunito', sans-serif;
-      font-size: 0.85rem; font-weight: 600; width: 100%; text-align: center;
-      margin-top: 0.75rem; padding: 0.5rem;
-    }
-    .btn-voltar:hover { color: #4b5563; }
-
-    /* Spinner */
-    .spinner {
-      display: inline-block; width: 16px; height: 16px;
-      border: 3px solid rgba(255,255,255,0.4); border-top-color: #fff;
-      border-radius: 50%; animation: spin 0.7s linear infinite;
-      vertical-align: middle; margin-right: 6px;
-    }
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 3px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .footer-txt { color: rgba(255,255,255,0.5); font-size: 0.75rem; text-align: center; margin-top: 1rem; }
@@ -155,7 +66,6 @@
 <body>
 <div class="wrapper">
 
-  <!-- Logo -->
   <div class="logo-area">
     <div class="logo-icon"><i class="fa fa-graduation-cap"></i></div>
     <div class="logo-title">Plataforma de Estudos</div>
@@ -163,102 +73,47 @@
   </div>
 
   <div class="card">
+    <div class="card-title">Bem-vindo de volta!</div>
+    <div class="card-sub">Entre com seu e-mail e senha</div>
 
-    <!-- ===== ETAPA 1 ===== -->
-    <div id="etapa1">
-      <div class="card-title">Bem-vindo de volta!</div>
-      <div class="card-sub">Entre com seu e-mail e senha</div>
+    <div id="alertaErro" class="alert alert-erro"><i class="fa fa-exclamation-circle"></i><span id="alertaErroTxt"></span></div>
+    <div id="alertaOk" class="alert alert-ok"><i class="fa fa-check-circle"></i><span>Conta criada com sucesso! Faça seu login.</span></div>
 
-      <div id="alertaErro" class="alert alert-erro"><i class="fa fa-exclamation-circle"></i><span id="alertaErroTxt"></span></div>
-      <div id="alertaOk"   class="alert alert-ok"><i class="fa fa-check-circle"></i><span>Conta criada com sucesso! Faça seu login.</span></div>
-
-      <div class="field">
-        <label for="email">E-mail</label>
-        <div class="input-wrap">
-          <i class="fa fa-envelope"></i>
-          <input type="email" id="email" placeholder="seuemail@exemplo.com">
-        </div>
+    <div class="field">
+      <label for="email">E-mail</label>
+      <div class="input-wrap">
+        <i class="fa fa-envelope icone"></i>
+        <input type="email" id="email" placeholder="seuemail@exemplo.com">
       </div>
-
-      <div class="field">
-        <label for="senha">Senha</label>
-        <div class="input-wrap">
-          <i class="fa fa-lock"></i>
-          <input type="password" id="senha" placeholder="Digite sua senha" onkeydown="if(event.key==='Enter')fazerLogin()">
-          <button class="toggle-senha" type="button" onclick="toggleSenha()"><i id="olho" class="fa fa-eye-slash"></i></button>
-        </div>
-      </div>
-
-      <button id="btnEntrar" class="btn-primary" onclick="fazerLogin()">
-        <i class="fa fa-sign-in"></i> Entrar
-      </button>
-
-      <div class="divisor"></div>
-      <div class="link-area">Ainda não tem conta? <a href="cadastro.html">Criar conta grátis</a></div>
     </div>
 
-    <!-- ===== ETAPA 2 ===== -->
-    <div id="etapa2">
-      <div class="centro">
-        <div class="shield-icon"><i class="fa fa-shield"></i></div>
-        <div class="card-title">Verificação em 2 etapas</div>
-        <div class="card-sub">Enviamos um código de 6 dígitos para</div>
-        <div class="email-mascara" id="emailMascara"></div>
+    <div class="field">
+      <label for="senha">Senha</label>
+      <div class="input-wrap">
+        <i class="fa fa-lock icone"></i>
+        <input type="password" id="senha" placeholder="Digite sua senha" onkeydown="if(event.key==='Enter')fazerLogin()">
+        <button class="toggle-senha" type="button" onclick="toggleSenha()"><i id="olho" class="fa fa-eye-slash"></i></button>
       </div>
-
-      <div id="alertaOTP" class="alert alert-erro" style="margin-top:1rem"><i class="fa fa-exclamation-circle"></i><span id="alertaOTPTxt"></span></div>
-
-      <div class="otp-wrap">
-        <input class="otp-box" id="d1" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
-        <input class="otp-box" id="d2" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
-        <input class="otp-box" id="d3" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
-        <input class="otp-box" id="d4" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
-        <input class="otp-box" id="d5" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
-        <input class="otp-box" id="d6" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
-      </div>
-
-      <div class="timer-txt">O código expira em <span class="timer-num" id="timerOTP">05:00</span></div>
-
-      <button id="btnVerificar" class="btn-primary" onclick="verificarCodigo()">
-        <i class="fa fa-check-circle"></i> Verificar Código
-      </button>
-
-      <button id="btnReenviar" class="btn-reenviar" onclick="reenviarCodigo()" disabled>
-        Reenviar código (<span id="contador">60</span>s)
-      </button>
-
-      <div class="divisor"></div>
-      <button class="btn-voltar" onclick="voltarEtapa1()"><i class="fa fa-arrow-left"></i> Usar outra conta</button>
     </div>
 
-  </div><!-- fim card -->
+    <button id="btnEntrar" class="btn-primary" onclick="fazerLogin()">
+      <i class="fa fa-sign-in"></i> Entrar
+    </button>
+
+    <div class="divisor"></div>
+    <div class="link-area">Ainda não tem conta? <a href="cadastro.html">Criar conta grátis</a></div>
+  </div>
+
   <div class="footer-txt">&copy; 2024 Plataforma de Estudos</div>
 </div>
 
 <script>
-  // ── Credenciais EmailJS ───────────────────────────────
-  const EMAILJS_PUBLIC_KEY  = '6GHEnHuChHxkjttGN';
-  const EMAILJS_SERVICE_ID  = 'service_08wwqco';
-  const EMAILJS_TEMPLATE_ID = 'template_12bk4a9';
-
-  emailjs.init(EMAILJS_PUBLIC_KEY);
-
-  // Estado
-  let codigoOTP = '';
-  let usuarioTemp = null;
-  let timerInterval = null;
-  let reenvioInterval = null;
-  let otpExpira = null;
-
-  // ── Inicializar ───────────────────────────────────────
   window.addEventListener('DOMContentLoaded', () => {
     if (new URLSearchParams(window.location.search).get('cadastro') === 'ok') {
       document.getElementById('alertaOk').classList.add('show');
     }
-    configurarCaixinhas();
   });
 
-  // ── Toggle senha ──────────────────────────────────────
   function toggleSenha() {
     const c = document.getElementById('senha');
     const i = document.getElementById('olho');
@@ -266,186 +121,37 @@
     i.className = c.type === 'password' ? 'fa fa-eye-slash' : 'fa fa-eye';
   }
 
-  // ── Etapa 1: Login ────────────────────────────────────
-  async function fazerLogin() {
+  function fazerLogin() {
     const email = document.getElementById('email').value.trim().toLowerCase();
     const senha = document.getElementById('senha').value;
-    esconderErro('alertaErro');
+    const btn   = document.getElementById('btnEntrar');
 
-    if (!email || !senha) { mostrarErro('alertaErro','alertaErroTxt','Preencha e-mail e senha.'); return; }
+    document.getElementById('alertaErro').classList.remove('show');
+
+    if (!email || !senha) {
+      mostrarErro('Preencha e-mail e senha.');
+      return;
+    }
 
     const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
     const usuario = lista.find(u => u.email === email && u.senha === senha);
 
-    if (!usuario) { mostrarErro('alertaErro','alertaErroTxt','E-mail ou senha incorretos.'); return; }
-
-    usuarioTemp = usuario;
-    const btn = document.getElementById('btnEntrar');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> Enviando código...';
-
-    const ok = await enviarOTP(email);
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fa fa-sign-in"></i> Entrar';
-
-    if (ok) {
-      mostrarEtapa2(email);
-    } else {
-      mostrarErro('alertaErro','alertaErroTxt','Erro ao enviar código. Verifique sua conexão.');
-    }
-  }
-
-  // ── Gerar e enviar OTP ────────────────────────────────
-  async function enviarOTP(email) {
-    codigoOTP = String(Math.floor(100000 + Math.random() * 900000));
-    otpExpira = Date.now() + 5 * 60 * 1000;
-    try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        to_email: email,
-        to_name:  usuarioTemp?.nome || 'Estudante',
-        otp_code: codigoOTP,
-        expira:   '5 minutos',
-      });
-      return true;
-    } catch(e) { console.error(e); return false; }
-  }
-
-  // ── Mostrar etapa 2 ───────────────────────────────────
-  function mostrarEtapa2(email) {
-    document.getElementById('etapa1').style.display = 'none';
-    document.getElementById('etapa2').style.display = 'block';
-    const [u, d] = email.split('@');
-    document.getElementById('emailMascara').textContent =
-      u.slice(0,2) + '*'.repeat(Math.max(u.length-2,2)) + '@' + d;
-    ['d1','d2','d3','d4','d5','d6'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('d1').focus();
-    iniciarTimerExpiracao();
-    iniciarContadorReenvio();
-  }
-
-  // ── Timer 5 min ───────────────────────────────────────
-  function iniciarTimerExpiracao() {
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-      const r = Math.max(0, otpExpira - Date.now());
-      const m = String(Math.floor(r/60000)).padStart(2,'0');
-      const s = String(Math.floor((r%60000)/1000)).padStart(2,'0');
-      document.getElementById('timerOTP').textContent = r ? `${m}:${s}` : 'Expirado';
-      if (!r) { clearInterval(timerInterval); codigoOTP = ''; }
-    }, 1000);
-  }
-
-  // ── Contador reenvio 60s ──────────────────────────────
-  function iniciarContadorReenvio() {
-    clearInterval(reenvioInterval);
-    const btn = document.getElementById('btnReenviar');
-    btn.disabled = true;
-    let seg = 60;
-    document.getElementById('contador').textContent = seg;
-    reenvioInterval = setInterval(() => {
-      seg--;
-      document.getElementById('contador').textContent = seg;
-      if (seg <= 0) {
-        clearInterval(reenvioInterval);
-        btn.disabled = false;
-        btn.innerHTML = 'Reenviar código';
-      }
-    }, 1000);
-  }
-
-  // ── Reenviar ──────────────────────────────────────────
-  async function reenviarCodigo() {
-    const btn = document.getElementById('btnReenviar');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner" style="border-top-color:#165DFF;border-color:rgba(22,93,255,0.3)"></span> Enviando...';
-    const ok = await enviarOTP(usuarioTemp.email);
-    if (ok) {
-      iniciarTimerExpiracao();
-      iniciarContadorReenvio();
-      ['d1','d2','d3','d4','d5','d6'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('d1').focus();
-      esconderErro('alertaOTP');
-    } else {
-      btn.disabled = false;
-      btn.innerHTML = 'Reenviar código';
-      mostrarErro('alertaOTP','alertaOTPTxt','Erro ao reenviar. Tente novamente.');
-    }
-  }
-
-  // ── Verificar código ──────────────────────────────────
-  function verificarCodigo() {
-    const digitado = ['d1','d2','d3','d4','d5','d6'].map(id => document.getElementById(id).value).join('');
-    if (digitado.length < 6) { mostrarErro('alertaOTP','alertaOTPTxt','Digite todos os 6 dígitos.'); return; }
-    if (!codigoOTP)           { mostrarErro('alertaOTP','alertaOTPTxt','Código expirado. Solicite um novo.'); return; }
-    if (digitado !== codigoOTP) {
-      mostrarErro('alertaOTP','alertaOTPTxt','Código incorreto. Verifique e tente novamente.');
-      ['d1','d2','d3','d4','d5','d6'].forEach(id => {
-        const el = document.getElementById(id);
-        el.value = ''; el.classList.add('otp-erro');
-        setTimeout(() => el.classList.remove('otp-erro'), 1500);
-      });
-      document.getElementById('d1').focus();
+    if (!usuario) {
+      mostrarErro('E-mail ou senha incorretos. Tente novamente.');
       return;
     }
-    clearInterval(timerInterval); clearInterval(reenvioInterval); codigoOTP = '';
-    const btn = document.getElementById('btnVerificar');
-    btn.className = 'btn-primary btn-success';
-    btn.innerHTML = '<i class="fa fa-check-circle"></i> Verificado!';
+
     btn.disabled = true;
-    localStorage.setItem('usuarioLogado', JSON.stringify(usuarioTemp));
-    setTimeout(() => { window.location.href = 'inicio.html'; }, 700);
+    btn.innerHTML = '<span class="spinner"></span> Entrando...';
+
+    localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+
+    setTimeout(() => { window.location.href = 'inicio.html'; }, 600);
   }
 
-  // ── Voltar etapa 1 ────────────────────────────────────
-  function voltarEtapa1() {
-    clearInterval(timerInterval); clearInterval(reenvioInterval);
-    codigoOTP = ''; usuarioTemp = null;
-    document.getElementById('etapa2').style.display = 'none';
-    document.getElementById('etapa1').style.display = 'block';
-    esconderErro('alertaOTP');
-  }
-
-  // ── Utilitários ───────────────────────────────────────
-  function mostrarErro(divId, spanId, msg) {
-    document.getElementById(spanId).textContent = msg;
-    document.getElementById(divId).classList.add('show');
-  }
-  function esconderErro(divId) { document.getElementById(divId).classList.remove('show'); }
-
-  // ── Caixinhas OTP ─────────────────────────────────────
-  function configurarCaixinhas() {
-    const ids = ['d1','d2','d3','d4','d5','d6'];
-
-    function tratarValor(el, i) {
-      const limpo = el.value.replace(/\D/g,'').slice(-1);
-      el.value = limpo;
-      if (limpo && i < ids.length-1) document.getElementById(ids[i+1]).focus();
-      const todos = ids.map(id => document.getElementById(id).value).join('');
-      if (todos.length === 6) verificarCodigo();
-    }
-
-    ids.forEach((id, i) => {
-      const el = document.getElementById(id);
-      el.setAttribute('autocomplete', i === 0 ? 'one-time-code' : 'off');
-
-      el.addEventListener('input', () => tratarValor(el, i));
-      el.addEventListener('keyup', () => tratarValor(el, i));
-
-      el.addEventListener('keydown', e => {
-        if (e.key === 'Backspace' && !el.value && i > 0) document.getElementById(ids[i-1]).focus();
-        if (e.key === 'Enter') verificarCodigo();
-      });
-
-      el.addEventListener('click', () => el.select());
-
-      el.addEventListener('paste', e => {
-        e.preventDefault();
-        const txt = (e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
-        txt.split('').forEach((c,j) => { if(ids[j]) document.getElementById(ids[j]).value = c; });
-        document.getElementById(ids[Math.min(txt.length, ids.length-1)]).focus();
-        if (txt.length === 6) verificarCodigo();
-      });
-    });
+  function mostrarErro(msg) {
+    document.getElementById('alertaErroTxt').textContent = msg;
+    document.getElementById('alertaErro').classList.add('show');
   }
 </script>
 </body>

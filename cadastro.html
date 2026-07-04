@@ -1,264 +1,460 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro - Plataforma de Estudos</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primario: '#165DFF', secundario: '#36BFFA', sucesso: '#00B42A',
-                        aviso: '#FF7D00', erro: '#F53F3F', claro: '#F7F8FA', escuro: '#1D2129',
-                    },
-                    fontFamily: { sans: ['Nunito', 'system-ui', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
-    <style>
-        * { box-sizing: border-box; }
-        body { background: linear-gradient(135deg, #0f2f8f 0%, #165DFF 50%, #36BFFA 100%); min-height: 100vh; }
-        @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
-        .card { animation: fadeUp 0.5s ease both; }
-        .input-campo {
-            width: 100%; padding: 0.75rem 1rem; border: 2px solid #e5e7eb;
-            border-radius: 0.75rem; font-family: 'Nunito', sans-serif;
-            font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
-            background: #fafafa; color: #1D2129;
-        }
-        .input-campo:focus { border-color: #165DFF; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(22,93,255,0.12); }
-        .input-campo::placeholder { color: #9ca3af; font-weight: 500; }
-        label { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #4b5563; margin-bottom: 0.4rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro - Plataforma de Estudos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #0f2f8f 0%, #165DFF 50%, #36BFFA 100%);
+      min-height: 100vh; display: flex; align-items: flex-start;
+      justify-content: center; padding: 2rem 1rem;
+    }
+    .wrapper { width: 100%; max-width: 480px; }
+
+    .logo-area { text-align: center; margin-bottom: 1.5rem; }
+    .logo-icon { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; background: rgba(255,255,255,0.2); border-radius: 16px; margin-bottom: 0.75rem; }
+    .logo-icon i { color: #fff; font-size: 1.75rem; }
+    .logo-title { color: #fff; font-size: 1.5rem; font-weight: 900; }
+    .logo-sub { color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 0.25rem; }
+
+    .card { background: #fff; border-radius: 24px; padding: 1.75rem; box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: fadeUp 0.5s ease both; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+
+    .banner-teste { background: linear-gradient(90deg, rgba(22,93,255,0.08), rgba(54,191,250,0.08)); border: 1.5px solid rgba(22,93,255,0.2); border-radius: 14px; padding: 0.85rem 1rem; margin-bottom: 1.25rem; display: flex; align-items: flex-start; gap: 0.75rem; }
+    .banner-icone { width: 36px; height: 36px; background: #165DFF; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .banner-icone i { color: #fff; font-size: 0.85rem; }
+    .banner-titulo { font-weight: 900; color: #165DFF; font-size: 0.85rem; }
+    .banner-sub { color: #6b7280; font-size: 0.75rem; margin-top: 0.2rem; }
+
+    .card-title { font-size: 1.35rem; font-weight: 900; color: #1D2129; margin-bottom: 1.1rem; }
+
+    .campo { margin-bottom: 0.9rem; }
+    label { display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #4b5563; margin-bottom: 0.35rem; }
+    .input { width: 100%; padding: 0.7rem 1rem; border: 2px solid #e5e7eb; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 0.875rem; font-weight: 600; color: #1D2129; background: #fafafa; transition: all 0.2s; }
+    .input:focus { border-color: #165DFF; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(22,93,255,0.1); }
+    .input::placeholder { color: #9ca3af; font-weight: 500; }
+
+    .input-wrap { position: relative; }
+    .toggle-olho { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9ca3af; }
+    .toggle-olho:hover { color: #4b5563; }
+
+    .tipo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+    .tipo-label { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+    .tipo-label.ativo { border-color: #165DFF; background: rgba(22,93,255,0.05); }
+    .tipo-label input { accent-color: #165DFF; }
+    .tipo-nome { font-weight: 900; font-size: 0.75rem; color: #6b7280; }
+    .tipo-label.ativo .tipo-nome { color: #165DFF; }
+    .tipo-sub { font-size: 0.7rem; color: #9ca3af; }
+
+    .alert { display: none; border-radius: 12px; padding: 0.7rem 1rem; font-size: 0.82rem; font-weight: 700; margin-bottom: 1rem; align-items: center; gap: 0.5rem; }
+    .alert.show { display: flex; }
+    .alert-erro { background: #fff1f0; border: 1px solid #ffccc7; color: #F53F3F; }
+
+    .btn-primary { width: 100%; padding: 0.9rem; background: #165DFF; color: #fff; border: none; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 900; cursor: pointer; transition: background 0.2s; box-shadow: 0 6px 20px rgba(22,93,255,0.3); margin-top: 0.5rem; }
+    .btn-primary:hover { background: #1347cc; }
+    .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    .divisor { border-top: 1px solid #f3f4f6; margin: 1.1rem 0; }
+    .link-area { text-align: center; font-size: 0.85rem; color: #9ca3af; }
+    .link-area a { color: #165DFF; font-weight: 900; text-decoration: none; margin-left: 4px; }
+    .link-area a:hover { text-decoration: underline; }
+
+    /* ETAPA 2 */
+    #etapa2 { display: none; }
+    .centro { text-align: center; }
+    .shield-box { display: inline-flex; align-items: center; justify-content: center; width: 54px; height: 54px; background: #eff6ff; border-radius: 16px; margin-bottom: 0.75rem; }
+    .shield-box i { color: #165DFF; font-size: 1.5rem; }
+    .email-mask { color: #165DFF; font-weight: 900; font-size: 0.85rem; margin-top: 0.25rem; }
+
+    .otp-wrap { display: flex; justify-content: center; gap: 8px; margin: 1.25rem 0; }
+    .otp-box { width: 46px; height: 54px; border: 2px solid #e5e7eb; border-radius: 12px; text-align: center; font-size: 1.4rem; font-weight: 900; font-family: 'Nunito', sans-serif; color: #1D2129 !important; -webkit-text-fill-color: #1D2129; caret-color: #165DFF; background: #fafafa; transition: all 0.2s; padding: 0; }
+    .otp-box:focus { border-color: #165DFF; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(22,93,255,0.12); }
+    .otp-erro-borda { border-color: #F53F3F !important; }
+
+    .timer-txt { font-size: 0.8rem; color: #9ca3af; text-align: center; margin-bottom: 1rem; }
+    .timer-num { font-weight: 900; color: #FF7D00; }
+
+    .btn-reenviar { background: none; border: none; cursor: pointer; color: #165DFF; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 900; width: 100%; text-align: center; margin-top: 0.5rem; padding: 0.5rem; }
+    .btn-reenviar:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-voltar { background: none; border: none; cursor: pointer; color: #9ca3af; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 600; width: 100%; text-align: center; margin-top: 0.75rem; padding: 0.5rem; }
+    .btn-voltar:hover { color: #4b5563; }
+
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 3px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .footer-txt { color: rgba(255,255,255,0.5); font-size: 0.75rem; text-align: center; margin-top: 1rem; }
+  </style>
 </head>
-<body class="font-sans text-escuro flex items-start justify-center py-8 px-4">
+<body>
+<div class="wrapper">
 
-    <div class="w-full max-w-lg card">
-        <!-- Logo -->
-        <div class="text-center mb-6">
-            <div class="inline-flex items-center justify-center w-14 h-14 bg-white/20 rounded-2xl mb-3">
-                <i class="fa fa-graduation-cap text-white text-2xl"></i>
-            </div>
-            <h1 class="text-white text-2xl font-black">Plataforma de Estudos</h1>
-            <p class="text-blue-200 text-sm mt-1">Crie sua conta e comece a estudar</p>
+  <div class="logo-area">
+    <div class="logo-icon"><i class="fa fa-graduation-cap"></i></div>
+    <div class="logo-title">Plataforma de Estudos</div>
+    <div class="logo-sub">Crie sua conta e comece a estudar</div>
+  </div>
+
+  <div class="card">
+
+    <!-- ===== ETAPA 1: FORMULÁRIO ===== -->
+    <div id="etapa1">
+      <div class="banner-teste">
+        <div class="banner-icone"><i class="fa fa-gift"></i></div>
+        <div>
+          <div class="banner-titulo">3 dias grátis para testar!</div>
+          <div class="banner-sub">Acesso total a todos os recursos. Sem precisar de cartão.</div>
         </div>
+      </div>
 
-        <!-- Card do formulário -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-2xl">
-            <!-- Banner teste grátis -->
-            <div class="bg-gradient-to-r from-primario/10 to-secundario/10 border border-primario/20 rounded-2xl p-4 mb-6 flex items-start gap-3">
-                <div class="w-9 h-9 bg-primario rounded-xl flex items-center justify-center flex-shrink-0">
-                    <i class="fa fa-gift text-white text-sm"></i>
-                </div>
-                <div>
-                    <p class="font-black text-primario text-sm">3 dias grátis para testar!</p>
-                    <p class="text-gray-500 text-xs mt-0.5">Acesso total a todos os recursos. Sem precisar de cartão.</p>
-                </div>
-            </div>
+      <div class="card-title">Criar Nova Conta</div>
 
-            <h2 class="text-xl font-black text-escuro mb-5">Criar Nova Conta</h2>
+      <div id="alertaErro" class="alert alert-erro"><i class="fa fa-exclamation-circle"></i><span id="alertaErroTxt"></span></div>
 
-            <div id="erroGeral" class="hidden bg-red-50 border border-red-200 text-erro rounded-xl p-3 text-sm font-semibold mb-4"></div>
-
-            <div class="space-y-4">
-                <!-- Nome -->
-                <div>
-                    <label for="nome">Nome Completo</label>
-                    <input type="text" id="nome" class="input-campo" placeholder="Digite seu nome completo">
-                </div>
-
-                <!-- Data de Nascimento -->
-                <div>
-                    <label for="nascimento">Data de Nascimento</label>
-                    <input type="date" id="nascimento" class="input-campo">
-                </div>
-
-                <!-- E-mail -->
-                <div>
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" class="input-campo" placeholder="seuemail@exemplo.com">
-                </div>
-
-                <!-- Telefone -->
-                <div>
-                    <label for="telefone">Telefone para Contato</label>
-                    <input type="tel" id="telefone" class="input-campo" placeholder="(00) 00000-0000">
-                </div>
-
-                <!-- Série -->
-                <div>
-                    <label for="serie">Série / Ano que estuda</label>
-                    <select id="serie" class="input-campo">
-                        <option value="">Selecione a série</option>
-                        <option value="5ano">5º Ano do Ensino Fundamental</option>
-                        <option value="6ano">6º Ano do Ensino Fundamental</option>
-                        <option value="7ano">7º Ano do Ensino Fundamental</option>
-                        <option value="8ano">8º Ano do Ensino Fundamental</option>
-                        <option value="9ano">9º Ano do Ensino Fundamental</option>
-                        <option value="1medio">1º Ano do Ensino Médio</option>
-                        <option value="2medio">2º Ano do Ensino Médio</option>
-                        <option value="3medio">3º Ano do Ensino Médio</option>
-                    </select>
-                </div>
-
-                <!-- Escola -->
-                <div>
-                    <label for="escola">Nome da Escola</label>
-                    <input type="text" id="escola" class="input-campo" placeholder="Digite o nome da sua escola">
-                </div>
-
-                <!-- Tipo de usuário -->
-                <div>
-                    <label>Tipo de Usuário</label>
-                    <div class="grid grid-cols-2 gap-3 mt-1">
-                        <label class="flex items-center gap-2 p-3 border-2 border-primario bg-primario/5 rounded-xl cursor-pointer" id="labelAluno">
-                            <input type="radio" name="tipoUsuario" value="aluno" checked onchange="selecionarTipo(this)" class="accent-primario">
-                            <div>
-                                <p class="font-black text-xs text-primario">Aluno</p>
-                                <p class="text-gray-400 text-xs">Estudante</p>
-                            </div>
-                        </label>
-                        <label class="flex items-center gap-2 p-3 border-2 border-gray-200 rounded-xl cursor-pointer" id="labelResponsavel">
-                            <input type="radio" name="tipoUsuario" value="responsavel" onchange="selecionarTipo(this)" class="accent-primario">
-                            <div>
-                                <p class="font-black text-xs text-gray-600">Responsável</p>
-                                <p class="text-gray-400 text-xs">Pai / Mãe</p>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Senha -->
-                <div>
-                    <label for="senha">Senha</label>
-                    <div class="relative">
-                        <input type="password" id="senha" class="input-campo pr-12" placeholder="Mínimo 6 caracteres">
-                        <button type="button" onclick="toggleSenha('senha','olhoSenha')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                            <i id="olhoSenha" class="fa fa-eye-slash"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Confirmar Senha -->
-                <div>
-                    <label for="confirmarSenha">Confirmar Senha</label>
-                    <div class="relative">
-                        <input type="password" id="confirmarSenha" class="input-campo pr-12" placeholder="Repita sua senha">
-                        <button type="button" onclick="toggleSenha('confirmarSenha','olhoConfirmar')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                            <i id="olhoConfirmar" class="fa fa-eye-slash"></i>
-                        </button>
-                    </div>
-                    <p id="erroSenha" class="text-erro text-xs font-bold mt-1 hidden">⚠ As senhas não são iguais!</p>
-                </div>
-
-                <!-- Botão cadastrar -->
-                <button onclick="cadastrar()" class="w-full bg-primario text-white py-3.5 rounded-xl font-black text-base mt-2 hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200">
-                    Cadastrar e Acessar
-                </button>
-            </div>
-
-            <div class="text-center mt-5 pt-5 border-t border-gray-100">
-                <p class="text-gray-500 text-sm">Já tem uma conta?
-                    <a href="login.html" class="text-primario font-black hover:underline ml-1">Fazer login</a>
-                </p>
-            </div>
+      <div class="campo">
+        <label for="nome">Nome Completo</label>
+        <input type="text" id="nome" class="input" placeholder="Digite seu nome completo">
+      </div>
+      <div class="campo">
+        <label for="nascimento">Data de Nascimento</label>
+        <input type="date" id="nascimento" class="input">
+      </div>
+      <div class="campo">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" class="input" placeholder="seuemail@exemplo.com">
+      </div>
+      <div class="campo">
+        <label for="telefone">Telefone para Contato</label>
+        <input type="tel" id="telefone" class="input" placeholder="(00) 00000-0000">
+      </div>
+      <div class="campo">
+        <label for="serie">Série / Ano que estuda</label>
+        <select id="serie" class="input">
+          <option value="">Selecione a série</option>
+          <option value="5ano">5º Ano do Ensino Fundamental</option>
+          <option value="6ano">6º Ano do Ensino Fundamental</option>
+          <option value="7ano">7º Ano do Ensino Fundamental</option>
+          <option value="8ano">8º Ano do Ensino Fundamental</option>
+          <option value="9ano">9º Ano do Ensino Fundamental</option>
+          <option value="1medio">1º Ano do Ensino Médio</option>
+          <option value="2medio">2º Ano do Ensino Médio</option>
+          <option value="3medio">3º Ano do Ensino Médio</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="escola">Nome da Escola</label>
+        <input type="text" id="escola" class="input" placeholder="Digite o nome da sua escola">
+      </div>
+      <div class="campo">
+        <label>Tipo de Usuário</label>
+        <div class="tipo-grid">
+          <label class="tipo-label ativo" id="labelAluno">
+            <input type="radio" name="tipo" value="aluno" checked onchange="selecionarTipo(this)">
+            <div><div class="tipo-nome">Aluno</div><div class="tipo-sub">Estudante</div></div>
+          </label>
+          <label class="tipo-label" id="labelResponsavel">
+            <input type="radio" name="tipo" value="responsavel" onchange="selecionarTipo(this)">
+            <div><div class="tipo-nome">Responsável</div><div class="tipo-sub">Pai / Mãe</div></div>
+          </label>
         </div>
+      </div>
+      <div class="campo">
+        <label for="senha">Senha</label>
+        <div class="input-wrap">
+          <input type="password" id="senha" class="input" style="padding-right:2.5rem" placeholder="Mínimo 6 caracteres">
+          <button type="button" class="toggle-olho" onclick="toggleOlho('senha','olho1')"><i id="olho1" class="fa fa-eye-slash"></i></button>
+        </div>
+      </div>
+      <div class="campo">
+        <label for="confirmarSenha">Confirmar Senha</label>
+        <div class="input-wrap">
+          <input type="password" id="confirmarSenha" class="input" style="padding-right:2.5rem" placeholder="Repita sua senha">
+          <button type="button" class="toggle-olho" onclick="toggleOlho('confirmarSenha','olho2')"><i id="olho2" class="fa fa-eye-slash"></i></button>
+        </div>
+        <p id="erroSenha" class="alert alert-erro" style="margin-top:6px;margin-bottom:0"><i class="fa fa-exclamation-circle"></i><span>As senhas não são iguais!</span></p>
+      </div>
 
-        <p class="text-blue-200 text-xs text-center mt-4">&copy; 2024 Plataforma de Estudos</p>
+      <button id="btnCadastrar" class="btn-primary" onclick="iniciarCadastro()">
+        <i class="fa fa-user-plus"></i> Criar Conta
+      </button>
+
+      <div class="divisor"></div>
+      <div class="link-area">Já tem uma conta? <a href="login.html">Fazer login</a></div>
     </div>
 
-    <script>
-        function toggleSenha(campoId, iconeId) {
-            const campo = document.getElementById(campoId);
-            const icone = document.getElementById(iconeId);
-            if (campo.type === 'password') {
-                campo.type = 'text';
-                icone.className = 'fa fa-eye';
-            } else {
-                campo.type = 'password';
-                icone.className = 'fa fa-eye-slash';
-            }
-        }
+    <!-- ===== ETAPA 2: VERIFICAÇÃO OTP ===== -->
+    <div id="etapa2">
+      <div class="centro">
+        <div class="shield-box"><i class="fa fa-shield"></i></div>
+        <div class="card-title" style="margin-bottom:0.25rem">Verificar e-mail</div>
+        <p style="color:#9ca3af;font-size:0.85rem">Enviamos um código de 6 dígitos para</p>
+        <div class="email-mask" id="emailMask"></div>
+      </div>
 
-        function selecionarTipo(radio) {
-            document.getElementById('labelAluno').className = 'flex items-center gap-2 p-3 border-2 border-gray-200 rounded-xl cursor-pointer';
-            document.getElementById('labelResponsavel').className = 'flex items-center gap-2 p-3 border-2 border-gray-200 rounded-xl cursor-pointer';
-            document.getElementById('labelAluno').querySelector('p').className = 'font-black text-xs text-gray-600';
+      <div id="alertaOTP" class="alert alert-erro" style="margin-top:1rem"><i class="fa fa-exclamation-circle"></i><span id="alertaOTPTxt"></span></div>
 
-            const labelId = radio.value === 'aluno' ? 'labelAluno' : 'labelResponsavel';
-            const label = document.getElementById(labelId);
-            label.className = 'flex items-center gap-2 p-3 border-2 border-primario bg-primario/5 rounded-xl cursor-pointer';
-            label.querySelector('p').className = 'font-black text-xs text-primario';
-        }
+      <div class="otp-wrap">
+        <input class="otp-box" id="d1" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-box" id="d2" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-box" id="d3" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-box" id="d4" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-box" id="d5" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
+        <input class="otp-box" id="d6" maxlength="1" type="tel" inputmode="numeric" pattern="[0-9]*">
+      </div>
 
-        function cadastrar() {
-            const nome = document.getElementById('nome').value.trim();
-            const nascimento = document.getElementById('nascimento').value;
-            const email = document.getElementById('email').value.trim().toLowerCase();
-            const telefone = document.getElementById('telefone').value.trim();
-            const serie = document.getElementById('serie').value;
-            const escola = document.getElementById('escola').value.trim();
-            const senha = document.getElementById('senha').value;
-            const confirmar = document.getElementById('confirmarSenha').value;
-            const tipo = document.querySelector('input[name="tipoUsuario"]:checked').value;
-            const erroGeral = document.getElementById('erroGeral');
-            const erroSenha = document.getElementById('erroSenha');
+      <div class="timer-txt">O código expira em <span class="timer-num" id="timerOTP">05:00</span></div>
 
-            erroGeral.classList.add('hidden');
-            erroSenha.classList.add('hidden');
+      <button id="btnVerificar" class="btn-primary" onclick="verificarCodigo()">
+        <i class="fa fa-check-circle"></i> Verificar e Finalizar Cadastro
+      </button>
 
-            if (!nome || !nascimento || !email || !telefone || !serie || !escola || !senha || !confirmar) {
-                erroGeral.textContent = 'Por favor, preencha todos os campos.';
-                erroGeral.classList.remove('hidden');
-                erroGeral.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                return;
-            }
-            if (senha.length < 6) {
-                erroGeral.textContent = 'A senha deve ter pelo menos 6 caracteres.';
-                erroGeral.classList.remove('hidden');
-                return;
-            }
-            if (senha !== confirmar) {
-                erroSenha.classList.remove('hidden');
-                return;
-            }
+      <button id="btnReenviar" class="btn-reenviar" onclick="reenviarCodigo()" disabled>
+        Reenviar código (<span id="contador">60</span>s)
+      </button>
 
-            // Verificar e-mail duplicado
-            const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
-            if (lista.find(u => u.email === email)) {
-                erroGeral.textContent = 'Este e-mail já está cadastrado. Faça login.';
-                erroGeral.classList.remove('hidden');
-                return;
-            }
+      <div class="divisor"></div>
+      <button class="btn-voltar" onclick="voltarEtapa1()"><i class="fa fa-arrow-left"></i> Voltar e corrigir dados</button>
+    </div>
 
-            const agora = new Date();
-            const fimTeste = new Date(agora.getTime() + 3 * 24 * 60 * 60 * 1000);
+  </div>
+  <div class="footer-txt">&copy; 2024 Plataforma de Estudos</div>
+</div>
 
-            const labelSerie = {
-                '5ano':'5º Ano', '6ano':'6º Ano', '7ano':'7º Ano', '8ano':'8º Ano', '9ano':'9º Ano',
-                '1medio':'1º Médio', '2medio':'2º Médio', '3medio':'3º Médio'
-            };
+<script>
+  const EMAILJS_PUBLIC_KEY  = '6GHEnHuChHxkjttGN';
+  const EMAILJS_SERVICE_ID  = 'service_08wwqco';
+  const EMAILJS_TEMPLATE_ID = 'template_12bk4a9';
+  emailjs.init(EMAILJS_PUBLIC_KEY);
 
-            const usuario = {
-                nome, nascimento, email, telefone,
-                serie, serieLabel: labelSerie[serie] || serie,
-                escola, senha, tipo, logado: true,
-                statusAssinatura: 'teste',
-                dataInicioTeste: agora.toISOString(),
-                dataFimTeste: fimTeste.toISOString(),
-                dataAssinatura: null, planoAssinatura: null, valorAssinatura: null
-            };
+  let codigoOTP = '';
+  let dadosTemp = null;
+  let otpExpira = null;
+  let timerInterval = null;
+  let reenvioInterval = null;
 
-            lista.push(usuario);
-            localStorage.setItem('listaUsuarios', JSON.stringify(lista));
-            localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
-            window.location.href = 'inicio.html';
-        }
-    </script>
+  // ── Toggle olho ───────────────────────────────────────
+  function toggleOlho(campoId, iconeId) {
+    const c = document.getElementById(campoId);
+    const i = document.getElementById(iconeId);
+    c.type = c.type === 'password' ? 'text' : 'password';
+    i.className = c.type === 'password' ? 'fa fa-eye-slash' : 'fa fa-eye';
+  }
+
+  // ── Tipo usuário ──────────────────────────────────────
+  function selecionarTipo(radio) {
+    document.getElementById('labelAluno').classList.remove('ativo');
+    document.getElementById('labelResponsavel').classList.remove('ativo');
+    document.getElementById(radio.value === 'aluno' ? 'labelAluno' : 'labelResponsavel').classList.add('ativo');
+  }
+
+  // ── Etapa 1: Validar e enviar OTP ────────────────────
+  async function iniciarCadastro() {
+    const nome       = document.getElementById('nome').value.trim();
+    const nascimento = document.getElementById('nascimento').value;
+    const email      = document.getElementById('email').value.trim().toLowerCase();
+    const telefone   = document.getElementById('telefone').value.trim();
+    const serie      = document.getElementById('serie').value;
+    const escola     = document.getElementById('escola').value.trim();
+    const senha      = document.getElementById('senha').value;
+    const confirmar  = document.getElementById('confirmarSenha').value;
+    const tipo       = document.querySelector('input[name="tipo"]:checked').value;
+
+    document.getElementById('alertaErro').classList.remove('show');
+    document.getElementById('erroSenha').classList.remove('show');
+
+    if (!nome || !nascimento || !email || !telefone || !serie || !escola || !senha || !confirmar) {
+      mostrarErro('alertaErro','alertaErroTxt','Por favor, preencha todos os campos.');
+      return;
+    }
+    if (senha.length < 6) {
+      mostrarErro('alertaErro','alertaErroTxt','A senha deve ter pelo menos 6 caracteres.');
+      return;
+    }
+    if (senha !== confirmar) {
+      document.getElementById('erroSenha').classList.add('show');
+      return;
+    }
+
+    const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+    if (lista.find(u => u.email === email)) {
+      mostrarErro('alertaErro','alertaErroTxt','Este e-mail já está cadastrado. Faça login.');
+      return;
+    }
+
+    const labelSerie = { '5ano':'5º Ano','6ano':'6º Ano','7ano':'7º Ano','8ano':'8º Ano','9ano':'9º Ano','1medio':'1º Médio','2medio':'2º Médio','3medio':'3º Médio' };
+    const agora = new Date();
+    const fimTeste = new Date(agora.getTime() + 3 * 24 * 60 * 60 * 1000);
+
+    dadosTemp = { nome, nascimento, email, telefone, serie, serieLabel: labelSerie[serie] || serie, escola, senha, tipo, logado: true, statusAssinatura: 'teste', dataInicioTeste: agora.toISOString(), dataFimTeste: fimTeste.toISOString(), dataAssinatura: null, planoAssinatura: null, valorAssinatura: null };
+
+    const btn = document.getElementById('btnCadastrar');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Enviando código...';
+
+    const ok = await enviarOTP(email, nome);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa fa-user-plus"></i> Criar Conta';
+
+    if (ok) {
+      mostrarEtapa2(email);
+    } else {
+      mostrarErro('alertaErro','alertaErroTxt','Erro ao enviar código de verificação. Verifique sua conexão.');
+    }
+  }
+
+  // ── Enviar OTP ────────────────────────────────────────
+  async function enviarOTP(email, nome) {
+    codigoOTP = String(Math.floor(100000 + Math.random() * 900000));
+    otpExpira = Date.now() + 5 * 60 * 1000;
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email: email, to_name: nome, otp_code: codigoOTP, expira: '5 minutos'
+      });
+      return true;
+    } catch(e) { console.error(e); return false; }
+  }
+
+  // ── Mostrar etapa 2 ───────────────────────────────────
+  function mostrarEtapa2(email) {
+    document.getElementById('etapa1').style.display = 'none';
+    document.getElementById('etapa2').style.display = 'block';
+    const [u, d] = email.split('@');
+    document.getElementById('emailMask').textContent = u.slice(0,2) + '*'.repeat(Math.max(u.length-2,2)) + '@' + d;
+    ['d1','d2','d3','d4','d5','d6'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('d1').focus();
+    iniciarTimer();
+    iniciarReenvio();
+  }
+
+  // ── Timer 5 min ───────────────────────────────────────
+  function iniciarTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      const r = Math.max(0, otpExpira - Date.now());
+      const m = String(Math.floor(r/60000)).padStart(2,'0');
+      const s = String(Math.floor((r%60000)/1000)).padStart(2,'0');
+      document.getElementById('timerOTP').textContent = r ? `${m}:${s}` : 'Expirado';
+      if (!r) { clearInterval(timerInterval); codigoOTP = ''; }
+    }, 1000);
+  }
+
+  // ── Contador reenvio ──────────────────────────────────
+  function iniciarReenvio() {
+    clearInterval(reenvioInterval);
+    const btn = document.getElementById('btnReenviar');
+    btn.disabled = true;
+    let seg = 60;
+    document.getElementById('contador').textContent = seg;
+    reenvioInterval = setInterval(() => {
+      seg--;
+      document.getElementById('contador').textContent = seg;
+      if (seg <= 0) { clearInterval(reenvioInterval); btn.disabled = false; btn.innerHTML = 'Reenviar código'; }
+    }, 1000);
+  }
+
+  // ── Reenviar ──────────────────────────────────────────
+  async function reenviarCodigo() {
+    const btn = document.getElementById('btnReenviar');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner" style="border-top-color:#165DFF;border-color:rgba(22,93,255,0.3)"></span> Enviando...';
+    const ok = await enviarOTP(dadosTemp.email, dadosTemp.nome);
+    if (ok) {
+      iniciarTimer(); iniciarReenvio();
+      ['d1','d2','d3','d4','d5','d6'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('d1').focus();
+      document.getElementById('alertaOTP').classList.remove('show');
+    } else {
+      btn.disabled = false; btn.innerHTML = 'Reenviar código';
+      mostrarErro('alertaOTP','alertaOTPTxt','Erro ao reenviar. Tente novamente.');
+    }
+  }
+
+  // ── Verificar código e salvar cadastro ────────────────
+  function verificarCodigo() {
+    const digitado = ['d1','d2','d3','d4','d5','d6'].map(id => document.getElementById(id).value).join('');
+
+    if (digitado.length < 6) { mostrarErro('alertaOTP','alertaOTPTxt','Digite todos os 6 dígitos.'); return; }
+    if (!codigoOTP)           { mostrarErro('alertaOTP','alertaOTPTxt','Código expirado. Clique em Reenviar.'); return; }
+    if (digitado !== codigoOTP) {
+      mostrarErro('alertaOTP','alertaOTPTxt','Código incorreto. Verifique e tente novamente.');
+      ['d1','d2','d3','d4','d5','d6'].forEach(id => {
+        const el = document.getElementById(id); el.value = '';
+        el.classList.add('otp-erro-borda');
+        setTimeout(() => el.classList.remove('otp-erro-borda'), 1500);
+      });
+      document.getElementById('d1').focus();
+      return;
+    }
+
+    // ✅ Código correto — salvar conta e ir pro login
+    clearInterval(timerInterval); clearInterval(reenvioInterval); codigoOTP = '';
+
+    const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+    lista.push(dadosTemp);
+    localStorage.setItem('listaUsuarios', JSON.stringify(lista));
+    // NÃO salva usuarioLogado — redireciona pro login
+
+    const btn = document.getElementById('btnVerificar');
+    btn.style.background = '#00B42A';
+    btn.innerHTML = '<i class="fa fa-check-circle"></i> Conta criada! Redirecionando...';
+    btn.disabled = true;
+
+    setTimeout(() => { window.location.href = 'login.html?cadastro=ok'; }, 1000);
+  }
+
+  // ── Voltar etapa 1 ────────────────────────────────────
+  function voltarEtapa1() {
+    clearInterval(timerInterval); clearInterval(reenvioInterval);
+    codigoOTP = '';
+    document.getElementById('etapa2').style.display = 'none';
+    document.getElementById('etapa1').style.display = 'block';
+    document.getElementById('alertaOTP').classList.remove('show');
+  }
+
+  // ── Utilitário erro ───────────────────────────────────
+  function mostrarErro(divId, spanId, msg) {
+    document.getElementById(spanId).textContent = msg;
+    document.getElementById(divId).classList.add('show');
+  }
+
+  // ── Caixinhas OTP ─────────────────────────────────────
+  function configurarCaixinhas() {
+    const ids = ['d1','d2','d3','d4','d5','d6'];
+    ids.forEach((id, i) => {
+      const el = document.getElementById(id);
+      el.setAttribute('autocomplete', i === 0 ? 'one-time-code' : 'off');
+
+      function tratar() {
+        const limpo = el.value.replace(/\D/g,'').slice(-1);
+        el.value = limpo;
+        if (limpo && i < ids.length-1) document.getElementById(ids[i+1]).focus();
+        const todos = ids.map(id => document.getElementById(id).value).join('');
+        if (todos.length === 6) verificarCodigo();
+      }
+
+      el.addEventListener('input', tratar);
+      el.addEventListener('keyup', tratar);
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Backspace' && !el.value && i > 0) document.getElementById(ids[i-1]).focus();
+        if (e.key === 'Enter') verificarCodigo();
+      });
+      el.addEventListener('click', () => el.select());
+      el.addEventListener('paste', e => {
+        e.preventDefault();
+        const txt = (e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+        txt.split('').forEach((c,j) => { if(ids[j]) document.getElementById(ids[j]).value = c; });
+        document.getElementById(ids[Math.min(txt.length, ids.length-1)]).focus();
+        if (txt.length === 6) verificarCodigo();
+      });
+    });
+  }
+
+  configurarCaixinhas();
+</script>
 </body>
 </html>
