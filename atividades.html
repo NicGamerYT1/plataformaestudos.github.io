@@ -4,213 +4,597 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Atividades - Plataforma de Estudos</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="acesso.js"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          primario:'#165DFF',secundario:'#36BFFA',sucesso:'#00B42A',aviso:'#FF7D00',erro:'#F53F3F',claro:'#F7F8FA',escuro:'#1D2129',
-        },
-        fontFamily: { sans: ['Nunito', 'system-ui', 'sans-serif'] }
-      }
-    }
-  }
-</script>
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;}body{background:#F0F4FF;}
-  .conteudo-sombra{box-shadow:0 4px 24px rgba(22,93,255,0.07);}
-  .botao-efeito{transition:all 0.3s ease;}.botao-efeito:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(22,93,255,0.25);}
-  .menu-lateral{transition:transform 0.3s cubic-bezier(.4,0,.2,1);}
-  #modalAtividade{transition:opacity 0.2s ease;}
-  .opcao-questao{border:2px solid #e5e7eb;border-radius:0.75rem;padding:0.875rem 1rem;cursor:pointer;transition:all 0.2s;font-weight:600;font-size:0.9rem;display:flex;align-items:center;gap:0.75rem;}
-  .opcao-questao:hover{border-color:#165DFF;background:#eff4ff;}
-  .opcao-questao.selecionada{border-color:#165DFF;background:#eff4ff;color:#165DFF;}
-  .opcao-questao.correta{border-color:#00B42A;background:#f0fdf4;color:#00B42A;}
-  .opcao-questao.errada{border-color:#F53F3F;background:#fff1f1;color:#F53F3F;}
-  .letra-opcao{width:2rem;height:2rem;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.8rem;flex-shrink:0;transition:all 0.2s;}
-  .selecionada .letra-opcao{background:#165DFF;color:white;}.correta .letra-opcao{background:#00B42A;color:white;}.errada .letra-opcao{background:#F53F3F;color:white;}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}.anim{animation:fadeUp 0.4s ease both;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#F0F4FF;color:#1D2129;min-height:100vh;display:flex;}
+
+/* ── Header ── */
+header{position:fixed;top:0;left:0;right:0;background:#165DFF;color:#fff;padding:1rem;z-index:20;box-shadow:0 4px 16px rgba(22,93,255,0.3);display:flex;align-items:center;justify-content:space-between;}
+.header-esq{display:flex;align-items:center;gap:.75rem;}
+.header-esq h1{font-size:1.1rem;font-weight:900;}
+.btn-menu{background:none;border:none;color:#fff;font-size:1.25rem;cursor:pointer;padding:.25rem;display:none;}
+.btn-sair{background:#fff;color:#165DFF;border:none;padding:.4rem .85rem;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:900;cursor:pointer;}
+.btn-sair:hover{background:#eff6ff;}
+#nomeUsuario{font-size:.85rem;font-weight:700;}
+
+/* ── Menu lateral ── */
+aside{position:fixed;top:64px;left:0;width:256px;height:calc(100vh - 64px);background:#fff;border-right:1px solid #f0f0f0;padding:1.5rem 1rem;overflow-y:auto;z-index:15;transition:transform .3s ease;box-shadow:2px 0 8px rgba(0,0,0,.04);}
+aside nav ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+aside nav a{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;border-radius:12px;text-decoration:none;color:#6b7280;font-weight:700;font-size:.875rem;transition:all .2s;}
+aside nav a:hover{background:rgba(22,93,255,.08);color:#165DFF;}
+aside nav a.ativo{background:rgba(22,93,255,.1);color:#165DFF;font-weight:900;}
+aside nav a i{width:18px;text-align:center;}
+.fundo-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:14;}
+
+/* ── Main ── */
+main{margin-left:256px;margin-top:64px;padding:2rem 1.5rem;width:100%;}
+
+/* ── Tela matérias ── */
+#telaMateria{display:block;}
+#telaLista{display:none;}
+
+.titulo-pagina{font-size:1.75rem;font-weight:900;margin-bottom:.5rem;}
+.subtitulo-pagina{color:#6b7280;font-size:.9rem;margin-bottom:2rem;}
+
+.grade-materias{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.25rem;}
+
+.card-materia{border-radius:20px;padding:1.75rem 1.5rem;cursor:pointer;transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;color:#fff;min-height:160px;display:flex;flex-direction:column;justify-content:space-between;}
+.card-materia:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.18);}
+.card-materia .icone-materia{font-size:2.5rem;margin-bottom:.75rem;opacity:.9;}
+.card-materia h3{font-size:1.2rem;font-weight:900;margin-bottom:.25rem;}
+.card-materia .qtd{font-size:.8rem;opacity:.8;font-weight:700;}
+.card-materia .seta{position:absolute;bottom:1.25rem;right:1.25rem;font-size:1.1rem;opacity:.7;}
+.card-materia::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.12);}
+.card-materia::after{content:'';position:absolute;bottom:-20px;left:-20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.08);}
+
+/* ── Tela lista de atividades ── */
+.btn-voltar-materia{display:inline-flex;align-items:center;gap:.5rem;background:#fff;border:2px solid #e5e7eb;color:#6b7280;padding:.5rem 1rem;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;margin-bottom:1.5rem;transition:all .2s;}
+.btn-voltar-materia:hover{border-color:#165DFF;color:#165DFF;}
+
+.cabecalho-lista{display:flex;align-items:center;gap:1rem;margin-bottom:1.75rem;flex-wrap:wrap;}
+.icone-lista{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;flex-shrink:0;}
+.cabecalho-lista h2{font-size:1.5rem;font-weight:900;}
+.cabecalho-lista p{color:#6b7280;font-size:.85rem;}
+
+.grade-atividades{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;}
+
+.card-atividade{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.07);transition:transform .2s,box-shadow .2s;}
+.card-atividade:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.12);}
+.card-atividade .faixa{height:6px;}
+.card-atividade .corpo{padding:1.25rem;}
+.card-atividade h3{font-size:1rem;font-weight:900;margin-bottom:.4rem;}
+.card-atividade p{color:#6b7280;font-size:.82rem;margin-bottom:1rem;line-height:1.5;}
+.card-atividade .infos{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.75rem;color:#6b7280;font-weight:700;}
+.badge-dif{padding:2px 10px;border-radius:999px;font-size:.72rem;font-weight:900;}
+.badge-facil{background:#f0fdf4;color:#00B42A;}
+.badge-medio{background:#fff7ed;color:#FF7D00;}
+.badge-dificil{background:#fff1f0;color:#F53F3F;}
+.btn-comecar{width:100%;padding:.7rem;border:none;border-radius:10px;color:#fff;font-family:'Nunito',sans-serif;font-size:.875rem;font-weight:900;cursor:pointer;transition:opacity .2s;}
+.btn-comecar:hover{opacity:.88;}
+
+.sem-atividades{text-align:center;padding:4rem 1rem;color:#9ca3af;}
+.sem-atividades i{font-size:3rem;display:block;margin-bottom:1rem;}
+
+/* ── Modal atividade ── */
+.modal-fundo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:50;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;}
+.modal-fundo.show{display:flex;}
+.modal-box{background:#fff;border-radius:20px;width:100%;max-width:640px;margin:1rem auto;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.25);}
+
+.modal-header{padding:1.25rem 1.5rem;color:#fff;}
+.modal-header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;}
+.modal-materia-label{font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;opacity:.8;margin-bottom:.35rem;}
+.modal-titulo{font-size:1.25rem;font-weight:900;line-height:1.3;}
+.modal-info{font-size:.8rem;opacity:.75;margin-top:.25rem;}
+.btn-fechar-modal{background:rgba(255,255,255,.2);border:none;color:#fff;width:32px;height:32px;border-radius:8px;font-size:1.1rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.btn-fechar-modal:hover{background:rgba(255,255,255,.35);}
+
+.progresso-wrap{margin-top:1rem;background:rgba(255,255,255,.25);border-radius:999px;height:6px;}
+.progresso-barra{height:6px;border-radius:999px;background:#fff;transition:width .4s ease;}
+.progresso-txt{font-size:.72rem;opacity:.7;margin-top:.3rem;text-align:right;}
+
+.modal-corpo{padding:1.5rem;}
+.enunciado{font-size:1rem;font-weight:800;color:#1D2129;margin-bottom:1.25rem;line-height:1.6;}
+.opcoes{display:flex;flex-direction:column;gap:.75rem;}
+.opcao{display:flex;align-items:center;gap:.75rem;padding:.875rem 1rem;border:2px solid #e5e7eb;border-radius:12px;cursor:pointer;transition:all .2s;font-weight:700;font-size:.875rem;background:#fff;width:100%;text-align:left;font-family:'Nunito',sans-serif;}
+.opcao:hover:not(:disabled){border-color:#165DFF;background:#eff4ff;}
+.opcao .letra{width:32px;height:32px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.78rem;flex-shrink:0;transition:all .2s;}
+.opcao.correta{border-color:#00B42A;background:#f0fdf4;color:#00B42A;}
+.opcao.correta .letra{background:#00B42A;color:#fff;}
+.opcao.errada{border-color:#F53F3F;background:#fff1f0;color:#F53F3F;}
+.opcao.errada .letra{background:#F53F3F;color:#fff;}
+.opcao.selecionada{border-color:#165DFF;background:#eff4ff;}
+.opcao.selecionada .letra{background:#165DFF;color:#fff;}
+
+.feedback{margin-top:1rem;padding:.875rem 1rem;border-radius:12px;font-size:.875rem;font-weight:700;display:none;}
+.feedback.show{display:block;}
+.feedback.ok{background:#f0fdf4;border:1.5px solid #bbf7d0;color:#00B42A;}
+.feedback.erro{background:#fff1f0;border:1.5px solid #fecaca;color:#F53F3F;}
+
+.modal-rodape{padding:.875rem 1.5rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.placar{font-size:.85rem;font-weight:800;color:#6b7280;}
+.btn-proximo{background:#165DFF;color:#fff;border:none;padding:.65rem 1.5rem;border-radius:10px;font-family:'Nunito',sans-serif;font-size:.875rem;font-weight:900;cursor:pointer;display:none;transition:opacity .2s;}
+.btn-proximo:hover{opacity:.88;}
+
+/* ── Modal resultado ── */
+.modal-resultado .modal-box{text-align:center;padding:2.5rem 2rem;}
+.modal-resultado .emoji{font-size:4rem;display:block;margin-bottom:1rem;}
+.modal-resultado h3{font-size:1.5rem;font-weight:900;margin-bottom:.5rem;}
+.modal-resultado p{color:#6b7280;margin-bottom:1.75rem;}
+.resultado-acoes{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;}
+.btn-tentar{background:#165DFF;color:#fff;border:none;padding:.7rem 1.5rem;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:900;cursor:pointer;}
+.btn-tentar:hover{opacity:.88;}
+.btn-fechar-res{background:#f3f4f6;color:#374151;border:none;padding:.7rem 1.5rem;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:900;cursor:pointer;}
+.btn-fechar-res:hover{background:#e5e7eb;}
+
+/* ── Responsivo ── */
+@media(max-width:768px){
+  aside{transform:translateX(-100%);}
+  aside.aberto{transform:translateX(0);}
+  .btn-menu{display:block;}
+  main{margin-left:0;padding:1.25rem 1rem;}
+  .grade-materias{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:420px){
+  .grade-materias{grid-template-columns:1fr;}
+}
 </style>
 </head>
-<body class="min-h-screen font-sans text-escuro flex">
+<body>
 
-<header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20 shadow-lg">
-  <div class="flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <button class="md:hidden text-white text-xl p-1" onclick="toggleMenu()"><i class="fa fa-bars"></i></button>
-      <i class="fa fa-graduation-cap text-2xl"></i>
-      <h1 class="text-lg md:text-xl font-bold">Plataforma de Estudos</h1>
-    </div>
-    <div class="flex items-center gap-3">
-      <span id="nomeUsuario" class="font-semibold text-sm hidden sm:inline"></span>
-      <button onclick="sairDaConta()" class="bg-white text-primario px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-50 transition-colors">Sair</button>
-    </div>
+<!-- HEADER -->
+<header>
+  <div class="header-esq">
+    <button class="btn-menu" onclick="toggleMenu()"><i class="fa fa-bars"></i></button>
+    <i class="fa fa-graduation-cap" style="font-size:1.4rem"></i>
+    <h1>Plataforma de Estudos</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem">
+    <span id="nomeUsuario"></span>
+    <button class="btn-sair" onclick="sairDaConta()">Sair</button>
   </div>
 </header>
 
-<aside id="menuLateral" class="menu-lateral fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-100 pt-6 z-30 overflow-y-auto -translate-x-full md:translate-x-0 shadow-xl md:shadow-none">
-  <nav class="px-4"><ul class="space-y-1">
-    <li><a href="inicio.html"     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-home w-5 text-center"></i> Início</a></li>
-    <li><a href="materias.html"   class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-book w-5 text-center"></i> Matérias</a></li>
-    <li><a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primario/10 text-primario font-bold text-sm"><i class="fa fa-tasks w-5 text-center"></i> Atividades</a></li>
-    <li><a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-bar-chart w-5 text-center"></i> Meu Desempenho</a></li>
-    <li><a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-credit-card w-5 text-center"></i> Assinatura</a></li>
-    <li><a href="perfil.html"     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-user w-5 text-center"></i> Perfil</a></li>
-    <li><a href="pais.html"       class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-users w-5 text-center"></i> Pais / Responsáveis</a></li>
-  </ul></nav>
+<!-- MENU LATERAL -->
+<aside id="menuLateral">
+  <nav>
+    <ul>
+      <li><a href="inicio.html"><i class="fa fa-home"></i> Início</a></li>
+      <li><a href="materias.html"><i class="fa fa-book"></i> Matérias</a></li>
+      <li><a href="atividades.html" class="ativo"><i class="fa fa-tasks"></i> Atividades</a></li>
+      <li><a href="desempenho.html"><i class="fa fa-bar-chart"></i> Meu Desempenho</a></li>
+      <li><a href="assinatura.html"><i class="fa fa-credit-card"></i> Assinatura</a></li>
+      <li><a href="perfil.html"><i class="fa fa-user"></i> Perfil</a></li>
+      <li><a href="pais.html"><i class="fa fa-users"></i> Pais / Responsáveis</a></li>
+      <li><a href="configuracoes.html"><i class="fa fa-cog"></i> Configurações</a></li>
+    </ul>
+  </nav>
 </aside>
-<div id="fundoMenu" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden" onclick="toggleMenu()"></div>
+<div class="fundo-menu" id="fundoMenu" onclick="toggleMenu()"></div>
 
-<main class="w-full md:ml-64 mt-16 pb-16 px-3 sm:px-6 pt-8">
-  <div class="mb-6 anim"><h2 class="text-2xl sm:text-3xl font-black mb-1">Atividades de Estudo</h2><p class="text-gray-500 text-sm">Resolva exercícios, teste seus conhecimentos e acompanhe seu progresso.</p></div>
+<!-- CONTEÚDO -->
+<main>
 
-  <div class="bg-white rounded-2xl p-4 sm:p-6 conteudo-sombra mb-8 anim">
-    <h3 class="font-bold text-base mb-4 flex items-center gap-2"><i class="fa fa-filter text-primario"></i> Filtrar Atividades</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div><label class="block text-gray-700 font-bold mb-1.5 text-xs uppercase tracking-wide">Matéria</label>
-        <select id="filtroMateria" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primario bg-gray-50">
-          <option value="">Todas as matérias</option><option value="matematica">Matemática</option><option value="portugues">Língua Portuguesa</option><option value="ciencias">Ciências</option><option value="historia">História</option><option value="geografia">Geografia</option><option value="ingles">Inglês</option>
-        </select></div>
-      <div><label class="block text-gray-700 font-bold mb-1.5 text-xs uppercase tracking-wide">Série / Ano</label>
-        <select id="filtroSerie" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primario bg-gray-50">
-          <option value="">Todas as séries</option><option value="5ano">5º Ano</option><option value="6ano">6º Ano</option><option value="7ano">7º Ano</option><option value="8ano">8º Ano</option><option value="9ano">9º Ano</option>
-        </select></div>
-      <div><label class="block text-gray-700 font-bold mb-1.5 text-xs uppercase tracking-wide">Dificuldade</label>
-        <select id="filtroDificuldade" class="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-primario bg-gray-50">
-          <option value="">Todas</option><option value="facil">Fácil</option><option value="medio">Médio</option><option value="dificil">Difícil</option>
-        </select></div>
-      <div class="flex items-end"><button onclick="filtrarAtividades()" class="w-full bg-primario text-white py-2.5 px-4 rounded-xl font-bold botao-efeito text-sm"><i class="fa fa-search mr-1"></i> Filtrar</button></div>
+  <!-- ===== TELA 1: GRADE DE MATÉRIAS ===== -->
+  <div id="telaMateria">
+    <div class="titulo-pagina">Atividades de Estudo</div>
+    <div class="subtitulo-pagina">Escolha uma matéria para ver as atividades disponíveis</div>
+
+    <div class="grade-materias">
+      <div class="card-materia" style="background:linear-gradient(135deg,#3B82F6,#1D4ED8)" onclick="abrirMateria('matematica')">
+        <div>
+          <div class="icone-materia">📐</div>
+          <h3>Matemática</h3>
+          <div class="qtd" id="qtd-matematica"></div>
+        </div>
+        <i class="fa fa-arrow-right seta"></i>
+      </div>
+      <div class="card-materia" style="background:linear-gradient(135deg,#EF4444,#B91C1C)" onclick="abrirMateria('portugues')">
+        <div>
+          <div class="icone-materia">📖</div>
+          <h3>Língua Portuguesa</h3>
+          <div class="qtd" id="qtd-portugues"></div>
+        </div>
+        <i class="fa fa-arrow-right seta"></i>
+      </div>
+      <div class="card-materia" style="background:linear-gradient(135deg,#22C55E,#15803D)" onclick="abrirMateria('ciencias')">
+        <div>
+          <div class="icone-materia">🔬</div>
+          <h3>Ciências</h3>
+          <div class="qtd" id="qtd-ciencias"></div>
+        </div>
+        <i class="fa fa-arrow-right seta"></i>
+      </div>
+      <div class="card-materia" style="background:linear-gradient(135deg,#F59E0B,#B45309)" onclick="abrirMateria('historia')">
+        <div>
+          <div class="icone-materia">🏛️</div>
+          <h3>História</h3>
+          <div class="qtd" id="qtd-historia"></div>
+        </div>
+        <i class="fa fa-arrow-right seta"></i>
+      </div>
+      <div class="card-materia" style="background:linear-gradient(135deg,#10B981,#065F46)" onclick="abrirMateria('geografia')">
+        <div>
+          <div class="icone-materia">🌍</div>
+          <h3>Geografia</h3>
+          <div class="qtd" id="qtd-geografia"></div>
+        </div>
+        <i class="fa fa-arrow-right seta"></i>
+      </div>
+      <div class="card-materia" style="background:linear-gradient(135deg,#8B5CF6,#6D28D9)" onclick="abrirMateria('ingles')">
+        <div>
+          <div class="icone-materia">🇺🇸</div>
+          <h3>Inglês</h3>
+          <div class="qtd" id="qtd-ingles"></div>
+        </div>
+        <i class="fa fa-arrow-right seta"></i>
+      </div>
     </div>
   </div>
 
-  <p id="contadorResultados" class="text-sm text-gray-500 font-semibold mb-4"></p>
-  <div id="listaAtividades" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5"></div>
-  <div id="semResultados" class="hidden text-center py-16"><i class="fa fa-search text-5xl text-gray-300 mb-4 block"></i><p class="text-gray-500 font-bold text-lg">Nenhuma atividade encontrada</p><p class="text-gray-400 text-sm mt-1">Tente outros filtros</p></div>
+  <!-- ===== TELA 2: LISTA DE ATIVIDADES DA MATÉRIA ===== -->
+  <div id="telaLista">
+    <button class="btn-voltar-materia" onclick="voltarMaterias()">
+      <i class="fa fa-arrow-left"></i> Voltar para matérias
+    </button>
+
+    <div class="cabecalho-lista">
+      <div class="icone-lista" id="iconeLista"></div>
+      <div>
+        <h2 id="nomeLista"></h2>
+        <p id="subLista"></p>
+      </div>
+    </div>
+
+    <div class="grade-atividades" id="gradeAtividades"></div>
+    <div class="sem-atividades" id="semAtividades" style="display:none">
+      <i class="fa fa-inbox"></i>
+      <p style="font-weight:800;font-size:1.1rem">Nenhuma atividade disponível</p>
+      <p style="font-size:.85rem;margin-top:.25rem">Em breve teremos novidades para esta matéria!</p>
+    </div>
+  </div>
+
 </main>
 
-<!-- Modal Atividade -->
-<div id="modalAtividade" class="fixed inset-0 bg-black/60 z-50 hidden flex items-start justify-center p-3 sm:p-6 overflow-y-auto">
-  <div class="bg-white rounded-2xl w-full max-w-2xl my-4 overflow-hidden shadow-2xl">
-    <div id="modalHeader" class="p-5 text-white">
-      <div class="flex items-start justify-between">
-        <div><p id="modalMateria" class="text-xs font-bold uppercase tracking-widest opacity-80 mb-1"></p><h3 id="modalTitulo" class="text-xl font-black leading-tight"></h3><p id="modalInfo" class="text-sm opacity-80 mt-1"></p></div>
-        <button onclick="fecharModal()" class="text-white/70 hover:text-white text-2xl ml-4 flex-shrink-0 leading-none">&times;</button>
+<!-- ===== MODAL DA ATIVIDADE ===== -->
+<div class="modal-fundo" id="modalAtividade">
+  <div class="modal-box">
+    <div class="modal-header" id="modalHeader">
+      <div class="modal-header-top">
+        <div>
+          <div class="modal-materia-label" id="modalMateriaLabel"></div>
+          <div class="modal-titulo" id="modalTitulo"></div>
+          <div class="modal-info" id="modalInfo"></div>
+        </div>
+        <button class="btn-fechar-modal" onclick="fecharModal()"><i class="fa fa-times"></i></button>
       </div>
-      <div class="mt-4 bg-white/20 rounded-full h-2"><div id="barraProgresso" class="bg-white rounded-full h-2 transition-all duration-500" style="width:0%"></div></div>
-      <p id="progressoTexto" class="text-xs opacity-70 mt-1 text-right"></p>
+      <div class="progresso-wrap">
+        <div class="progresso-barra" id="progressoBarra" style="width:0%"></div>
+      </div>
+      <div class="progresso-txt" id="progressoTxt"></div>
     </div>
-    <div id="corpoModal" class="p-5 sm:p-6">
-      <p id="enunciadoQuestao" class="text-base font-bold text-escuro mb-5 leading-relaxed"></p>
-      <div id="opcoesQuestao" class="space-y-3"></div>
-      <div id="feedbackQuestao" class="hidden mt-4 p-4 rounded-xl text-sm font-semibold"></div>
+
+    <div class="modal-corpo">
+      <div class="enunciado" id="enunciado"></div>
+      <div class="opcoes" id="opcoes"></div>
+      <div class="feedback" id="feedback"></div>
     </div>
-    <div class="px-5 pb-5 sm:px-6 sm:pb-6 flex justify-between items-center gap-3">
-      <div id="placarModal" class="text-sm font-bold text-gray-500"></div>
-      <button id="btnProximo" onclick="proximaQuestao()" class="bg-primario text-white px-6 py-2.5 rounded-xl font-bold botao-efeito text-sm hidden">Próxima <i class="fa fa-arrow-right ml-1"></i></button>
+
+    <div class="modal-rodape">
+      <div class="placar" id="placar"></div>
+      <button class="btn-proximo" id="btnProximo" onclick="proximaQuestao()">Próxima <i class="fa fa-arrow-right"></i></button>
     </div>
   </div>
 </div>
 
-<!-- Modal Resultado -->
-<div id="modalResultado" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl w-full max-w-md p-8 text-center shadow-2xl">
-    <div id="iconResultado" class="text-6xl mb-4"></div>
-    <h3 id="tituloResultado" class="text-2xl font-black mb-2"></h3>
-    <p id="subtituloResultado" class="text-gray-500 mb-6"></p>
-    <div class="flex gap-3 justify-center flex-wrap">
-      <button onclick="reiniciarAtividade()" class="bg-primario text-white px-6 py-2.5 rounded-xl font-bold botao-efeito text-sm"><i class="fa fa-refresh mr-1"></i> Tentar Novamente</button>
-      <button onclick="fecharTudo()" class="bg-gray-100 text-gray-700 px-6 py-2.5 rounded-xl font-bold hover:bg-gray-200 transition-colors text-sm">Fechar</button>
+<!-- ===== MODAL RESULTADO ===== -->
+<div class="modal-fundo modal-resultado" id="modalResultado">
+  <div class="modal-box">
+    <span class="emoji" id="emojiRes"></span>
+    <h3 id="tituloRes"></h3>
+    <p id="subRes"></p>
+    <div class="resultado-acoes">
+      <button class="btn-tentar" onclick="reiniciarAtividade()"><i class="fa fa-refresh"></i> Tentar Novamente</button>
+      <button class="btn-fechar-res" onclick="fecharTudo()">Fechar</button>
     </div>
   </div>
 </div>
 
 <script>
+// ── Matérias ──────────────────────────────────────────
+const materias = {
+  matematica: { label:'Matemática', icone:'📐', cor:'#3B82F6' },
+  portugues:  { label:'Língua Portuguesa', icone:'📖', cor:'#EF4444' },
+  ciencias:   { label:'Ciências', icone:'🔬', cor:'#22C55E' },
+  historia:   { label:'História', icone:'🏛️', cor:'#F59E0B' },
+  geografia:  { label:'Geografia', icone:'#10B981', icone:'🌍', cor:'#10B981' },
+  ingles:     { label:'Inglês', icone:'🇺🇸', cor:'#8B5CF6' },
+};
+
+// ── Atividades ────────────────────────────────────────
 const atividades = [
-  {id:1,titulo:'Operações Básicas',materia:'matematica',materiaLabel:'Matemática',serie:'5ano',dificuldade:'facil',cor:'#3B82F6',descricao:'Exercícios de adição, subtração, multiplicação e divisão.',questoes:[{enunciado:'Quanto é 48 + 37?',opcoes:['75','85','95','65'],correta:1},{enunciado:'Quanto é 120 - 45?',opcoes:['65','75','85','95'],correta:1},{enunciado:'Quanto é 7 × 8?',opcoes:['54','56','58','48'],correta:1},{enunciado:'Quanto é 144 ÷ 12?',opcoes:['10','11','12','13'],correta:2},{enunciado:'Qual é o dobro de 35?',opcoes:['60','65','70','75'],correta:2}]},
-  {id:2,titulo:'Interpretação de Texto',materia:'portugues',materiaLabel:'Português',serie:'6ano',dificuldade:'medio',cor:'#EF4444',descricao:'Leia os textos e responda perguntas sobre conteúdo e interpretação.',questoes:[{enunciado:'O que é um substantivo?',opcoes:['Palavra que indica ação','Palavra que dá nome aos seres','Palavra que modifica o verbo','Palavra que une orações'],correta:1},{enunciado:'Qual é o plural de "cidadão"?',opcoes:['cidadãos','cidadões','cidadõis','cidadãis'],correta:0},{enunciado:'Qual classe gramatical pertence a palavra "rapidamente"?',opcoes:['Adjetivo','Substantivo','Advérbio','Pronome'],correta:2},{enunciado:'Em "O gato subiu no telhado", qual é o sujeito?',opcoes:['subiu','no telhado','O gato','telhado'],correta:2},{enunciado:'Qual é o sinônimo de "feliz"?',opcoes:['Triste','Contente','Irritado','Cansado'],correta:1}]},
-  {id:3,titulo:'Corpo Humano',materia:'ciencias',materiaLabel:'Ciências',serie:'7ano',dificuldade:'medio',cor:'#22C55E',descricao:'Estude os sistemas do corpo humano e suas funções principais.',questoes:[{enunciado:'Qual órgão é responsável pelo bombeamento do sangue?',opcoes:['Pulmão','Rim','Coração','Fígado'],correta:2},{enunciado:'Qual sistema é responsável pela troca de gases no corpo?',opcoes:['Digestório','Respiratório','Circulatório','Nervoso'],correta:1},{enunciado:'Onde ocorre a digestão dos alimentos?',opcoes:['Coração','Pulmão','Cérebro','Sistema digestório'],correta:3},{enunciado:'Qual é a função dos rins?',opcoes:['Produzir sangue','Filtrar o sangue e produzir urina','Realizar trocas gasosas','Controlar o corpo'],correta:1},{enunciado:'Quantos ossos tem o corpo humano adulto aproximadamente?',opcoes:['106','206','306','406'],correta:1}]},
-  {id:4,titulo:'Períodos Históricos',materia:'historia',materiaLabel:'História',serie:'8ano',dificuldade:'dificil',cor:'#F59E0B',descricao:'Conheça as principais fases da história e seus acontecimentos.',questoes:[{enunciado:'Em que ano o Brasil foi descoberto pelos portugueses?',opcoes:['1498','1500','1502','1492'],correta:1},{enunciado:'Quem proclamou a Independência do Brasil?',opcoes:['Dom João VI','Tiradentes','Dom Pedro I','Getúlio Vargas'],correta:2},{enunciado:'Em que ano ocorreu a Proclamação da República no Brasil?',opcoes:['1888','1889','1890','1891'],correta:1},{enunciado:'Qual movimento buscava a independência do Brasil no século XVIII?',opcoes:['Revolução Farroupilha','Conjuração Baiana','Inconfidência Mineira','Cabanagem'],correta:2},{enunciado:'Qual foi o primeiro presidente do Brasil?',opcoes:['Floriano Peixoto','Getúlio Vargas','Deodoro da Fonseca','Campos Sales'],correta:2}]},
-  {id:5,titulo:'Regiões do Brasil',materia:'geografia',materiaLabel:'Geografia',serie:'6ano',dificuldade:'facil',cor:'#10B981',descricao:'Características, climas, vegetação e economia das regiões brasileiras.',questoes:[{enunciado:'Quantas regiões tem o Brasil?',opcoes:['3','4','5','6'],correta:2},{enunciado:'Qual é a maior região do Brasil em extensão territorial?',opcoes:['Sudeste','Sul','Nordeste','Norte'],correta:3},{enunciado:'Qual é a capital do Brasil?',opcoes:['São Paulo','Rio de Janeiro','Brasília','Salvador'],correta:2},{enunciado:'Qual região é conhecida como o "celeiro do Brasil"?',opcoes:['Norte','Nordeste','Centro-Oeste','Sul'],correta:3},{enunciado:'O bioma Cerrado está presente principalmente em qual região?',opcoes:['Norte','Sul','Centro-Oeste','Sudeste'],correta:2}]},
-  {id:6,titulo:'Vocabulário em Inglês',materia:'ingles',materiaLabel:'Inglês',serie:'5ano',dificuldade:'facil',cor:'#8B5CF6',descricao:'Aprenda palavras e expressões básicas em inglês.',questoes:[{enunciado:'Como se diz "cachorro" em inglês?',opcoes:['Cat','Bird','Dog','Fish'],correta:2},{enunciado:'O que significa "Hello"?',opcoes:['Tchau','Obrigado','Olá','Por favor'],correta:2},{enunciado:'Como se diz "escola" em inglês?',opcoes:['House','School','Book','Table'],correta:1},{enunciado:'O que significa "I am happy"?',opcoes:['Estou com fome','Estou feliz','Estou cansado','Estou com frio'],correta:1},{enunciado:'Como se diz "vermelho" em inglês?',opcoes:['Blue','Green','Yellow','Red'],correta:3}]},
-  {id:7,titulo:'Frações e Decimais',materia:'matematica',materiaLabel:'Matemática',serie:'6ano',dificuldade:'medio',cor:'#3B82F6',descricao:'Operações com frações, números decimais e porcentagem.',questoes:[{enunciado:'Quanto é 1/2 + 1/4?',opcoes:['2/6','3/4','1/3','2/4'],correta:1},{enunciado:'Quanto é 0,5 + 0,25?',opcoes:['0,70','0,75','0,80','0,85'],correta:1},{enunciado:'Qual é a fração equivalente a 0,25?',opcoes:['1/5','1/3','1/4','1/2'],correta:2},{enunciado:'50% de 200 é igual a?',opcoes:['50','75','100','150'],correta:2},{enunciado:'Quanto é 3/4 de 80?',opcoes:['40','50','60','70'],correta:2}]},
-  {id:8,titulo:'Ortografia e Gramática',materia:'portugues',materiaLabel:'Português',serie:'5ano',dificuldade:'facil',cor:'#EF4444',descricao:'Regras de escrita, acentuação e uso correto da língua portuguesa.',questoes:[{enunciado:'Qual a grafia correta?',opcoes:['Excessão','Exeção','Exceção','Execeção'],correta:2},{enunciado:'Qual palavra está acentuada corretamente?',opcoes:['Voce','Você','Vocé','Vôce'],correta:1},{enunciado:'Qual é o plural de "cidadão"?',opcoes:['Cidadões','Cidadãos','Cidadõis','Cidadeis'],correta:1},{enunciado:'Qual alternativa usa a vírgula corretamente?',opcoes:['João, foi ao mercado','Maria comprou pão, leite e ovos','Ele correu, rápido','A casa, é bonita'],correta:1},{enunciado:'Qual é o antônimo de "generoso"?',opcoes:['Bondoso','Gentil','Mesquinho','Amável'],correta:2}]},
-  {id:9,titulo:'Sistema Solar',materia:'ciencias',materiaLabel:'Ciências',serie:'6ano',dificuldade:'facil',cor:'#22C55E',descricao:'Planetas, estrelas e os principais elementos do sistema solar.',questoes:[{enunciado:'Quantos planetas tem o Sistema Solar?',opcoes:['7','8','9','10'],correta:1},{enunciado:'Qual é o maior planeta do Sistema Solar?',opcoes:['Saturno','Netuno','Júpiter','Urano'],correta:2},{enunciado:'Qual planeta é conhecido como o "planeta vermelho"?',opcoes:['Vênus','Mercúrio','Marte','Júpiter'],correta:2},{enunciado:'O que é o Sol?',opcoes:['Um planeta','Uma lua','Uma estrela','Um asteroide'],correta:2},{enunciado:'Qual planeta fica mais próximo do Sol?',opcoes:['Vênus','Terra','Mercúrio','Marte'],correta:2}]},
+  { id:1, titulo:'Operações Básicas', materia:'matematica', serie:'5ano', dificuldade:'facil',
+    descricao:'Exercícios de adição, subtração, multiplicação e divisão.',
+    questoes:[
+      {e:'Quanto é 48 + 37?', o:['75','85','95','65'], c:1},
+      {e:'Quanto é 120 - 45?', o:['65','75','85','95'], c:1},
+      {e:'Quanto é 7 × 8?', o:['54','56','58','48'], c:1},
+      {e:'Quanto é 144 ÷ 12?', o:['10','11','12','13'], c:2},
+      {e:'Qual é o dobro de 35?', o:['60','65','70','75'], c:2},
+    ]},
+  { id:2, titulo:'Frações e Decimais', materia:'matematica', serie:'6ano', dificuldade:'medio',
+    descricao:'Operações com frações, números decimais e porcentagem.',
+    questoes:[
+      {e:'Quanto é 1/2 + 1/4?', o:['2/6','3/4','1/3','2/4'], c:1},
+      {e:'Quanto é 0,5 + 0,25?', o:['0,70','0,75','0,80','0,85'], c:1},
+      {e:'Qual é a fração equivalente a 0,25?', o:['1/5','1/3','1/4','1/2'], c:2},
+      {e:'50% de 200 é igual a?', o:['50','75','100','150'], c:2},
+      {e:'Quanto é 3/4 de 80?', o:['40','50','60','70'], c:2},
+    ]},
+  { id:3, titulo:'Interpretação de Texto', materia:'portugues', serie:'6ano', dificuldade:'medio',
+    descricao:'Leia e responda perguntas sobre conteúdo e interpretação.',
+    questoes:[
+      {e:'O que é um substantivo?', o:['Palavra que indica ação','Palavra que dá nome aos seres','Palavra que modifica o verbo','Palavra que une orações'], c:1},
+      {e:'Qual é o plural de "cidadão"?', o:['cidadãos','cidadões','cidadõis','cidadeis'], c:0},
+      {e:'Qual classe gramatical é "rapidamente"?', o:['Adjetivo','Substantivo','Advérbio','Pronome'], c:2},
+      {e:'Em "O gato subiu no telhado", qual é o sujeito?', o:['subiu','no telhado','O gato','telhado'], c:2},
+      {e:'Qual é o sinônimo de "feliz"?', o:['Triste','Contente','Irritado','Cansado'], c:1},
+    ]},
+  { id:4, titulo:'Ortografia e Gramática', materia:'portugues', serie:'5ano', dificuldade:'facil',
+    descricao:'Regras de escrita, acentuação e uso correto da língua portuguesa.',
+    questoes:[
+      {e:'Qual a grafia correta?', o:['Excessão','Exeção','Exceção','Execeção'], c:2},
+      {e:'Qual palavra está acentuada corretamente?', o:['Voce','Você','Vocé','Vôce'], c:1},
+      {e:'Qual é o plural de "cidadão"?', o:['Cidadões','Cidadãos','Cidadõis','Cidadeis'], c:1},
+      {e:'Qual é o antônimo de "generoso"?', o:['Bondoso','Gentil','Mesquinho','Amável'], c:2},
+      {e:'Qual é o feminino de "ator"?', o:['Atora','Atriz','Actriz','Atura'], c:1},
+    ]},
+  { id:5, titulo:'Corpo Humano', materia:'ciencias', serie:'7ano', dificuldade:'medio',
+    descricao:'Estude os sistemas do corpo humano e suas funções principais.',
+    questoes:[
+      {e:'Qual órgão bombeia o sangue?', o:['Pulmão','Rim','Coração','Fígado'], c:2},
+      {e:'Qual sistema realiza a troca de gases?', o:['Digestório','Respiratório','Circulatório','Nervoso'], c:1},
+      {e:'Onde ocorre a digestão dos alimentos?', o:['Coração','Pulmão','Cérebro','Sistema digestório'], c:3},
+      {e:'Qual é a função dos rins?', o:['Produzir sangue','Filtrar sangue e produzir urina','Trocas gasosas','Controlar o corpo'], c:1},
+      {e:'Quantos ossos tem o adulto humano?', o:['106','206','306','406'], c:1},
+    ]},
+  { id:6, titulo:'Sistema Solar', materia:'ciencias', serie:'6ano', dificuldade:'facil',
+    descricao:'Planetas, estrelas e os principais elementos do sistema solar.',
+    questoes:[
+      {e:'Quantos planetas tem o Sistema Solar?', o:['7','8','9','10'], c:1},
+      {e:'Qual é o maior planeta?', o:['Saturno','Netuno','Júpiter','Urano'], c:2},
+      {e:'Qual planeta é o "planeta vermelho"?', o:['Vênus','Mercúrio','Marte','Júpiter'], c:2},
+      {e:'O que é o Sol?', o:['Um planeta','Uma lua','Uma estrela','Um asteroide'], c:2},
+      {e:'Qual planeta fica mais próximo do Sol?', o:['Vênus','Terra','Mercúrio','Marte'], c:2},
+    ]},
+  { id:7, titulo:'Períodos Históricos', materia:'historia', serie:'8ano', dificuldade:'dificil',
+    descricao:'Principais fases da história do Brasil e seus acontecimentos.',
+    questoes:[
+      {e:'Em que ano o Brasil foi descoberto?', o:['1498','1500','1502','1492'], c:1},
+      {e:'Quem proclamou a Independência do Brasil?', o:['Dom João VI','Tiradentes','Dom Pedro I','Getúlio Vargas'], c:2},
+      {e:'Em que ano foi a Proclamação da República?', o:['1888','1889','1890','1891'], c:1},
+      {e:'Qual movimento buscava a independência no século XVIII?', o:['Revolução Farroupilha','Conjuração Baiana','Inconfidência Mineira','Cabanagem'], c:2},
+      {e:'Qual foi o primeiro presidente do Brasil?', o:['Floriano Peixoto','Getúlio Vargas','Deodoro da Fonseca','Campos Sales'], c:2},
+    ]},
+  { id:8, titulo:'Regiões do Brasil', materia:'geografia', serie:'6ano', dificuldade:'facil',
+    descricao:'Características, climas, vegetação e economia das regiões brasileiras.',
+    questoes:[
+      {e:'Quantas regiões tem o Brasil?', o:['3','4','5','6'], c:2},
+      {e:'Qual é a maior região em extensão?', o:['Sudeste','Sul','Nordeste','Norte'], c:3},
+      {e:'Qual é a capital do Brasil?', o:['São Paulo','Rio de Janeiro','Brasília','Salvador'], c:2},
+      {e:'Qual região é conhecida como o "celeiro do Brasil"?', o:['Norte','Nordeste','Centro-Oeste','Sul'], c:3},
+      {e:'O bioma Cerrado está presente principalmente em qual região?', o:['Norte','Sul','Centro-Oeste','Sudeste'], c:2},
+    ]},
+  { id:9, titulo:'Vocabulário em Inglês', materia:'ingles', serie:'5ano', dificuldade:'facil',
+    descricao:'Aprenda palavras e expressões básicas em inglês.',
+    questoes:[
+      {e:'Como se diz "cachorro" em inglês?', o:['Cat','Bird','Dog','Fish'], c:2},
+      {e:'O que significa "Hello"?', o:['Tchau','Obrigado','Olá','Por favor'], c:2},
+      {e:'Como se diz "escola" em inglês?', o:['House','School','Book','Table'], c:1},
+      {e:'O que significa "I am happy"?', o:['Estou com fome','Estou feliz','Estou cansado','Estou com frio'], c:1},
+      {e:'Como se diz "vermelho" em inglês?', o:['Blue','Green','Yellow','Red'], c:3},
+    ]},
 ];
 
-let atividadeAtual=null,questaoAtual=0,acertos=0,respondida=false;
-const coresDificuldade={facil:'text-sucesso bg-green-50',medio:'text-aviso bg-orange-50',dificil:'text-erro bg-red-50'};
-const labelDificuldade={facil:'Fácil',medio:'Médio',dificil:'Difícil'};
-const labelSerie={'5ano':'5º Ano','6ano':'6º Ano','7ano':'7º Ano','8ano':'8º Ano','9ano':'9º Ano'};
+// ── Estado ────────────────────────────────────────────
+let atividadeAtual = null;
+let questaoAtual   = 0;
+let acertos        = 0;
+let respondida     = false;
+let materiaAtual   = null;
 
-function renderizarCards(lista){
-  const c=document.getElementById('listaAtividades'),s=document.getElementById('semResultados'),cnt=document.getElementById('contadorResultados');
-  c.innerHTML='';cnt.textContent=`${lista.length} atividade${lista.length!==1?'s':''} encontrada${lista.length!==1?'s':''}`;
-  if(lista.length===0){s.classList.remove('hidden');return;}s.classList.add('hidden');
-  lista.forEach((a,i)=>{const card=document.createElement('div');card.className='bg-white rounded-2xl overflow-hidden conteudo-sombra botao-efeito anim';card.style.animationDelay=`${i*0.06}s`;card.innerHTML=`<div class="h-2" style="background:${a.cor}"></div><div class="p-5"><div class="flex justify-between items-start mb-3 gap-2"><h3 class="text-base font-black leading-tight">${a.titulo}</h3><span class="px-2.5 py-1 rounded-full text-xs font-bold flex-shrink-0" style="background:${a.cor}22;color:${a.cor}">${a.materiaLabel}</span></div><p class="text-gray-500 text-sm mb-4 leading-relaxed">${a.descricao}</p><div class="flex flex-wrap gap-3 mb-5 text-xs text-gray-500 font-semibold"><span><i class="fa fa-graduation-cap mr-1"></i>${labelSerie[a.serie]||a.serie}</span><span class="px-2 py-0.5 rounded-full text-xs font-bold ${coresDificuldade[a.dificuldade]}">${labelDificuldade[a.dificuldade]}</span><span><i class="fa fa-list mr-1"></i>${a.questoes.length} questões</span></div><button onclick="abrirAtividade(${a.id})" class="w-full py-2.5 px-4 rounded-xl font-bold text-sm text-white botao-efeito" style="background:${a.cor}"><i class="fa fa-play mr-1"></i> Começar Atividade</button></div>`;c.appendChild(card);});
+const labelSerie = {'5ano':'5º Ano','6ano':'6º Ano','7ano':'7º Ano','8ano':'8º Ano','9ano':'9º Ano','1medio':'1º Médio','2medio':'2º Médio','3medio':'3º Médio'};
+const labelDif   = {facil:'Fácil', medio:'Médio', dificil:'Difícil'};
+const letras     = ['A','B','C','D','E'];
+
+// ── Init ──────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const u = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
+  if (!u.nome) { window.location.href = 'login.html'; return; }
+  document.getElementById('nomeUsuario').textContent = u.nome;
+
+  // Preencher quantidades
+  Object.keys(materias).forEach(key => {
+    const qtd = atividades.filter(a => a.materia === key).length;
+    const el = document.getElementById('qtd-' + key);
+    if (el) el.textContent = qtd + ' atividade' + (qtd !== 1 ? 's' : '');
+  });
+
+  // Verificar parâmetro ?materia= na URL
+  const param = new URLSearchParams(window.location.search).get('materia');
+  if (param && materias[param]) abrirMateria(param);
+});
+
+// ── Menu ──────────────────────────────────────────────
+function toggleMenu() {
+  document.getElementById('menuLateral').classList.toggle('aberto');
+  document.getElementById('fundoMenu').style.display =
+    document.getElementById('menuLateral').classList.contains('aberto') ? 'block' : 'none';
+}
+function sairDaConta() {
+  localStorage.removeItem('usuarioLogado');
+  window.location.href = 'login.html';
 }
 
-function filtrarAtividades(){
-  const mat=document.getElementById('filtroMateria').value,ser=document.getElementById('filtroSerie').value,dif=document.getElementById('filtroDificuldade').value;
-  renderizarCards(atividades.filter(a=>(!mat||a.materia===mat)&&(!ser||a.serie===ser)&&(!dif||a.dificuldade===dif)));
+// ── Tela matérias ─────────────────────────────────────
+function abrirMateria(key) {
+  materiaAtual = key;
+  const m = materias[key];
+  const lista = atividades.filter(a => a.materia === key);
+
+  document.getElementById('telaMateria').style.display = 'none';
+  document.getElementById('telaLista').style.display = 'block';
+
+  // Cabeçalho
+  const icone = document.getElementById('iconeLista');
+  icone.textContent = m.icone;
+  icone.style.background = m.cor;
+  document.getElementById('nomeLista').textContent = m.label;
+  document.getElementById('subLista').textContent = lista.length + ' atividade' + (lista.length !== 1 ? 's' : '') + ' disponível' + (lista.length !== 1 ? 'is' : '');
+
+  // Cards
+  const grade = document.getElementById('gradeAtividades');
+  grade.innerHTML = '';
+
+  if (lista.length === 0) {
+    document.getElementById('semAtividades').style.display = 'block';
+    return;
+  }
+  document.getElementById('semAtividades').style.display = 'none';
+
+  lista.forEach(a => {
+    const card = document.createElement('div');
+    card.className = 'card-atividade';
+    card.innerHTML = `
+      <div class="faixa" style="background:${m.cor}"></div>
+      <div class="corpo">
+        <h3>${a.titulo}</h3>
+        <p>${a.descricao}</p>
+        <div class="infos">
+          <span><i class="fa fa-graduation-cap"></i> ${labelSerie[a.serie] || a.serie}</span>
+          <span class="badge-dif badge-${a.dificuldade}">${labelDif[a.dificuldade]}</span>
+          <span><i class="fa fa-list"></i> ${a.questoes.length} questões</span>
+        </div>
+        <button class="btn-comecar" style="background:${m.cor}" onclick="abrirAtividade(${a.id})">
+          <i class="fa fa-play"></i> Começar Atividade
+        </button>
+      </div>`;
+    grade.appendChild(card);
+  });
 }
 
-function abrirAtividade(id){atividadeAtual=atividades.find(a=>a.id===id);questaoAtual=0;acertos=0;respondida=false;document.getElementById('modalAtividade').classList.remove('hidden');document.body.style.overflow='hidden';renderizarQuestao();}
-function fecharModal(){document.getElementById('modalAtividade').classList.add('hidden');document.body.style.overflow='';}
-function fecharTudo(){fecharModal();document.getElementById('modalResultado').classList.add('hidden');document.body.style.overflow='';}
-
-function renderizarQuestao(){
-  const q=atividadeAtual.questoes[questaoAtual],total=atividadeAtual.questoes.length,prog=(questaoAtual/total)*100;
-  document.getElementById('modalHeader').style.background=`linear-gradient(135deg,${atividadeAtual.cor},${atividadeAtual.cor}cc)`;
-  document.getElementById('modalMateria').textContent=atividadeAtual.materiaLabel;
-  document.getElementById('modalTitulo').textContent=atividadeAtual.titulo;
-  document.getElementById('modalInfo').textContent=`${labelDificuldade[atividadeAtual.dificuldade]} · ${labelSerie[atividadeAtual.serie]}`;
-  document.getElementById('barraProgresso').style.width=prog+'%';
-  document.getElementById('progressoTexto').textContent=`Questão ${questaoAtual+1} de ${total}`;
-  document.getElementById('enunciadoQuestao').textContent=q.enunciado;
-  const letras=['A','B','C','D'],el=document.getElementById('opcoesQuestao');el.innerHTML='';
-  q.opcoes.forEach((op,i)=>{const btn=document.createElement('button');btn.className='opcao-questao w-full text-left';btn.innerHTML=`<span class="letra-opcao">${letras[i]}</span>${op}`;btn.onclick=()=>responder(i,btn);el.appendChild(btn);});
-  document.getElementById('feedbackQuestao').classList.add('hidden');document.getElementById('btnProximo').classList.add('hidden');
-  document.getElementById('placarModal').textContent=`✅ ${acertos} acerto${acertos!==1?'s':''}`;respondida=false;
+function voltarMaterias() {
+  document.getElementById('telaLista').style.display = 'none';
+  document.getElementById('telaMateria').style.display = 'block';
 }
 
-function responder(indice,btnClicado){
-  if(respondida)return;respondida=true;
-  const q=atividadeAtual.questoes[questaoAtual],opcoes=document.querySelectorAll('.opcao-questao'),feedback=document.getElementById('feedbackQuestao');
-  opcoes.forEach(b=>b.style.pointerEvents='none');
-  if(indice===q.correta){acertos++;btnClicado.classList.add('correta');feedback.className='mt-4 p-4 rounded-xl text-sm font-semibold bg-green-50 text-sucesso border border-green-200';feedback.textContent='✅ Correto! Muito bem!';}
-  else{btnClicado.classList.add('errada');opcoes[q.correta].classList.add('correta');feedback.className='mt-4 p-4 rounded-xl text-sm font-semibold bg-red-50 text-erro border border-red-200';feedback.textContent=`❌ Incorreto. A resposta certa é: ${q.opcoes[q.correta]}`;}
-  feedback.classList.remove('hidden');document.getElementById('placarModal').textContent=`✅ ${acertos} acerto${acertos!==1?'s':''}`;
-  const btnProx=document.getElementById('btnProximo');btnProx.classList.remove('hidden');
-  btnProx.innerHTML=questaoAtual===atividadeAtual.questoes.length-1?'Ver Resultado <i class="fa fa-trophy ml-1"></i>':'Próxima <i class="fa fa-arrow-right ml-1"></i>';
+// ── Abrir atividade ───────────────────────────────────
+function abrirAtividade(id) {
+  atividadeAtual = atividades.find(a => a.id === id);
+  questaoAtual = 0; acertos = 0; respondida = false;
+  document.getElementById('modalAtividade').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  renderQuestao();
 }
 
-function proximaQuestao(){questaoAtual++;if(questaoAtual>=atividadeAtual.questoes.length)mostrarResultado();else renderizarQuestao();}
-
-function mostrarResultado(){
-  fecharModal();const total=atividadeAtual.questoes.length,pct=Math.round((acertos/total)*100);
-  let icone,titulo,sub;
-  if(pct>=80){icone='🏆';titulo=`Excelente! ${pct}%`;sub=`Você acertou ${acertos} de ${total} questões. Parabéns!`;}
-  else if(pct>=50){icone='👍';titulo=`Bom trabalho! ${pct}%`;sub=`Você acertou ${acertos} de ${total} questões. Continue praticando!`;}
-  else{icone='📚';titulo=`Pode melhorar! ${pct}%`;sub=`Você acertou ${acertos} de ${total} questões. Revise o conteúdo e tente novamente!`;}
-  document.getElementById('iconResultado').textContent=icone;document.getElementById('tituloResultado').textContent=titulo;document.getElementById('subtituloResultado').textContent=sub;
-  document.getElementById('modalResultado').classList.remove('hidden');document.body.style.overflow='hidden';
+function fecharModal() {
+  document.getElementById('modalAtividade').classList.remove('show');
+  document.body.style.overflow = '';
 }
 
-function reiniciarAtividade(){document.getElementById('modalResultado').classList.add('hidden');abrirAtividade(atividadeAtual.id);}
+function fecharTudo() {
+  fecharModal();
+  document.getElementById('modalResultado').classList.remove('show');
+  document.body.style.overflow = '';
+}
 
-window.onload = function() {
-  const u = verificarAcesso();
-  if (!u) return;
-  preencherNome();
-  const params = new URLSearchParams(window.location.search);
-  const materiaParam = params.get('materia');
-  if (materiaParam) document.getElementById('filtroMateria').value = materiaParam;
-  filtrarAtividades();
-};
+// ── Renderizar questão ────────────────────────────────
+function renderQuestao() {
+  const q   = atividadeAtual.questoes[questaoAtual];
+  const m   = materias[atividadeAtual.materia];
+  const tot = atividadeAtual.questoes.length;
+
+  document.getElementById('modalHeader').style.background = `linear-gradient(135deg,${m.cor},${m.cor}cc)`;
+  document.getElementById('modalMateriaLabel').textContent = m.label;
+  document.getElementById('modalTitulo').textContent       = atividadeAtual.titulo;
+  document.getElementById('modalInfo').textContent         = labelDif[atividadeAtual.dificuldade] + ' · ' + (labelSerie[atividadeAtual.serie] || atividadeAtual.serie);
+  document.getElementById('progressoBarra').style.width    = (questaoAtual / tot * 100) + '%';
+  document.getElementById('progressoTxt').textContent      = 'Questão ' + (questaoAtual+1) + ' de ' + tot;
+  document.getElementById('enunciado').textContent         = q.e;
+  document.getElementById('placar').textContent            = '✅ ' + acertos + ' acerto' + (acertos!==1?'s':'');
+
+  const opcoesEl = document.getElementById('opcoes');
+  opcoesEl.innerHTML = '';
+  q.o.forEach((op, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opcao';
+    btn.innerHTML = `<span class="letra">${letras[i]}</span>${op}`;
+    btn.onclick = () => responder(i, btn);
+    opcoesEl.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback'; fb.textContent = '';
+  document.getElementById('btnProximo').style.display = 'none';
+  respondida = false;
+}
+
+// ── Responder ─────────────────────────────────────────
+function responder(idx, btn) {
+  if (respondida) return;
+  respondida = true;
+  const q    = atividadeAtual.questoes[questaoAtual];
+  const bts  = document.querySelectorAll('.opcao');
+  const fb   = document.getElementById('feedback');
+  bts.forEach(b => b.disabled = true);
+
+  if (idx === q.c) {
+    acertos++;
+    btn.classList.add('correta');
+    fb.className = 'feedback show ok';
+    fb.textContent = '✅ Correto! Muito bem!';
+  } else {
+    btn.classList.add('errada');
+    bts[q.c].classList.add('correta');
+    fb.className = 'feedback show erro';
+    fb.textContent = '❌ Incorreto. A resposta certa é: ' + q.o[q.c];
+  }
+
+  document.getElementById('placar').textContent = '✅ ' + acertos + ' acerto' + (acertos!==1?'s':'');
+  const btnP = document.getElementById('btnProximo');
+  btnP.style.display = 'block';
+  const ultima = questaoAtual === atividadeAtual.questoes.length - 1;
+  btnP.innerHTML = ultima ? 'Ver Resultado <i class="fa fa-trophy"></i>' : 'Próxima <i class="fa fa-arrow-right"></i>';
+}
+
+// ── Próxima ───────────────────────────────────────────
+function proximaQuestao() {
+  questaoAtual++;
+  if (questaoAtual >= atividadeAtual.questoes.length) mostrarResultado();
+  else renderQuestao();
+}
+
+// ── Resultado ─────────────────────────────────────────
+function mostrarResultado() {
+  fecharModal();
+  const tot = atividadeAtual.questoes.length;
+  const pct = Math.round(acertos / tot * 100);
+  let emoji, titulo, sub;
+  if (pct >= 80) { emoji='🏆'; titulo=`Excelente! ${pct}%`; sub=`Você acertou ${acertos} de ${tot} questões. Parabéns!`; }
+  else if (pct >= 50) { emoji='👍'; titulo=`Bom trabalho! ${pct}%`; sub=`Você acertou ${acertos} de ${tot} questões. Continue praticando!`; }
+  else { emoji='📚'; titulo=`Pode melhorar! ${pct}%`; sub=`Você acertou ${acertos} de ${tot} questões. Revise o conteúdo e tente novamente!`; }
+  document.getElementById('emojiRes').textContent = emoji;
+  document.getElementById('tituloRes').textContent = titulo;
+  document.getElementById('subRes').textContent = sub;
+  document.getElementById('modalResultado').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function reiniciarAtividade() {
+  document.getElementById('modalResultado').classList.remove('show');
+  abrirAtividade(atividadeAtual.id);
+}
 </script>
 </body>
 </html>
