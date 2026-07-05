@@ -75,6 +75,7 @@ label.campo-label{display:block;font-size:0.72rem;font-weight:800;text-transform
 .input:focus{border-color:#165DFF;outline:none;background:#fff;box-shadow:0 0 0 3px rgba(22,93,255,0.1);}
 .input-travado{background:#f3f4f6 !important;color:#9ca3af !important;cursor:not-allowed !important;border-color:#e5e7eb !important;}
 .campo-aviso{font-size:0.72rem;color:#9ca3af;margin-top:4px;display:flex;align-items:center;gap:4px;}
+.campo-aviso-laranja{font-size:0.72rem;color:#d97706;margin-top:4px;display:flex;align-items:center;gap:4px;font-weight:700;background:#fff7ed;border:1px solid #fde68a;padding:.35rem .6rem;border-radius:8px;}
 .campo-grupo{margin-bottom:0.875rem;}
 
 .btn-salvar{background:#165DFF;color:#fff;border:none;padding:0.6rem 1.25rem;border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.875rem;font-weight:900;cursor:pointer;}
@@ -383,9 +384,34 @@ function toggleEdicao() {
   document.getElementById('modoEditar').style.display = 'block';
   document.getElementById('btnEditar').style.display = 'none';
   document.getElementById('eNome').value     = usuario.nome || '';
-  document.getElementById('eEmail').value    = usuario.email || '';   // só exibe, não pode alterar
+  document.getElementById('eEmail').value    = usuario.email || '';
   document.getElementById('eTelefone').value = usuario.telefone || '';
-  document.getElementById('eEscola').value   = usuario.escola || '';  // só exibe, não pode alterar
+  document.getElementById('eEscola').value   = usuario.escola || '';
+
+  // ── Verificar bloqueio de nome (1 semana) ──
+  const avisoNome = document.getElementById('avisoNome');
+  const campoNome = document.getElementById('eNome');
+  const ultimaTroca = usuario.ultimaTrocaNome ? new Date(usuario.ultimaTrocaNome) : null;
+  const agora = new Date();
+  const umaSemana = 7 * 24 * 60 * 60 * 1000;
+
+  if (ultimaTroca && (agora - ultimaTroca) < umaSemana) {
+    const diasRestantes = Math.ceil((umaSemana - (agora - ultimaTroca)) / (1000 * 60 * 60 * 24));
+    const horasRestantes = Math.ceil((umaSemana - (agora - ultimaTroca)) / (1000 * 60 * 60));
+    const texto = diasRestantes > 1
+      ? `Você poderá mudar o nome em ${diasRestantes} dias`
+      : `Você poderá mudar o nome em ${horasRestantes} hora${horasRestantes !== 1 ? 's' : ''}`;
+    avisoNome.innerHTML = `<i class="fa fa-lock"></i> ${texto}`;
+    avisoNome.style.display = 'flex';
+    campoNome.classList.add('input-travado');
+    campoNome.readOnly = true;
+    campoNome.disabled = true;
+  } else {
+    avisoNome.style.display = 'none';
+    campoNome.classList.remove('input-travado');
+    campoNome.readOnly = false;
+    campoNome.disabled = false;
+  }
 }
 
 function cancelarEdicao() {
