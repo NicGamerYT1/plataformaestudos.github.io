@@ -251,6 +251,7 @@ main{margin-left:256px;margin-top:64px;padding:2rem 1.5rem;width:100%;max-width:
     <span class="res-emoji" id="resEmoji"></span>
     <div class="res-titulo" id="resTitulo"></div>
     <div class="res-sub" id="resSub"></div>
+    <div id="resXP" style="display:none;margin:.5rem 0 .25rem;background:#eff6ff;color:#2563eb;border-radius:10px;padding:.5rem 1rem;font-size:.85rem;font-weight:900;"></div>
     <div class="res-barra-wrap"><div class="res-barra" id="resBarra" style="width:0%"></div></div>
     <div class="res-acoes">
       <button class="btn-tentar" onclick="reiniciar()"><i class="fa fa-refresh"></i> Tentar Novamente</button>
@@ -415,14 +416,38 @@ function mostrarResultado() {
   const tot = atividades[atvIdx].questoes.length;
   const pct = Math.round(acertos / tot * 100);
   let emoji, titulo, sub;
-  if (pct === 100)      { emoji = '🏆'; titulo = 'Perfeito! 100%';        sub = `Você acertou todas as ${tot} questões! Incrível!`; }
-  else if (pct >= 70)   { emoji = '🎉'; titulo = `Excelente! ${pct}%`;    sub = `Você acertou ${acertos} de ${tot} questões. Parabéns!`; }
-  else if (pct >= 50)   { emoji = '👍'; titulo = `Bom trabalho! ${pct}%`; sub = `Você acertou ${acertos} de ${tot} questões. Continue praticando!`; }
-  else                  { emoji = '📚'; titulo = `Continue estudando! ${pct}%`; sub = `Você acertou ${acertos} de ${tot} questões. Revise e tente novamente!`; }
+  if (pct === 100)    { emoji = '🏆'; titulo = 'Perfeito! 100%';           sub = `Você acertou todas as ${tot} questões! Incrível!`; }
+  else if (pct >= 70) { emoji = '🎉'; titulo = `Excelente! ${pct}%`;       sub = `Você acertou ${acertos} de ${tot} questões. Parabéns!`; }
+  else if (pct >= 50) { emoji = '👍'; titulo = `Bom trabalho! ${pct}%`;    sub = `Você acertou ${acertos} de ${tot} questões. Continue praticando!`; }
+  else                { emoji = '📚'; titulo = `Continue estudando! ${pct}%`; sub = `Você acertou ${acertos} de ${tot} questões. Revise e tente novamente!`; }
 
-  document.getElementById('resEmoji').textContent = emoji;
-  document.getElementById('resTitulo').textContent = titulo;
-  document.getElementById('resSub').textContent = sub;
+  // ── Calcular e salvar XP ──
+  const xpAtividade = 20;                      // +20 por completar
+  const xpAcertos   = acertos * 5;             // +5 por acerto
+  const xpBonus     = pct === 100 ? 30 : 0;   // +30 bônus se 100%
+  const xpGanho     = xpAtividade + xpAcertos + xpBonus;
+
+  const u = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
+  u.xp                = (u.xp || 0) + xpGanho;
+  u.atividadesFeitas  = (u.atividadesFeitas || 0) + 1;
+  localStorage.setItem('usuarioLogado', JSON.stringify(u));
+
+  // Atualizar na lista de usuários
+  const lista = JSON.parse(localStorage.getItem('listaUsuarios') || '[]');
+  const idx   = lista.findIndex(x => x.email === u.email);
+  if (idx !== -1) { lista[idx].xp = u.xp; lista[idx].atividadesFeitas = u.atividadesFeitas; }
+  localStorage.setItem('listaUsuarios', JSON.stringify(lista));
+
+  // Montar texto de XP ganho
+  let xpTxt = `+${xpGanho} XP (atividade +${xpAtividade}, acertos +${xpAcertos}`;
+  if (xpBonus > 0) xpTxt += `, bônus 100% +${xpBonus}`;
+  xpTxt += ')';
+
+  document.getElementById('resEmoji').textContent   = emoji;
+  document.getElementById('resTitulo').textContent  = titulo;
+  document.getElementById('resSub').textContent     = sub;
+  document.getElementById('resXP').textContent      = xpTxt;
+  document.getElementById('resXP').style.display    = 'block';
   document.getElementById('modalRes').classList.add('show');
   document.body.style.overflow = 'hidden';
   setTimeout(() => { document.getElementById('resBarra').style.width = pct + '%'; }, 100);
