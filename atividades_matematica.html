@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matemática - Atividades</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#F0F4FF;color:#1D2129;min-height:100vh;display:flex;}
+
+/* ── Header ── */
+header{position:fixed;top:0;left:0;right:0;background:#165DFF;color:#fff;padding:1rem;z-index:20;box-shadow:0 4px 16px rgba(22,93,255,0.3);display:flex;align-items:center;justify-content:space-between;}
+.header-esq{display:flex;align-items:center;gap:.75rem;}
+.header-esq h1{font-size:1.1rem;font-weight:900;}
+.btn-menu{background:none;border:none;color:#fff;font-size:1.25rem;cursor:pointer;padding:.25rem;display:none;}
+.btn-sair{background:#fff;color:#165DFF;border:none;padding:.4rem .85rem;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:900;cursor:pointer;}
+.btn-sair:hover{background:#eff6ff;}
+#nomeUsuario{font-size:.85rem;font-weight:700;}
+
+/* ── Menu lateral ── */
+aside{position:fixed;top:64px;left:0;width:256px;height:calc(100vh - 64px);background:#fff;border-right:1px solid #f0f0f0;padding:1.5rem 1rem;overflow-y:auto;z-index:15;transition:transform .3s ease;}
+aside nav ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+aside nav a{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;border-radius:12px;text-decoration:none;color:#6b7280;font-weight:700;font-size:.875rem;transition:all .2s;}
+aside nav a:hover{background:rgba(22,93,255,.08);color:#165DFF;}
+aside nav a.ativo{background:rgba(22,93,255,.1);color:#165DFF;font-weight:900;}
+aside nav a i{width:18px;text-align:center;}
+.fundo-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:14;}
+
+/* ── Main ── */
+main{margin-left:256px;margin-top:64px;padding:2rem 1.5rem;width:100%;max-width:860px;}
+
+/* ── Voltar ── */
+.btn-voltar{display:inline-flex;align-items:center;gap:.5rem;background:#fff;border:2px solid #e5e7eb;color:#6b7280;padding:.55rem 1.1rem;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;margin-bottom:1.75rem;transition:all .2s;text-decoration:none;}
+.btn-voltar:hover{border-color:#165DFF;color:#165DFF;}
+
+/* ── Cabeçalho matéria ── */
+.cab{display:flex;align-items:center;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;}
+.cab-icone{width:58px;height:58px;border-radius:16px;background:linear-gradient(135deg,#2563EB,#1e40af);display:flex;align-items:center;justify-content:center;font-size:1.75rem;box-shadow:0 6px 18px rgba(37,99,235,.35);flex-shrink:0;}
+.cab-titulo{font-size:1.6rem;font-weight:900;}
+.cab-sub{color:#6b7280;font-size:.875rem;margin-top:.2rem;}
+
+/* ── Cards de atividade ── */
+.lista{display:flex;flex-direction:column;gap:1.25rem;}
+
+.card-atv{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 2px 14px rgba(0,0,0,.08);transition:transform .2s,box-shadow .2s;}
+.card-atv:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.13);}
+.faixa{height:7px;background:linear-gradient(90deg,#2563EB,#60a5fa);}
+.card-corpo{padding:1.4rem 1.5rem;}
+.atv-titulo{font-size:1.1rem;font-weight:900;margin-bottom:.4rem;}
+.atv-desc{color:#6b7280;font-size:.85rem;line-height:1.55;margin-bottom:1rem;}
+.atv-infos{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:1.1rem;}
+.info-chip{display:inline-flex;align-items:center;gap:.35rem;font-size:.78rem;font-weight:700;color:#6b7280;}
+.badge{padding:.25rem .75rem;border-radius:999px;font-size:.72rem;font-weight:900;}
+.badge-facil{background:#f0fdf4;color:#16a34a;}
+.badge-medio{background:#fff7ed;color:#d97706;}
+.badge-dificil{background:#fff1f0;color:#dc2626;}
+.btn-comecar{width:100%;padding:.85rem;background:linear-gradient(90deg,#2563EB,#3b82f6);color:#fff;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:900;cursor:pointer;transition:opacity .2s,transform .15s;display:flex;align-items:center;justify-content:center;gap:.5rem;}
+.btn-comecar:hover{opacity:.9;transform:scale(1.01);}
+.btn-comecar:active{transform:scale(.98);}
+
+/* ── Modal questão ── */
+.modal-fundo{display:none;position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:50;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;}
+.modal-fundo.show{display:flex;}
+.modal{background:#fff;border-radius:24px;width:100%;max-width:580px;margin:1rem auto;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.3);}
+
+/* Cabeçalho modal */
+.modal-cab{background:linear-gradient(135deg,#2563EB,#1d4ed8);padding:1.4rem 1.5rem 1.25rem;color:#fff;}
+.modal-label{font-size:.7rem;font-weight:900;text-transform:uppercase;letter-spacing:.1em;opacity:.75;margin-bottom:.3rem;}
+.modal-atv-titulo{font-size:1.2rem;font-weight:900;line-height:1.3;}
+.modal-atv-sub{font-size:.78rem;opacity:.7;margin-top:.2rem;}
+.modal-cab-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;}
+.btn-fechar{background:rgba(255,255,255,.2);border:none;color:#fff;width:34px;height:34px;border-radius:10px;font-size:1rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.btn-fechar:hover{background:rgba(255,255,255,.35);}
+.prog-wrap{margin-top:1rem;background:rgba(255,255,255,.25);border-radius:999px;height:5px;}
+.prog-barra{height:5px;border-radius:999px;background:#fff;transition:width .4s ease;}
+.prog-txt{font-size:.7rem;opacity:.65;margin-top:.3rem;text-align:right;}
+
+/* Corpo modal */
+.modal-corpo{padding:1.5rem;}
+.enunciado{font-size:1rem;font-weight:800;color:#1D2129;margin-bottom:1.25rem;line-height:1.6;}
+.opcoes{display:flex;flex-direction:column;gap:.75rem;}
+.opcao{display:flex;align-items:center;gap:.85rem;padding:.9rem 1rem;border:2px solid #e5e7eb;border-radius:14px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;background:#fff;width:100%;text-align:left;transition:all .18s;color:#1D2129;}
+.opcao:hover:not(:disabled){border-color:#2563EB;background:#eff6ff;}
+.letra{width:34px;height:34px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.8rem;flex-shrink:0;transition:all .18s;}
+.opcao.correta{border-color:#16a34a;background:#f0fdf4;color:#16a34a;}
+.opcao.correta .letra{background:#16a34a;color:#fff;}
+.opcao.errada{border-color:#dc2626;background:#fff1f0;color:#dc2626;}
+.opcao.errada .letra{background:#dc2626;color:#fff;}
+
+/* Feedback */
+.feedback{margin-top:1rem;padding:.9rem 1rem;border-radius:14px;font-size:.875rem;font-weight:700;display:none;line-height:1.5;}
+.feedback.show{display:block;}
+.feedback.ok{background:#f0fdf4;border:1.5px solid #bbf7d0;color:#16a34a;}
+.feedback.erro{background:#fff1f0;border:1.5px solid #fecaca;color:#dc2626;}
+
+/* Rodapé modal */
+.modal-rodape{padding:.875rem 1.5rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.placar{font-size:.875rem;font-weight:800;color:#6b7280;}
+.btn-proximo{background:linear-gradient(90deg,#2563EB,#3b82f6);color:#fff;border:none;padding:.65rem 1.5rem;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.875rem;font-weight:900;cursor:pointer;display:none;gap:.5rem;align-items:center;}
+.btn-proximo.show{display:flex;}
+.btn-proximo:hover{opacity:.9;}
+
+/* ── Modal resultado ── */
+.modal-res-fundo{display:none;position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:51;align-items:center;justify-content:center;padding:1rem;}
+.modal-res-fundo.show{display:flex;}
+.modal-res{background:#fff;border-radius:24px;width:100%;max-width:420px;padding:2.5rem 2rem;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.3);}
+.res-emoji{font-size:4.5rem;display:block;margin-bottom:1rem;}
+.res-titulo{font-size:1.5rem;font-weight:900;margin-bottom:.5rem;}
+.res-sub{color:#6b7280;font-size:.9rem;margin-bottom:.75rem;line-height:1.6;}
+.res-barra-wrap{background:#f3f4f6;border-radius:999px;height:10px;margin:1rem 0 1.75rem;}
+.res-barra{height:10px;border-radius:999px;background:linear-gradient(90deg,#2563EB,#60a5fa);transition:width .6s ease;}
+.res-acoes{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;}
+.btn-tentar{background:linear-gradient(90deg,#2563EB,#3b82f6);color:#fff;border:none;padding:.75rem 1.5rem;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:900;font-size:.875rem;cursor:pointer;}
+.btn-tentar:hover{opacity:.9;}
+.btn-fechar-res{background:#f3f4f6;color:#374151;border:none;padding:.75rem 1.5rem;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:900;font-size:.875rem;cursor:pointer;}
+.btn-fechar-res:hover{background:#e5e7eb;}
+
+/* ── Responsivo ── */
+@media(max-width:768px){
+  aside{transform:translateX(-100%);}
+  aside.aberto{transform:translateX(0);}
+  .btn-menu{display:block;}
+  main{margin-left:0;padding:1.25rem 1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-esq">
+    <button class="btn-menu" onclick="toggleMenu()"><i class="fa fa-bars"></i></button>
+    <i class="fa fa-graduation-cap" style="font-size:1.4rem"></i>
+    <h1>Plataforma de Estudos</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem">
+    <span id="nomeUsuario"></span>
+    <button class="btn-sair" onclick="sairDaConta()">Sair</button>
+  </div>
+</header>
+
+<!-- MENU LATERAL -->
+<aside id="menuLateral">
+  <nav><ul>
+    <li><a href="inicio.html"><i class="fa fa-home"></i> Início</a></li>
+    <li><a href="materias.html"><i class="fa fa-book"></i> Matérias</a></li>
+    <li><a href="atividades.html" class="ativo"><i class="fa fa-tasks"></i> Atividades</a></li>
+    <li><a href="desempenho.html"><i class="fa fa-bar-chart"></i> Meu Desempenho</a></li>
+    <li><a href="assinatura.html"><i class="fa fa-credit-card"></i> Assinatura</a></li>
+    <li><a href="perfil.html"><i class="fa fa-user"></i> Perfil</a></li>
+    <li><a href="pais.html"><i class="fa fa-users"></i> Pais / Responsáveis</a></li>
+    <li><a href="configuracoes.html"><i class="fa fa-cog"></i> Configurações</a></li>
+  </ul></nav>
+</aside>
+<div class="fundo-menu" id="fundoMenu" onclick="toggleMenu()"></div>
+
+<!-- CONTEÚDO -->
+<main>
+  <a href="atividades.html" class="btn-voltar"><i class="fa fa-arrow-left"></i> Voltar para matérias</a>
+
+  <div class="cab">
+    <div class="cab-icone">📐</div>
+    <div>
+      <div class="cab-titulo">Matemática</div>
+      <div class="cab-sub">3 atividades · 10 questões cada</div>
+    </div>
+  </div>
+
+  <div class="lista">
+
+    <!-- Atividade 1 -->
+    <div class="card-atv">
+      <div class="faixa"></div>
+      <div class="card-corpo">
+        <div class="atv-titulo">Operações Básicas</div>
+        <div class="atv-desc">Pratique adição, subtração, multiplicação e divisão com números inteiros do cotidiano.</div>
+        <div class="atv-infos">
+          <span class="info-chip"><i class="fa fa-graduation-cap"></i> 5º Ano</span>
+          <span class="badge badge-facil">Fácil</span>
+          <span class="info-chip"><i class="fa fa-list"></i> 10 questões</span>
+        </div>
+        <button class="btn-comecar" onclick="abrirAtividade(0)"><i class="fa fa-play"></i> Começar Atividade</button>
+      </div>
+    </div>
+
+    <!-- Atividade 2 -->
+    <div class="card-atv">
+      <div class="faixa"></div>
+      <div class="card-corpo">
+        <div class="atv-titulo">Frações e Decimais</div>
+        <div class="atv-desc">Operações com frações, números decimais, porcentagem e conversões entre representações.</div>
+        <div class="atv-infos">
+          <span class="info-chip"><i class="fa fa-graduation-cap"></i> 6º Ano</span>
+          <span class="badge badge-medio">Médio</span>
+          <span class="info-chip"><i class="fa fa-list"></i> 10 questões</span>
+        </div>
+        <button class="btn-comecar" onclick="abrirAtividade(1)"><i class="fa fa-play"></i> Começar Atividade</button>
+      </div>
+    </div>
+
+    <!-- Atividade 3 -->
+    <div class="card-atv">
+      <div class="faixa"></div>
+      <div class="card-corpo">
+        <div class="atv-titulo">Geometria e Álgebra</div>
+        <div class="atv-desc">Perímetro, área, expressões algébricas, equações do 1º grau e problemas contextualizados.</div>
+        <div class="atv-infos">
+          <span class="info-chip"><i class="fa fa-graduation-cap"></i> 7º Ano</span>
+          <span class="badge badge-dificil">Difícil</span>
+          <span class="info-chip"><i class="fa fa-list"></i> 10 questões</span>
+        </div>
+        <button class="btn-comecar" onclick="abrirAtividade(2)"><i class="fa fa-play"></i> Começar Atividade</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- MODAL QUESTÃO -->
+<div class="modal-fundo" id="modalFundo">
+  <div class="modal">
+    <div class="modal-cab" id="modalCab">
+      <div class="modal-cab-top">
+        <div>
+          <div class="modal-label">Matemática</div>
+          <div class="modal-atv-titulo" id="modalTitulo"></div>
+          <div class="modal-atv-sub" id="modalSub"></div>
+        </div>
+        <button class="btn-fechar" onclick="fecharModal()"><i class="fa fa-times"></i></button>
+      </div>
+      <div class="prog-wrap"><div class="prog-barra" id="progBarra" style="width:0%"></div></div>
+      <div class="prog-txt" id="progTxt"></div>
+    </div>
+    <div class="modal-corpo">
+      <div class="enunciado" id="enunciado"></div>
+      <div class="opcoes" id="opcoes"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div class="modal-rodape">
+      <div class="placar" id="placar">✅ 0 acertos</div>
+      <button class="btn-proximo" id="btnProximo" onclick="proximaQuestao()">Próxima <i class="fa fa-arrow-right"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RESULTADO -->
+<div class="modal-res-fundo" id="modalRes">
+  <div class="modal-res">
+    <span class="res-emoji" id="resEmoji"></span>
+    <div class="res-titulo" id="resTitulo"></div>
+    <div class="res-sub" id="resSub"></div>
+    <div class="res-barra-wrap"><div class="res-barra" id="resBarra" style="width:0%"></div></div>
+    <div class="res-acoes">
+      <button class="btn-tentar" onclick="reiniciar()"><i class="fa fa-refresh"></i> Tentar Novamente</button>
+      <button class="btn-fechar-res" onclick="fecharRes()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Atividades ────────────────────────────────────────
+const atividades = [
+  {
+    titulo: 'Operações Básicas',
+    sub: 'Fácil · 5º Ano',
+    questoes: [
+      {e:'Quanto é 48 + 37?', o:['75','85','95','65'], c:1},
+      {e:'Quanto é 120 − 45?', o:['65','75','85','95'], c:1},
+      {e:'Quanto é 7 × 8?', o:['54','56','58','48'], c:1},
+      {e:'Quanto é 144 ÷ 12?', o:['10','11','12','13'], c:2},
+      {e:'Qual é o dobro de 35?', o:['60','65','70','75'], c:2},
+      {e:'Quanto é 256 + 144?', o:['390','400','410','420'], c:1},
+      {e:'Quanto é 15 × 15?', o:['205','215','225','235'], c:2},
+      {e:'Quanto é 1000 − 378?', o:['612','622','632','642'], c:1},
+      {e:'Quanto é 360 ÷ 9?', o:['38','40','42','44'], c:1},
+      {e:'Qual é o triplo de 24?', o:['62','68','72','78'], c:2},
+    ]
+  },
+  {
+    titulo: 'Frações e Decimais',
+    sub: 'Médio · 6º Ano',
+    questoes: [
+      {e:'Quanto é 1/2 + 1/4?', o:['2/6','3/4','1/3','2/4'], c:1},
+      {e:'Quanto é 0,5 + 0,25?', o:['0,70','0,75','0,80','0,85'], c:1},
+      {e:'Qual fração equivale a 0,25?', o:['1/5','1/3','1/4','1/2'], c:2},
+      {e:'50% de 200 é igual a:', o:['50','75','100','150'], c:2},
+      {e:'Quanto é 3/4 de 80?', o:['40','50','60','70'], c:2},
+      {e:'Quanto é 2/3 + 1/6?', o:['3/9','4/6','5/6','1/2'], c:2},
+      {e:'Quanto é 1,8 − 0,75?', o:['0,95','1,05','1,15','1,25'], c:1},
+      {e:'75% de 120 é igual a:', o:['80','85','90','95'], c:2},
+      {e:'Quanto é 5/8 de 400?', o:['200','225','250','275'], c:2},
+      {e:'Qual é a forma decimal de 3/4?', o:['0,60','0,70','0,75','0,80'], c:2},
+    ]
+  },
+  {
+    titulo: 'Geometria e Álgebra',
+    sub: 'Difícil · 7º Ano',
+    questoes: [
+      {e:'Qual é a área de um quadrado de lado 7 cm?', o:['42 cm²','47 cm²','49 cm²','56 cm²'], c:2},
+      {e:'Qual é o perímetro de um retângulo 8×5 cm?', o:['20 cm','24 cm','26 cm','40 cm'], c:2},
+      {e:'Se 2x + 4 = 14, quanto vale x?', o:['3','4','5','6'], c:2},
+      {e:'Qual é a área de um triângulo com base 10 e altura 6?', o:['20','30','40','60'], c:1},
+      {e:'Se 3x − 6 = 9, quanto vale x?', o:['3','4','5','6'], c:2},
+      {e:'Qual é o volume de um cubo de aresta 4 cm?', o:['48 cm³','56 cm³','64 cm³','72 cm³'], c:2},
+      {e:'Qual é a área de um círculo de raio 5? (π ≈ 3,14)', o:['62,8','72,8','78,5','85,5'], c:2},
+      {e:'Se x/3 = 9, quanto vale x?', o:['18','21','24','27'], c:3},
+      {e:'Qual é o perímetro de um triângulo equilátero de lado 6 cm?', o:['12 cm','15 cm','18 cm','24 cm'], c:2},
+      {e:'Se 5x + 10 = 35, quanto vale x?', o:['3','4','5','6'], c:2},
+    ]
+  }
+];
+
+// ── Estado ────────────────────────────────────────────
+let atvIdx = 0, questaoIdx = 0, acertos = 0, respondida = false;
+const letras = ['A','B','C','D'];
+
+// ── Init ──────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const u = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
+  if (!u.nome) { window.location.href = 'login.html'; return; }
+  document.getElementById('nomeUsuario').textContent = u.nome;
+});
+
+function toggleMenu() {
+  document.getElementById('menuLateral').classList.toggle('aberto');
+  document.getElementById('fundoMenu').style.display =
+    document.getElementById('menuLateral').classList.contains('aberto') ? 'block' : 'none';
+}
+function sairDaConta() { localStorage.removeItem('usuarioLogado'); window.location.href = 'login.html'; }
+
+// ── Abrir atividade ───────────────────────────────────
+function abrirAtividade(idx) {
+  atvIdx = idx; questaoIdx = 0; acertos = 0; respondida = false;
+  document.getElementById('modalFundo').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  renderQuestao();
+}
+
+function fecharModal() {
+  document.getElementById('modalFundo').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// ── Renderizar questão ────────────────────────────────
+function renderQuestao() {
+  const atv = atividades[atvIdx];
+  const q   = atv.questoes[questaoIdx];
+  const tot = atv.questoes.length;
+  const pct = (questaoIdx / tot) * 100;
+
+  document.getElementById('modalTitulo').textContent = atv.titulo;
+  document.getElementById('modalSub').textContent    = atv.sub;
+  document.getElementById('progBarra').style.width   = pct + '%';
+  document.getElementById('progTxt').textContent     = 'Questão ' + (questaoIdx + 1) + ' de ' + tot;
+  document.getElementById('enunciado').textContent   = q.e;
+  document.getElementById('placar').textContent      = '✅ ' + acertos + ' acerto' + (acertos !== 1 ? 's' : '');
+
+  const opcoesEl = document.getElementById('opcoes');
+  opcoesEl.innerHTML = '';
+  q.o.forEach((op, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opcao';
+    btn.innerHTML = `<span class="letra">${letras[i]}</span>${op}`;
+    btn.onclick = () => responder(i, btn);
+    opcoesEl.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback'; fb.textContent = '';
+  const btnP = document.getElementById('btnProximo');
+  btnP.classList.remove('show');
+  respondida = false;
+}
+
+// ── Responder ─────────────────────────────────────────
+function responder(idx, btn) {
+  if (respondida) return;
+  respondida = true;
+  const q   = atividades[atvIdx].questoes[questaoIdx];
+  const bts = document.querySelectorAll('.opcao');
+  const fb  = document.getElementById('feedback');
+  bts.forEach(b => b.disabled = true);
+
+  if (idx === q.c) {
+    acertos++;
+    btn.classList.add('correta');
+    fb.className = 'feedback ok show';
+    fb.textContent = '✅ Correto! Muito bem!';
+  } else {
+    btn.classList.add('errada');
+    bts[q.c].classList.add('correta');
+    fb.className = 'feedback erro show';
+    fb.textContent = '❌ Incorreto! A resposta certa é: ' + q.o[q.c];
+  }
+
+  document.getElementById('placar').textContent = '✅ ' + acertos + ' acerto' + (acertos !== 1 ? 's' : '');
+  const btnP = document.getElementById('btnProximo');
+  btnP.classList.add('show');
+  const ultima = questaoIdx === atividades[atvIdx].questoes.length - 1;
+  btnP.innerHTML = ultima ? 'Ver Resultado <i class="fa fa-trophy"></i>' : 'Próxima <i class="fa fa-arrow-right"></i>';
+}
+
+// ── Próxima ───────────────────────────────────────────
+function proximaQuestao() {
+  questaoIdx++;
+  if (questaoIdx >= atividades[atvIdx].questoes.length) mostrarResultado();
+  else renderQuestao();
+}
+
+// ── Resultado ─────────────────────────────────────────
+function mostrarResultado() {
+  fecharModal();
+  const tot = atividades[atvIdx].questoes.length;
+  const pct = Math.round(acertos / tot * 100);
+  let emoji, titulo, sub;
+  if (pct === 100)      { emoji = '🏆'; titulo = 'Perfeito! 100%';        sub = `Você acertou todas as ${tot} questões! Incrível!`; }
+  else if (pct >= 70)   { emoji = '🎉'; titulo = `Excelente! ${pct}%`;    sub = `Você acertou ${acertos} de ${tot} questões. Parabéns!`; }
+  else if (pct >= 50)   { emoji = '👍'; titulo = `Bom trabalho! ${pct}%`; sub = `Você acertou ${acertos} de ${tot} questões. Continue praticando!`; }
+  else                  { emoji = '📚'; titulo = `Continue estudando! ${pct}%`; sub = `Você acertou ${acertos} de ${tot} questões. Revise e tente novamente!`; }
+
+  document.getElementById('resEmoji').textContent = emoji;
+  document.getElementById('resTitulo').textContent = titulo;
+  document.getElementById('resSub').textContent = sub;
+  document.getElementById('modalRes').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => { document.getElementById('resBarra').style.width = pct + '%'; }, 100);
+}
+
+function reiniciar() {
+  document.getElementById('modalRes').classList.remove('show');
+  abrirAtividade(atvIdx);
+}
+
+function fecharRes() {
+  document.getElementById('modalRes').classList.remove('show');
+  document.body.style.overflow = '';
+}
+</script>
+</body>
+</html>
