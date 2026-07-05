@@ -221,6 +221,8 @@ label.campo-label{display:block;font-size:0.72rem;font-weight:800;text-transform
           <div class="campo-grupo">
             <label class="campo-label">Nome</label>
             <input type="text" id="eNome" class="input">
+            <div id="avisoNome" class="campo-aviso-laranja" style="display:none"></div>
+            <div class="campo-aviso" id="dicaNome"><i class="fa fa-info-circle"></i> O nome só pode ser alterado 1 vez por semana</div>
           </div>
           <!-- E-MAIL TRAVADO -->
           <div class="campo-grupo">
@@ -422,9 +424,24 @@ function cancelarEdicao() {
 }
 
 function salvarEdicao() {
-  usuario.nome     = document.getElementById('eNome').value.trim() || usuario.nome;
+  const novoNome   = document.getElementById('eNome').value.trim();
   usuario.telefone = document.getElementById('eTelefone').value.trim() || usuario.telefone;
   // ⚠️ E-mail e escola NÃO são alterados — travados por segurança
+
+  // ── Verificar bloqueio de nome ──
+  const ultimaTroca = usuario.ultimaTrocaNome ? new Date(usuario.ultimaTrocaNome) : null;
+  const agora = new Date();
+  const umaSemana = 7 * 24 * 60 * 60 * 1000;
+  const nomeChanged = novoNome && novoNome !== usuario.nome;
+
+  if (nomeChanged) {
+    if (ultimaTroca && (agora - ultimaTroca) < umaSemana) {
+      // Bloqueado — ignora a troca de nome silenciosamente
+    } else {
+      usuario.nome = novoNome;
+      usuario.ultimaTrocaNome = agora.toISOString();
+    }
+  }
 
   const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
   const idx = lista.findIndex(u => u.email === usuario.email);

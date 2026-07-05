@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Nível - Plataforma de Estudos</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#F0F4FF;color:#1D2129;min-height:100vh;display:flex;}
+
+/* ── Header ── */
+header{position:fixed;top:0;left:0;right:0;background:#165DFF;color:#fff;padding:1rem;z-index:20;box-shadow:0 4px 16px rgba(22,93,255,.3);display:flex;align-items:center;justify-content:space-between;}
+.header-esq{display:flex;align-items:center;gap:.75rem;}
+.header-esq h1{font-size:1.1rem;font-weight:900;}
+.btn-menu{background:none;border:none;color:#fff;font-size:1.25rem;cursor:pointer;padding:.25rem;display:none;}
+.btn-sair{background:#fff;color:#165DFF;border:none;padding:.4rem .85rem;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:900;cursor:pointer;}
+.btn-sair:hover{background:#eff6ff;}
+#nomeHeader{font-size:.85rem;font-weight:700;}
+
+/* ── Menu lateral ── */
+aside{position:fixed;top:64px;left:0;width:256px;height:calc(100vh - 64px);background:#fff;border-right:1px solid #f0f0f0;padding:1.5rem 1rem;overflow-y:auto;z-index:15;transition:transform .3s ease;box-shadow:2px 0 8px rgba(0,0,0,.04);}
+aside nav ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+aside nav a{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;border-radius:12px;text-decoration:none;color:#6b7280;font-weight:700;font-size:.875rem;transition:all .2s;}
+aside nav a:hover{background:rgba(22,93,255,.08);color:#165DFF;}
+aside nav a.ativo{background:rgba(22,93,255,.1);color:#165DFF;font-weight:900;}
+aside nav a i{width:18px;text-align:center;}
+.fundo-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:14;}
+
+/* ── Main ── */
+main{margin-left:256px;margin-top:64px;padding:2.5rem 2rem;width:100%;max-width:860px;}
+
+/* ── Card nível atual ── */
+.card-nivel-atual{border-radius:24px;padding:2rem;color:#fff;position:relative;overflow:hidden;margin-bottom:1.5rem;box-shadow:0 12px 40px rgba(0,0,0,.18);}
+.card-nivel-atual::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.1);}
+.card-nivel-atual::after{content:'';position:absolute;bottom:-40px;left:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.08);}
+.nivel-topo{display:flex;align-items:center;justify-content:space-between;gap:1rem;position:relative;z-index:1;flex-wrap:wrap;}
+.nivel-esq{display:flex;align-items:center;gap:1.25rem;}
+.nivel-emoji-grande{font-size:4rem;filter:drop-shadow(0 4px 8px rgba(0,0,0,.25));}
+.nivel-info-txt .label{font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.1em;opacity:.7;margin-bottom:.25rem;}
+.nivel-nome{font-size:2rem;font-weight:900;line-height:1.1;}
+.nivel-xp-total{font-size:.9rem;opacity:.75;margin-top:.3rem;font-weight:700;}
+.nivel-dir{text-align:right;}
+.nivel-rank{font-size:.8rem;opacity:.7;font-weight:700;margin-bottom:.25rem;}
+.nivel-rank-num{font-size:2.5rem;font-weight:900;line-height:1;}
+
+/* Barra de progresso */
+.prog-area{position:relative;z-index:1;margin-top:1.5rem;}
+.prog-labels{display:flex;justify-content:space-between;font-size:.75rem;font-weight:800;opacity:.8;margin-bottom:.5rem;}
+.prog-trilho{background:rgba(255,255,255,.25);border-radius:999px;height:12px;}
+.prog-barra{height:12px;border-radius:999px;background:#fff;transition:width 1s ease;box-shadow:0 2px 8px rgba(255,255,255,.4);}
+.prog-pct{text-align:center;font-size:.78rem;font-weight:900;opacity:.8;margin-top:.4rem;}
+
+/* ── Cards de estatísticas ── */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+.stat-card{background:#fff;border-radius:18px;padding:1.25rem;box-shadow:0 2px 12px rgba(0,0,0,.07);text-align:center;}
+.stat-icone{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;margin:0 auto .75rem;}
+.stat-valor{font-size:1.6rem;font-weight:900;line-height:1;}
+.stat-label{font-size:.75rem;color:#9ca3af;font-weight:700;margin-top:.3rem;}
+
+/* ── Caminho de níveis ── */
+.card{background:#fff;border-radius:20px;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:1.25rem;}
+.card-titulo{font-size:.95rem;font-weight:900;display:flex;align-items:center;gap:.5rem;margin-bottom:1.25rem;}
+.card-titulo i{color:#165DFF;}
+
+.caminho{display:flex;flex-direction:column;gap:0;}
+.nivel-item{display:flex;align-items:center;gap:1rem;padding:.875rem 0;position:relative;}
+.nivel-item:not(:last-child)::after{content:'';position:absolute;left:22px;top:64px;width:2px;height:calc(100% - 20px);background:#e5e7eb;z-index:0;}
+.nivel-item.conquistado:not(:last-child)::after{background:linear-gradient(180deg,var(--cor),#e5e7eb);}
+.nivel-bolinha{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;position:relative;z-index:1;box-shadow:0 4px 12px rgba(0,0,0,.12);}
+.nivel-bolinha.bloqueado{background:#f3f4f6;filter:grayscale(1);opacity:.5;font-size:1.2rem;}
+.nivel-bolinha.atual{box-shadow:0 0 0 4px rgba(255,255,255,.8),0 0 0 7px var(--cor);animation:pulsar 2s ease-in-out infinite;}
+@keyframes pulsar{0%,100%{box-shadow:0 0 0 4px rgba(255,255,255,.8),0 0 0 7px var(--cor);}50%{box-shadow:0 0 0 4px rgba(255,255,255,.8),0 0 0 10px rgba(var(--cor-rgb),.3);}}
+.nivel-dados{flex:1;}
+.nivel-dados-nome{font-weight:900;font-size:.95rem;display:flex;align-items:center;gap:.5rem;}
+.tag-atual{background:rgba(22,93,255,.1);color:#165DFF;font-size:.65rem;font-weight:900;padding:.15rem .5rem;border-radius:999px;text-transform:uppercase;letter-spacing:.05em;}
+.tag-conquistado{background:#f0fdf4;color:#16a34a;font-size:.65rem;font-weight:900;padding:.15rem .5rem;border-radius:999px;}
+.nivel-dados-xp{font-size:.78rem;color:#9ca3af;font-weight:700;margin-top:.2rem;}
+.nivel-dados-desc{font-size:.78rem;color:#6b7280;margin-top:.15rem;}
+.nivel-xp-badge{font-size:.78rem;font-weight:900;padding:.3rem .7rem;border-radius:10px;flex-shrink:0;}
+
+/* ── Como ganhar XP ── */
+.xp-grid{display:grid;grid-template-columns:1fr 1fr;gap:.875rem;}
+.xp-item{display:flex;align-items:center;gap:.875rem;padding:.875rem;background:#f8faff;border-radius:14px;border:1.5px solid #e5e7eb;}
+.xp-icone{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+.xp-nome{font-size:.85rem;font-weight:800;}
+.xp-ganho{font-size:.75rem;color:#165DFF;font-weight:900;margin-top:.15rem;}
+
+/* ── Responsivo ── */
+@media(max-width:768px){
+  aside{transform:translateX(-100%);}
+  aside.aberto{transform:translateX(0);}
+  .btn-menu{display:block;}
+  main{margin-left:0;padding:1.25rem 1rem;}
+  .stats-grid{grid-template-columns:repeat(3,1fr);gap:.75rem;}
+  .xp-grid{grid-template-columns:1fr;}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:repeat(3,1fr);}
+  .nivel-nome{font-size:1.5rem;}
+  .nivel-emoji-grande{font-size:3rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-esq">
+    <button class="btn-menu" onclick="toggleMenu()"><i class="fa fa-bars"></i></button>
+    <i class="fa fa-graduation-cap" style="font-size:1.4rem"></i>
+    <h1>Plataforma de Estudos</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem">
+    <span id="nomeHeader"></span>
+    <button class="btn-sair" onclick="sairDaConta()">Sair</button>
+  </div>
+</header>
+
+<!-- MENU LATERAL -->
+<aside id="menuLateral">
+  <nav><ul>
+    <li><a href="inicio.html"><i class="fa fa-home"></i> Início</a></li>
+    <li><a href="materias.html"><i class="fa fa-book"></i> Matérias</a></li>
+    <li><a href="atividades.html"><i class="fa fa-tasks"></i> Atividades</a></li>
+    <li><a href="desempenho.html"><i class="fa fa-bar-chart"></i> Meu Desempenho</a></li>
+    <li><a href="nivel.html" class="ativo"><i class="fa fa-star"></i> Meu Nível</a></li>
+    <li><a href="assinatura.html"><i class="fa fa-credit-card"></i> Assinatura</a></li>
+    <li><a href="perfil.html"><i class="fa fa-user"></i> Perfil</a></li>
+    <li><a href="pais.html"><i class="fa fa-users"></i> Pais / Responsáveis</a></li>
+    <li><a href="configuracoes.html"><i class="fa fa-cog"></i> Configurações</a></li>
+  </ul></nav>
+</aside>
+<div class="fundo-menu" id="fundoMenu" onclick="toggleMenu()"></div>
+
+<!-- CONTEÚDO -->
+<main>
+
+  <!-- Card nível atual (preenchido via JS) -->
+  <div class="card-nivel-atual" id="cardNivelAtual"></div>
+
+  <!-- Estatísticas -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icone" style="background:#eff6ff;color:#2563eb"><i class="fa fa-bolt"></i></div>
+      <div class="stat-valor" id="statXP">0</div>
+      <div class="stat-label">XP Total</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icone" style="background:#f0fdf4;color:#16a34a"><i class="fa fa-check-circle"></i></div>
+      <div class="stat-valor" id="statAtv">0</div>
+      <div class="stat-label">Atividades Feitas</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icone" style="background:#fff7ed;color:#d97706"><i class="fa fa-clock-o"></i></div>
+      <div class="stat-valor" id="statTempo">0</div>
+      <div class="stat-label">Min. no Site</div>
+    </div>
+  </div>
+
+  <!-- Caminho de níveis -->
+  <div class="card">
+    <div class="card-titulo"><i class="fa fa-map"></i> Caminho de Níveis</div>
+    <div class="caminho" id="caminho"></div>
+  </div>
+
+  <!-- Como ganhar XP -->
+  <div class="card">
+    <div class="card-titulo"><i class="fa fa-bolt"></i> Como Ganhar XP</div>
+    <div class="xp-grid">
+      <div class="xp-item">
+        <div class="xp-icone" style="background:#eff6ff;color:#2563eb"><i class="fa fa-play-circle"></i></div>
+        <div>
+          <div class="xp-nome">Completar atividade</div>
+          <div class="xp-ganho">+20 XP por atividade</div>
+        </div>
+      </div>
+      <div class="xp-item">
+        <div class="xp-icone" style="background:#f0fdf4;color:#16a34a"><i class="fa fa-check"></i></div>
+        <div>
+          <div class="xp-nome">Acerto nas questões</div>
+          <div class="xp-ganho">+5 XP por acerto</div>
+        </div>
+      </div>
+      <div class="xp-item">
+        <div class="xp-icone" style="background:#fff7ed;color:#d97706"><i class="fa fa-clock-o"></i></div>
+        <div>
+          <div class="xp-nome">Tempo no site</div>
+          <div class="xp-ganho">+1 XP a cada 5 minutos</div>
+        </div>
+      </div>
+      <div class="xp-item">
+        <div class="xp-icone" style="background:#fdf4ff;color:#9333ea"><i class="fa fa-trophy"></i></div>
+        <div>
+          <div class="xp-nome">Atividade com 100%</div>
+          <div class="xp-ganho">+30 XP de bônus</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ── Definição dos níveis ──────────────────────────────
+const niveis = [
+  { nome:'Beta',      emoji:'🔵', xpMin:0,    xpMax:199,  cor:'#6b7280', corRGB:'107,114,128', desc:'Início da jornada. Explore a plataforma e complete suas primeiras atividades!' },
+  { nome:'Aprendiz',  emoji:'📗', xpMin:200,  xpMax:499,  cor:'#16a34a', corRGB:'22,163,74',   desc:'Você está pegando o ritmo! Continue completando atividades para evoluir.' },
+  { nome:'Estudante', emoji:'📘', xpMin:500,  xpMax:999,  cor:'#2563eb', corRGB:'37,99,235',   desc:'Dedicado e focado. Sua constância está fazendo diferença nos estudos!' },
+  { nome:'Expert',    emoji:'🏅', xpMin:1000, xpMax:1999, cor:'#d97706', corRGB:'217,119,6',   desc:'Nível avançado! Você domina os conteúdos e inspira outros alunos.' },
+  { nome:'Mestre',    emoji:'👑', xpMin:2000, xpMax:9999, cor:'#9333ea', corRGB:'147,51,234',  desc:'O nível máximo! Você é uma referência na Plataforma de Estudos. Parabéns!' },
+];
+
+function getNivelAtual(xp) {
+  for (let i = niveis.length - 1; i >= 0; i--) {
+    if (xp >= niveis[i].xpMin) return i;
+  }
+  return 0;
+}
+
+// ── Init ──────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const u = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
+  if (!u.nome) { window.location.href = 'login.html'; return; }
+  document.getElementById('nomeHeader').textContent = u.nome;
+
+  // Inicializar XP se não existir
+  if (!u.xp) u.xp = 0;
+  if (!u.atividadesFeitas) u.atividadesFeitas = 0;
+  if (!u.minutosNoSite) u.minutosNoSite = 0;
+  if (!u.ultimoAcesso) u.ultimoAcesso = new Date().toISOString();
+
+  // Salvar de volta
+  localStorage.setItem('usuarioLogado', JSON.stringify(u));
+
+  renderPagina(u);
+  iniciarContadorTempo(u);
+});
+
+// ── Renderizar ────────────────────────────────────────
+function renderPagina(u) {
+  const xp      = u.xp || 0;
+  const idxAtual = getNivelAtual(xp);
+  const nivel    = niveis[idxAtual];
+  const proximo  = niveis[idxAtual + 1];
+
+  // Progresso dentro do nível atual
+  const xpNoNivel   = xp - nivel.xpMin;
+  const xpParaProx  = proximo ? (proximo.xpMin - nivel.xpMin) : 1;
+  const pct         = proximo ? Math.min(100, Math.round((xpNoNivel / xpParaProx) * 100)) : 100;
+
+  // ── Card nível atual ──
+  const cardEl = document.getElementById('cardNivelAtual');
+  cardEl.style.background = `linear-gradient(135deg, ${nivel.cor}, ${ajustarCor(nivel.cor)})`;
+  cardEl.innerHTML = `
+    <div class="nivel-topo">
+      <div class="nivel-esq">
+        <span class="nivel-emoji-grande">${nivel.emoji}</span>
+        <div class="nivel-info-txt">
+          <div class="label">Seu nível atual</div>
+          <div class="nivel-nome">${nivel.nome}</div>
+          <div class="nivel-xp-total">${xp} XP acumulados</div>
+        </div>
+      </div>
+    </div>
+    <div class="prog-area">
+      <div class="prog-labels">
+        <span>${nivel.nome} (${nivel.xpMin} XP)</span>
+        <span>${proximo ? proximo.nome + ' (' + proximo.xpMin + ' XP)' : 'Nível Máximo!'}</span>
+      </div>
+      <div class="prog-trilho">
+        <div class="prog-barra" id="progBarra" style="width:0%"></div>
+      </div>
+      <div class="prog-pct">${proximo ? pct + '% → faltam ' + (proximo.xpMin - xp) + ' XP para ' + proximo.nome : '🏆 Nível Máximo atingido!'}</div>
+    </div>`;
+  setTimeout(() => {
+    document.getElementById('progBarra').style.width = pct + '%';
+  }, 100);
+
+  // ── Estatísticas ──
+  document.getElementById('statXP').textContent   = xp;
+  document.getElementById('statAtv').textContent  = u.atividadesFeitas || 0;
+  document.getElementById('statTempo').textContent= u.minutosNoSite || 0;
+
+  // ── Caminho de níveis ──
+  const caminho = document.getElementById('caminho');
+  caminho.innerHTML = '';
+  niveis.forEach((n, i) => {
+    const conquistado = xp >= n.xpMin;
+    const atual       = i === idxAtual;
+    const bloqueado   = !conquistado;
+
+    const item = document.createElement('div');
+    item.className = 'nivel-item' + (conquistado ? ' conquistado' : '');
+    item.style.setProperty('--cor', n.cor);
+    item.style.setProperty('--cor-rgb', n.corRGB);
+
+    let tag = '';
+    if (atual)        tag = '<span class="tag-atual">Atual</span>';
+    else if (conquistado) tag = '<span class="tag-conquistado">✓ Conquistado</span>';
+
+    let xpBadge = '';
+    if (bloqueado && !atual) {
+      xpBadge = `<span class="nivel-xp-badge" style="background:#f3f4f6;color:#9ca3af">${n.xpMin} XP</span>`;
+    } else if (conquistado) {
+      xpBadge = `<span class="nivel-xp-badge" style="background:${n.cor}20;color:${n.cor}">${n.xpMin} XP ✓</span>`;
+    }
+
+    item.innerHTML = `
+      <div class="nivel-bolinha ${bloqueado && !atual ? 'bloqueado' : ''} ${atual ? 'atual' : ''}"
+           style="${!bloqueado || atual ? 'background:' + n.cor : ''}; --cor:${n.cor}; --cor-rgb:${n.corRGB}">
+        ${bloqueado && !atual ? '🔒' : n.emoji}
+      </div>
+      <div class="nivel-dados">
+        <div class="nivel-dados-nome">${n.nome} ${tag}</div>
+        <div class="nivel-dados-xp">${n.xpMin} – ${n.xpMax === 9999 ? '∞' : n.xpMax} XP</div>
+        <div class="nivel-dados-desc">${n.desc}</div>
+      </div>
+      ${xpBadge}`;
+    caminho.appendChild(item);
+  });
+}
+
+// ── Contador de tempo (XP por tempo) ─────────────────
+function iniciarContadorTempo(u) {
+  // A cada 5 minutos ganha 1 XP
+  setInterval(() => {
+    const salvo = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
+    salvo.minutosNoSite = (salvo.minutosNoSite || 0) + 5;
+    salvo.xp = (salvo.xp || 0) + 1;
+    localStorage.setItem('usuarioLogado', JSON.stringify(salvo));
+
+    // Atualizar lista de usuários
+    const lista = JSON.parse(localStorage.getItem('listaUsuarios') || '[]');
+    const idx = lista.findIndex(x => x.email === salvo.email);
+    if (idx !== -1) { lista[idx].xp = salvo.xp; lista[idx].minutosNoSite = salvo.minutosNoSite; }
+    localStorage.setItem('listaUsuarios', JSON.stringify(lista));
+
+    renderPagina(salvo);
+  }, 5 * 60 * 1000); // 5 minutos
+}
+
+// ── Utilidade: escurecer cor ──────────────────────────
+function ajustarCor(hex) {
+  // Retorna versão ligeiramente mais escura para o gradiente
+  const map = {
+    '#6b7280':'#374151','#16a34a':'#065f46','#2563eb':'#1e3a8a',
+    '#d97706':'#92400e','#9333ea':'#581c87'
+  };
+  return map[hex] || hex;
+}
+
+function toggleMenu() {
+  document.getElementById('menuLateral').classList.toggle('aberto');
+  document.getElementById('fundoMenu').style.display =
+    document.getElementById('menuLateral').classList.contains('aberto') ? 'block' : 'none';
+}
+function sairDaConta() { localStorage.removeItem('usuarioLogado'); window.location.href = 'login.html'; }
+</script>
+</body>
+</html>
