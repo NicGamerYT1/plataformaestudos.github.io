@@ -4,155 +4,368 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Início - Plataforma de Estudos</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="acesso.js"></script>
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          primario: '#165DFF', secundario: '#36BFFA', sucesso: '#00B42A',
-          aviso: '#FF7D00', erro: '#F53F3F', claro: '#F7F8FA', escuro: '#1D2129',
-        },
-        fontFamily: { sans: ['Nunito', 'system-ui', 'sans-serif'] }
-      }
-    }
-  }
-</script>
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; }
-  body { background: #F0F4FF; }
-  .menu-lateral { transition: transform 0.3s cubic-bezier(.4,0,.2,1); }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);} }
-  .anim-1{animation:fadeUp 0.5s 0.00s ease both;}
-  .anim-2{animation:fadeUp 0.5s 0.08s ease both;}
-  .anim-3{animation:fadeUp 0.5s 0.16s ease both;}
-  .anim-4{animation:fadeUp 0.5s 0.24s ease both;}
-  .hero-bg{background:linear-gradient(135deg,#165DFF 0%,#0A3DBF 60%,#1a1a4e 100%);position:relative;overflow:hidden;}
-  .hero-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(54,191,250,0.2) 0%,transparent 55%),radial-gradient(circle at 10% 85%,rgba(255,125,0,0.12) 0%,transparent 45%);}
-  .hero-bg::after{content:'📚';font-size:clamp(6rem,20vw,13rem);position:absolute;right:-1rem;bottom:-1rem;opacity:0.06;pointer-events:none;line-height:1;}
-  .stat-card{border-radius:1rem;padding:1.1rem 1.25rem;transition:transform 0.2s ease,box-shadow 0.2s ease;}
-  .stat-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,0.1);}
-  .destaque-card{background:white;border-radius:1.25rem;overflow:hidden;box-shadow:0 4px 20px rgba(22,93,255,0.07);transition:transform 0.25s ease,box-shadow 0.25s ease;}
-  .destaque-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(22,93,255,0.14);}
-  .step-num{width:3.5rem;height:3.5rem;border-radius:50%;background:linear-gradient(135deg,#165DFF,#36BFFA);display:flex;align-items:center;justify-content:center;color:white;font-size:1.25rem;font-weight:900;margin:0 auto 1rem;box-shadow:0 8px 20px rgba(22,93,255,0.3);}
-  .aviso-teste{background:#eff4ff;color:#165DFF;border:1.5px solid #c7d9ff;}
-  .aviso-ativo{background:#f0fdf4;color:#00B42A;border:1.5px solid #bbf7d0;}
-  .aviso-expirado{background:#fff1f1;color:#F53F3F;border:1.5px solid #fecaca;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#F0F4FF;color:#1D2129;min-height:100vh;display:flex;}
+
+/* ── Header ── */
+header{position:fixed;top:0;left:0;right:0;background:#165DFF;color:#fff;padding:1rem;z-index:20;box-shadow:0 4px 16px rgba(22,93,255,.3);display:flex;align-items:center;justify-content:space-between;}
+.header-esq{display:flex;align-items:center;gap:.75rem;}
+.header-esq h1{font-size:1.1rem;font-weight:900;}
+.btn-menu{background:none;border:none;color:#fff;font-size:1.25rem;cursor:pointer;padding:.25rem;display:none;}
+.btn-sair{background:#fff;color:#165DFF;border:none;padding:.4rem .85rem;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:900;cursor:pointer;}
+.btn-sair:hover{background:#eff6ff;}
+#nomeHeader{font-size:.85rem;font-weight:700;}
+
+/* ── Menu lateral ── */
+aside{position:fixed;top:64px;left:0;width:256px;height:calc(100vh - 64px);background:#fff;border-right:1px solid #f0f0f0;padding:1.5rem 1rem;overflow-y:auto;z-index:15;transition:transform .3s ease;box-shadow:2px 0 8px rgba(0,0,0,.04);}
+aside nav ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+aside nav a{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;border-radius:12px;text-decoration:none;color:#6b7280;font-weight:700;font-size:.875rem;transition:all .2s;}
+aside nav a:hover{background:rgba(22,93,255,.08);color:#165DFF;}
+aside nav a.ativo{background:rgba(22,93,255,.1);color:#165DFF;font-weight:900;}
+aside nav a i{width:18px;text-align:center;}
+.fundo-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:14;}
+
+/* ── Main ── */
+main{margin-left:256px;margin-top:64px;width:100%;padding-bottom:3rem;}
+
+/* ── Hero ── */
+.hero{background:linear-gradient(135deg,#165DFF 0%,#0A3DBF 60%,#1a1a4e 100%);color:#fff;padding:2.5rem 2rem;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(54,191,250,.2) 0%,transparent 55%),radial-gradient(circle at 10% 85%,rgba(255,125,0,.12) 0%,transparent 45%);}
+.hero::after{content:'📚';font-size:10rem;position:absolute;right:-1rem;bottom:-1.5rem;opacity:.06;pointer-events:none;line-height:1;}
+.hero-inner{position:relative;z-index:1;max-width:680px;}
+.hero-label{font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.6);margin-bottom:.5rem;}
+.hero-titulo{font-size:clamp(1.75rem,5vw,2.75rem);font-weight:900;line-height:1.15;margin-bottom:.75rem;}
+.hero-titulo span{color:#36BFFA;}
+.hero-sub{color:rgba(255,255,255,.75);font-size:.9rem;max-width:480px;margin-bottom:1.5rem;line-height:1.6;}
+
+/* Aviso status */
+.aviso{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1rem;border-radius:12px;font-size:.82rem;font-weight:800;}
+.aviso-teste{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);color:#fff;}
+.aviso-ativo{background:rgba(0,180,42,.2);border:1.5px solid rgba(0,180,42,.4);color:#6effa0;}
+.aviso-expirado{background:rgba(245,63,63,.2);border:1.5px solid rgba(245,63,63,.4);color:#ffa0a0;}
+.aviso a{color:inherit;font-weight:900;}
+
+/* Stats hero */
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.875rem;margin-top:1.75rem;}
+.hero-stat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:1rem;text-align:center;}
+.hero-stat i{color:rgba(255,255,255,.6);font-size:1.1rem;display:block;margin-bottom:.4rem;}
+.hero-stat-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,.6);line-height:1.3;}
+.hero-stat-val{font-size:1.75rem;font-weight:900;margin-top:.25rem;}
+
+/* ── Conteúdo ── */
+.conteudo{padding:2rem 2rem 0;max-width:1000px;}
+
+/* Seção */
+.secao{margin-bottom:2.5rem;}
+.secao-titulo{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;}
+.secao-titulo::before{content:'';display:block;width:4px;height:28px;background:#165DFF;border-radius:4px;flex-shrink:0;}
+.secao-titulo h3{font-size:1.15rem;font-weight:900;}
+
+/* Acesso rápido */
+.acesso-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.875rem;}
+.acesso-card{background:#fff;border-radius:18px;padding:1.1rem;text-align:center;text-decoration:none;color:#1D2129;box-shadow:0 2px 10px rgba(0,0,0,.06);transition:transform .2s,box-shadow .2s;}
+.acesso-card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.12);}
+.acesso-icone{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;font-size:1.1rem;}
+.acesso-nome{font-weight:900;font-size:.82rem;}
+
+/* Nível card */
+.nivel-card{background:linear-gradient(135deg,#6b7280,#374151);border-radius:20px;padding:1.5rem;color:#fff;display:flex;align-items:center;gap:1.25rem;margin-bottom:2.5rem;box-shadow:0 8px 24px rgba(0,0,0,.15);cursor:pointer;text-decoration:none;transition:transform .2s,box-shadow .2s;}
+.nivel-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.2);}
+.nivel-emoji{font-size:3rem;flex-shrink:0;}
+.nivel-dados{flex:1;}
+.nivel-dados .label{font-size:.7rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;opacity:.7;margin-bottom:.2rem;}
+.nivel-dados .nome{font-size:1.4rem;font-weight:900;}
+.nivel-dados .xp{font-size:.82rem;opacity:.75;margin-top:.2rem;}
+.nivel-prog-wrap{background:rgba(255,255,255,.25);border-radius:999px;height:8px;margin-top:.75rem;}
+.nivel-prog-barra{height:8px;border-radius:999px;background:#fff;transition:width .8s ease;}
+.nivel-prog-txt{font-size:.72rem;opacity:.65;margin-top:.3rem;}
+.nivel-seta{font-size:1.2rem;opacity:.7;flex-shrink:0;}
+
+/* Destaque cards */
+.destaque-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;}
+.destaque-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.07);transition:transform .2s,box-shadow .2s;text-decoration:none;color:#1D2129;display:block;}
+.destaque-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.13);}
+.destaque-img{width:100%;height:130px;object-fit:cover;background:#e5e7eb;}
+.destaque-corpo{padding:1rem;}
+.destaque-tag{font-size:.7rem;font-weight:900;padding:.2rem .65rem;border-radius:999px;display:inline-block;margin-bottom:.5rem;}
+.destaque-titulo{font-size:.95rem;font-weight:900;margin-bottom:.35rem;}
+.destaque-desc{font-size:.78rem;color:#6b7280;line-height:1.5;margin-bottom:.75rem;}
+.destaque-link{color:#165DFF;font-size:.78rem;font-weight:900;display:flex;align-items:center;gap:.35rem;}
+
+/* Como funciona */
+.como-card{background:#fff;border-radius:20px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,.07);}
+.como-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:1.25rem;}
+.como-item{text-align:center;}
+.como-num{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#165DFF,#36BFFA);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;font-weight:900;margin:0 auto .875rem;box-shadow:0 8px 20px rgba(22,93,255,.3);}
+.como-titulo{font-weight:900;font-size:.95rem;margin-bottom:.4rem;}
+.como-desc{font-size:.8rem;color:#6b7280;line-height:1.6;}
+
+/* ── Responsivo ── */
+@media(max-width:900px){
+  .destaque-grid{grid-template-columns:repeat(2,1fr);}
+  .acesso-grid{grid-template-columns:repeat(4,1fr);}
+}
+@media(max-width:768px){
+  aside{transform:translateX(-100%);}
+  aside.aberto{transform:translateX(0);}
+  .btn-menu{display:block;}
+  main{margin-left:0;}
+  .conteudo{padding:1.5rem 1rem 0;}
+  .hero{padding:2rem 1rem;}
+  .acesso-grid{grid-template-columns:repeat(4,1fr);gap:.6rem;}
+  .acesso-icone{width:38px;height:38px;font-size:.95rem;}
+  .destaque-grid{grid-template-columns:1fr;}
+  .como-grid{grid-template-columns:1fr;gap:1.25rem;}
+}
+@media(max-width:480px){
+  .acesso-grid{grid-template-columns:repeat(4,1fr);}
+  .acesso-card{padding:.875rem .5rem;}
+  .hero-stats{gap:.6rem;}
+}
 </style>
 </head>
-<body class="min-h-screen font-sans text-escuro flex">
+<body>
 
-<header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20 shadow-lg">
-  <div class="flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <button class="md:hidden text-white text-xl p-1" onclick="toggleMenu()"><i class="fa fa-bars"></i></button>
-      <i class="fa fa-graduation-cap text-2xl"></i>
-      <h1 class="text-lg md:text-xl font-bold">Plataforma de Estudos</h1>
-    </div>
-    <div class="flex items-center gap-3">
-      <span id="nomeUsuario" class="font-semibold text-sm hidden sm:inline"></span>
-      <button onclick="sairDaConta()" class="bg-white text-primario px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-50 transition-colors">Sair</button>
-    </div>
+<!-- HEADER -->
+<header>
+  <div class="header-esq">
+    <button class="btn-menu" onclick="toggleMenu()"><i class="fa fa-bars"></i></button>
+    <i class="fa fa-graduation-cap" style="font-size:1.4rem"></i>
+    <h1>Plataforma de Estudos</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem">
+    <span id="nomeHeader"></span>
+    <button class="btn-sair" onclick="sairDaConta()">Sair</button>
   </div>
 </header>
 
-<aside id="menuLateral" class="menu-lateral fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-100 pt-6 z-30 overflow-y-auto -translate-x-full md:translate-x-0 shadow-xl md:shadow-none">
-  <nav class="px-4"><ul class="space-y-1">
-    <li><a href="inicio.html"     class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primario/10 text-primario font-bold text-sm"><i class="fa fa-home w-5 text-center"></i> Início</a></li>
-    <li><a href="materias.html"   class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-book w-5 text-center"></i> Matérias</a></li>
-    <li><a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-tasks w-5 text-center"></i> Atividades</a></li>
-    <li><a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-bar-chart w-5 text-center"></i> Meu Desempenho</a></li>
-    <li><a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-credit-card w-5 text-center"></i> Assinatura</a></li>
-    <li><a href="perfil.html"     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-user w-5 text-center"></i> Perfil</a></li>
-    <li><a href="pais.html"       class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-users w-5 text-center"></i> Pais / Responsáveis</a></li>
+<!-- MENU LATERAL -->
+<aside id="menuLateral">
+  <nav><ul>
+    <li><a href="inicio.html" class="ativo"><i class="fa fa-home"></i> Início</a></li>
+    <li><a href="materias.html"><i class="fa fa-book"></i> Matérias</a></li>
+    <li><a href="atividades.html"><i class="fa fa-tasks"></i> Atividades</a></li>
+    <li><a href="desempenho.html"><i class="fa fa-bar-chart"></i> Meu Desempenho</a></li>
+    <li><a href="nivel.html"><i class="fa fa-star"></i> Meu Nível</a></li>
+    <li><a href="assinatura.html"><i class="fa fa-credit-card"></i> Assinatura</a></li>
+    <li><a href="perfil.html"><i class="fa fa-user"></i> Perfil</a></li>
+    <li><a href="pais.html"><i class="fa fa-users"></i> Pais / Responsáveis</a></li>
+    <li><a href="configuracoes.html"><i class="fa fa-cog"></i> Configurações</a></li>
   </ul></nav>
 </aside>
-<div id="fundoMenu" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden" onclick="toggleMenu()"></div>
+<div class="fundo-menu" id="fundoMenu" onclick="toggleMenu()"></div>
 
-<main class="w-full md:ml-64 mt-16 pb-16">
-  <div class="hero-bg text-white px-4 sm:px-8 py-8 sm:py-12 anim-1">
-    <div class="max-w-4xl relative z-10">
-      <p class="text-blue-200 text-sm font-bold uppercase tracking-widest mb-2">Bem-vindo de volta 👋</p>
-      <h2 class="text-[clamp(1.8rem,6vw,3rem)] font-black leading-tight mb-2">Olá, <span id="nomeBoasVindas" class="text-secundario"></span>!</h2>
-      <p class="text-blue-100 text-sm sm:text-base max-w-xl mb-6">Aqui você encontra todo o material necessário para aprender e se destacar nos estudos.</p>
-      <div id="avisoStatus" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold"></div>
-      <div class="grid grid-cols-3 gap-3 mt-6">
-        <div class="stat-card bg-white/10 border border-white/20 backdrop-blur-sm">
-          <i class="fa fa-calendar text-blue-200 text-lg mb-1 block"></i>
-          <p class="text-xs text-blue-200 font-bold uppercase tracking-wide leading-tight">Dias de Teste</p>
-          <p id="diasRestantes" class="text-2xl font-black mt-1">0</p>
+<!-- CONTEÚDO -->
+<main>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-label">Bem-vindo de volta 👋</div>
+      <div class="hero-titulo">Olá, <span id="nomeBoasVindas"></span>!</div>
+      <div class="hero-sub">Aqui você encontra todo o material necessário para aprender e se destacar nos estudos.</div>
+      <div id="avisoStatus" class="aviso aviso-teste"></div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <i class="fa fa-calendar"></i>
+          <div class="hero-stat-label">Dias de Teste</div>
+          <div class="hero-stat-val" id="diasRestantes">0</div>
         </div>
-        <div class="stat-card bg-white/10 border border-white/20 backdrop-blur-sm">
-          <i class="fa fa-book text-blue-200 text-lg mb-1 block"></i>
-          <p class="text-xs text-blue-200 font-bold uppercase tracking-wide leading-tight">Matérias</p>
-          <p class="text-2xl font-black mt-1">12</p>
+        <div class="hero-stat">
+          <i class="fa fa-bolt"></i>
+          <div class="hero-stat-label">XP Total</div>
+          <div class="hero-stat-val" id="statXP">0</div>
         </div>
-        <div class="stat-card bg-white/10 border border-white/20 backdrop-blur-sm">
-          <i class="fa fa-tasks text-blue-200 text-lg mb-1 block"></i>
-          <p class="text-xs text-blue-200 font-bold uppercase tracking-wide leading-tight">Exercícios</p>
-          <p class="text-2xl font-black mt-1">150+</p>
+        <div class="hero-stat">
+          <i class="fa fa-check-circle"></i>
+          <div class="hero-stat-label">Atividades</div>
+          <div class="hero-stat-val" id="statAtv">0</div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="px-3 sm:px-6 md:px-8 pt-8 max-w-5xl mx-auto">
-    <div class="mb-10 anim-2">
-      <div class="flex items-center gap-3 mb-5"><div class="w-1 h-7 bg-primario rounded-full"></div><h3 class="text-lg sm:text-xl font-black">Acesso Rápido</h3></div>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <a href="materias.html"   class="bg-white rounded-2xl p-4 text-center shadow-sm hover:shadow-md hover:-translate-y-1 transition-all"><div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-2"><i class="fa fa-book text-primario text-lg"></i></div><p class="font-black text-sm text-escuro">Matérias</p></a>
-        <a href="atividades.html" class="bg-white rounded-2xl p-4 text-center shadow-sm hover:shadow-md hover:-translate-y-1 transition-all"><div class="w-11 h-11 bg-green-50 rounded-xl flex items-center justify-center mx-auto mb-2"><i class="fa fa-tasks text-sucesso text-lg"></i></div><p class="font-black text-sm text-escuro">Atividades</p></a>
-        <a href="desempenho.html" class="bg-white rounded-2xl p-4 text-center shadow-sm hover:shadow-md hover:-translate-y-1 transition-all"><div class="w-11 h-11 bg-cyan-50 rounded-xl flex items-center justify-center mx-auto mb-2"><i class="fa fa-bar-chart text-secundario text-lg"></i></div><p class="font-black text-sm text-escuro">Desempenho</p></a>
-        <a href="perfil.html"     class="bg-white rounded-2xl p-4 text-center shadow-sm hover:shadow-md hover:-translate-y-1 transition-all"><div class="w-11 h-11 bg-purple-50 rounded-xl flex items-center justify-center mx-auto mb-2"><i class="fa fa-user text-purple-500 text-lg"></i></div><p class="font-black text-sm text-escuro">Perfil</p></a>
+  <div class="conteudo">
+
+    <!-- Acesso rápido -->
+    <div class="secao">
+      <div class="secao-titulo"><h3>Acesso Rápido</h3></div>
+      <div class="acesso-grid">
+        <a href="materias.html" class="acesso-card">
+          <div class="acesso-icone" style="background:#eff6ff;color:#165DFF"><i class="fa fa-book"></i></div>
+          <div class="acesso-nome">Matérias</div>
+        </a>
+        <a href="atividades.html" class="acesso-card">
+          <div class="acesso-icone" style="background:#f0fdf4;color:#00B42A"><i class="fa fa-tasks"></i></div>
+          <div class="acesso-nome">Atividades</div>
+        </a>
+        <a href="nivel.html" class="acesso-card">
+          <div class="acesso-icone" style="background:#fff7ed;color:#d97706"><i class="fa fa-star"></i></div>
+          <div class="acesso-nome">Meu Nível</div>
+        </a>
+        <a href="configuracoes.html" class="acesso-card">
+          <div class="acesso-icone" style="background:#f5f3ff;color:#7c3aed"><i class="fa fa-cog"></i></div>
+          <div class="acesso-nome">Configurações</div>
+        </a>
       </div>
     </div>
 
-    <div class="mb-10 anim-3">
-      <div class="flex items-center gap-3 mb-5"><div class="w-1 h-7 bg-primario rounded-full"></div><h3 class="text-lg sm:text-xl font-black">Conteúdos em Destaque</h3></div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-        <div class="destaque-card"><img src="https://picsum.photos/id/20/600/300" alt="Matemática" class="w-full h-36 object-cover"><div class="p-4"><span class="text-xs font-black text-primario bg-blue-50 px-2 py-0.5 rounded-full">Matemática</span><h4 class="font-black text-base mt-2 mb-1">Números e Operações</h4><p class="text-gray-500 text-xs mb-3 leading-relaxed">Estude números, equações, geometria e muito mais com materiais exclusivos.</p><a href="materias.html#matematica" class="text-primario font-black text-xs flex items-center gap-1 hover:gap-2 transition-all">Acessar conteúdo <i class="fa fa-arrow-right text-xs"></i></a></div></div>
-        <div class="destaque-card"><img src="https://picsum.photos/id/42/600/300" alt="Português" class="w-full h-36 object-cover"><div class="p-4"><span class="text-xs font-black text-red-600 bg-red-50 px-2 py-0.5 rounded-full">Português</span><h4 class="font-black text-base mt-2 mb-1">Língua Portuguesa</h4><p class="text-gray-500 text-xs mb-3 leading-relaxed">Gramática, interpretação de textos, produção textual e redação.</p><a href="portugues_5ano.html" class="text-primario font-black text-xs flex items-center gap-1 hover:gap-2 transition-all">Acessar conteúdo <i class="fa fa-arrow-right text-xs"></i></a></div></div>
-        <div class="destaque-card sm:col-span-2 lg:col-span-1"><img src="https://picsum.photos/id/60/600/300" alt="Ciências" class="w-full h-36 object-cover"><div class="p-4"><span class="text-xs font-black text-sucesso bg-green-50 px-2 py-0.5 rounded-full">Ciências</span><h4 class="font-black text-base mt-2 mb-1">Ciências Naturais</h4><p class="text-gray-500 text-xs mb-3 leading-relaxed">Biologia, química e física explicadas de forma simples e divertida.</p><a href="materias.html#ciencias" class="text-primario font-black text-xs flex items-center gap-1 hover:gap-2 transition-all">Acessar conteúdo <i class="fa fa-arrow-right text-xs"></i></a></div></div>
+    <!-- Card de nível -->
+    <a href="nivel.html" class="nivel-card" id="nivelCard">
+      <span class="nivel-emoji" id="nivelEmoji">🔵</span>
+      <div class="nivel-dados">
+        <div class="label">Seu nível atual</div>
+        <div class="nome" id="nivelNome">Beta</div>
+        <div class="xp" id="nivelXP">0 XP acumulados</div>
+        <div class="nivel-prog-wrap">
+          <div class="nivel-prog-barra" id="nivelBarra" style="width:0%"></div>
+        </div>
+        <div class="nivel-prog-txt" id="nivelProgTxt"></div>
+      </div>
+      <i class="fa fa-chevron-right nivel-seta"></i>
+    </a>
+
+    <!-- Conteúdos em destaque -->
+    <div class="secao">
+      <div class="secao-titulo"><h3>Conteúdos em Destaque</h3></div>
+      <div class="destaque-grid">
+        <a href="materias.html" class="destaque-card">
+          <img src="https://picsum.photos/id/20/600/300" alt="Matemática" class="destaque-img">
+          <div class="destaque-corpo">
+            <span class="destaque-tag" style="background:#eff6ff;color:#165DFF">Matemática</span>
+            <div class="destaque-titulo">Números e Operações</div>
+            <div class="destaque-desc">Estude números, equações, geometria e muito mais com exercícios interativos.</div>
+            <div class="destaque-link">Acessar conteúdo <i class="fa fa-arrow-right"></i></div>
+          </div>
+        </a>
+        <a href="materias.html" class="destaque-card">
+          <img src="https://picsum.photos/id/42/600/300" alt="Português" class="destaque-img">
+          <div class="destaque-corpo">
+            <span class="destaque-tag" style="background:#fff1f0;color:#dc2626">Português</span>
+            <div class="destaque-titulo">Língua Portuguesa</div>
+            <div class="destaque-desc">Gramática, interpretação de textos, produção textual e redação.</div>
+            <div class="destaque-link">Acessar conteúdo <i class="fa fa-arrow-right"></i></div>
+          </div>
+        </a>
+        <a href="atividades.html" class="destaque-card">
+          <img src="https://picsum.photos/id/60/600/300" alt="Atividades" class="destaque-img">
+          <div class="destaque-corpo">
+            <span class="destaque-tag" style="background:#f0fdf4;color:#16a34a">Atividades</span>
+            <div class="destaque-titulo">Exercícios Interativos</div>
+            <div class="destaque-desc">Pratique com questões de múltipla escolha e ganhe XP para subir de nível!</div>
+            <div class="destaque-link">Ver atividades <i class="fa fa-arrow-right"></i></div>
+          </div>
+        </a>
       </div>
     </div>
 
-    <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm mb-4 anim-4">
-      <h3 class="text-lg sm:text-xl font-black text-center mb-8">Como Funciona</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
-        <div class="text-center"><div class="step-num">1</div><h4 class="font-black text-base mb-2">Cadastre-se</h4><p class="text-gray-500 text-sm leading-relaxed">Crie sua conta e ganhe 3 dias grátis para testar todos os recursos da plataforma.</p></div>
-        <div class="text-center"><div class="step-num">2</div><h4 class="font-black text-base mb-2">Estude</h4><p class="text-gray-500 text-sm leading-relaxed">Acesse matérias, exercícios interativos e aulas no seu ritmo e horário.</p></div>
-        <div class="text-center"><div class="step-num">3</div><h4 class="font-black text-base mb-2">Assine</h4><p class="text-gray-500 text-sm leading-relaxed">Após o teste, escolha o plano ideal para você e continue evoluindo.</p></div>
+    <!-- Como funciona -->
+    <div class="como-card" style="margin-bottom:2.5rem">
+      <div style="font-size:1.15rem;font-weight:900;text-align:center">Como Funciona</div>
+      <div class="como-grid">
+        <div class="como-item">
+          <div class="como-num">1</div>
+          <div class="como-titulo">Cadastre-se</div>
+          <div class="como-desc">Crie sua conta e ganhe 3 dias grátis para testar todos os recursos da plataforma.</div>
+        </div>
+        <div class="como-item">
+          <div class="como-num">2</div>
+          <div class="como-titulo">Estude e Evolua</div>
+          <div class="como-desc">Acesse matérias, faça atividades, ganhe XP e suba de nível enquanto aprende.</div>
+        </div>
+        <div class="como-item">
+          <div class="como-num">3</div>
+          <div class="como-titulo">Assine</div>
+          <div class="como-desc">Após o teste, escolha o plano ideal para você e continue evoluindo sem limites.</div>
+        </div>
       </div>
     </div>
+
   </div>
 </main>
 
 <script>
-  window.onload = function() {
-    const u = verificarAcesso();
-    if (!u) return;
+const niveis = [
+  {nome:'Beta',     emoji:'🔵', xpMin:0,    xpMax:199,  cor:'linear-gradient(135deg,#6b7280,#374151)'},
+  {nome:'Aprendiz', emoji:'📗', xpMin:200,  xpMax:499,  cor:'linear-gradient(135deg,#16a34a,#065f46)'},
+  {nome:'Estudante',emoji:'📘', xpMin:500,  xpMax:999,  cor:'linear-gradient(135deg,#2563eb,#1e3a8a)'},
+  {nome:'Expert',   emoji:'🏅', xpMin:1000, xpMax:1999, cor:'linear-gradient(135deg,#d97706,#92400e)'},
+  {nome:'Mestre',   emoji:'👑', xpMin:2000, xpMax:9999, cor:'linear-gradient(135deg,#9333ea,#581c87)'},
+];
 
-    preencherNome();
+function getNivelIdx(xp) {
+  for (let i = niveis.length - 1; i >= 0; i--) {
+    if (xp >= niveis[i].xpMin) return i;
+  }
+  return 0;
+}
 
-    const agora    = new Date();
-    const fimTeste = new Date(u.dataFimTeste);
-    const aviso    = document.getElementById('avisoStatus');
-    const diasEl   = document.getElementById('diasRestantes');
+function toggleMenu() {
+  document.getElementById('menuLateral').classList.toggle('aberto');
+  document.getElementById('fundoMenu').style.display =
+    document.getElementById('menuLateral').classList.contains('aberto') ? 'block' : 'none';
+}
 
-    if (u.statusAssinatura === 'ativa') {
-      aviso.className = 'inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold aviso-ativo';
-      aviso.innerHTML = '<i class="fa fa-check-circle"></i> Assinatura ativa — acesso total ao conteúdo!';
-      diasEl.textContent = '∞';
-    } else {
-      const dias = Math.ceil((fimTeste - agora) / (1000 * 60 * 60 * 24));
-      aviso.className = 'inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold aviso-teste';
-      aviso.innerHTML = `<i class="fa fa-gift"></i> Período de teste — faltam <strong>${dias} dia${dias !== 1 ? 's' : ''}</strong>`;
-      diasEl.textContent = dias;
-    }
-  };
+function sairDaConta() {
+  localStorage.removeItem('usuarioLogado');
+  window.location.href = 'login.html';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const salvo = localStorage.getItem('usuarioLogado');
+  if (!salvo) { window.location.href = 'login.html'; return; }
+  const u = JSON.parse(salvo);
+
+  document.getElementById('nomeHeader').textContent    = u.nome;
+  document.getElementById('nomeBoasVindas').textContent = u.nome;
+  document.getElementById('statXP').textContent        = u.xp || 0;
+  document.getElementById('statAtv').textContent       = u.atividadesFeitas || 0;
+
+  // ── Status assinatura ──
+  const agora    = new Date();
+  const fimTeste = new Date(u.dataFimTeste);
+  const aviso    = document.getElementById('avisoStatus');
+  const diasEl   = document.getElementById('diasRestantes');
+
+  if (u.statusAssinatura === 'ativa') {
+    aviso.className = 'aviso aviso-ativo';
+    aviso.innerHTML = '<i class="fa fa-check-circle"></i> Assinatura ativa — acesso total!';
+    diasEl.textContent = '∞';
+  } else if (agora < fimTeste) {
+    const dias = Math.ceil((fimTeste - agora) / 86400000);
+    aviso.className = 'aviso aviso-teste';
+    aviso.innerHTML = `<i class="fa fa-gift"></i> Período de teste — faltam <strong>${dias} dia${dias!==1?'s':''}</strong>`;
+    diasEl.textContent = dias;
+  } else {
+    u.statusAssinatura = 'expirada';
+    localStorage.setItem('usuarioLogado', JSON.stringify(u));
+    aviso.className = 'aviso aviso-expirado';
+    aviso.innerHTML = '<i class="fa fa-lock"></i> Teste expirado — <a href="assinatura.html">assine para continuar</a>';
+    diasEl.textContent = '0';
+  }
+
+  // ── Nível ──
+  const xp      = u.xp || 0;
+  const idx     = getNivelIdx(xp);
+  const nivel   = niveis[idx];
+  const proximo = niveis[idx + 1];
+  const pct     = proximo ? Math.min(100, Math.round(((xp - nivel.xpMin) / (proximo.xpMin - nivel.xpMin)) * 100)) : 100;
+
+  document.getElementById('nivelCard').style.background = nivel.cor;
+  document.getElementById('nivelEmoji').textContent     = nivel.emoji;
+  document.getElementById('nivelNome').textContent      = nivel.nome;
+  document.getElementById('nivelXP').textContent        = xp + ' XP acumulados';
+  document.getElementById('nivelProgTxt').textContent   = proximo
+    ? pct + '% → faltam ' + (proximo.xpMin - xp) + ' XP para ' + proximo.nome
+    : '🏆 Nível Máximo atingido!';
+
+  setTimeout(() => {
+    document.getElementById('nivelBarra').style.width = pct + '%';
+  }, 200);
+});
 </script>
 </body>
 </html>
