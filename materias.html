@@ -4,322 +4,245 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Matérias - Plataforma de Estudos</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          primario: '#165DFF', secundario: '#36BFFA', sucesso: '#00B42A',
-          aviso: '#FF7D00', erro: '#F53F3F', claro: '#F7F8FA', escuro: '#1D2129',
-        },
-        fontFamily: { sans: ['Nunito', 'system-ui', 'sans-serif'] }
-      }
-    }
-  }
-</script>
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; }
-  body { background: #F0F4FF; }
-  .menu-lateral { transition: transform 0.3s cubic-bezier(.4,0,.2,1); }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#F0F4FF;color:#1D2129;min-height:100vh;display:flex;}
+header{position:fixed;top:0;left:0;right:0;background:#165DFF;color:#fff;padding:1rem;z-index:20;box-shadow:0 4px 16px rgba(22,93,255,.3);display:flex;align-items:center;justify-content:space-between;}
+.header-esq{display:flex;align-items:center;gap:.75rem;}
+.header-esq h1{font-size:1.1rem;font-weight:900;}
+.btn-menu{background:none;border:none;color:#fff;font-size:1.25rem;cursor:pointer;padding:.25rem;display:none;}
+.btn-sair{background:#fff;color:#165DFF;border:none;padding:.4rem .85rem;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:900;cursor:pointer;}
+.btn-sair:hover{background:#eff6ff;}
+#nomeHeader{font-size:.85rem;font-weight:700;}
+aside{position:fixed;top:64px;left:0;width:256px;height:calc(100vh - 64px);background:#fff;border-right:1px solid #f0f0f0;padding:1.5rem 1rem;overflow-y:auto;z-index:15;transition:transform .3s ease;box-shadow:2px 0 8px rgba(0,0,0,.04);}
+aside nav ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+aside nav a{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;border-radius:12px;text-decoration:none;color:#6b7280;font-weight:700;font-size:.875rem;transition:all .2s;}
+aside nav a:hover{background:rgba(22,93,255,.08);color:#165DFF;}
+aside nav a.ativo{background:rgba(22,93,255,.1);color:#165DFF;font-weight:900;}
+aside nav a i{width:18px;text-align:center;}
+.fundo-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:14;}
+main{margin-left:256px;margin-top:64px;padding:2.5rem 2rem;width:100%;}
+.titulo-pg{font-size:1.75rem;font-weight:900;margin-bottom:.35rem;}
+.sub-pg{color:#6b7280;font-size:.9rem;margin-bottom:.75rem;}
 
-  @keyframes fadeUp {
-    from { opacity:0; transform:translateY(22px); }
-    to   { opacity:1; transform:translateY(0); }
-  }
-  .anim-1 { animation: fadeUp 0.5s 0.00s ease both; }
-  .anim-2 { animation: fadeUp 0.5s 0.08s ease both; }
-  .anim-3 { animation: fadeUp 0.5s 0.16s ease both; }
-  .anim-4 { animation: fadeUp 0.5s 0.24s ease both; }
+/* Banner série */
+.banner-serie{background:linear-gradient(135deg,#165DFF,#0a3dbf);color:#fff;border-radius:16px;padding:1rem 1.5rem;display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;font-weight:800;font-size:.9rem;}
+.banner-serie i{font-size:1.2rem;opacity:.8;}
 
-  /* Hero */
-  .hero-bg {
-    background: linear-gradient(135deg, #165DFF 0%, #0A3DBF 60%, #1a1a4e 100%);
-    position: relative; overflow: hidden;
-  }
-  .hero-bg::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at 80% 20%, rgba(54,191,250,0.2) 0%, transparent 55%),
-                radial-gradient(circle at 10% 85%, rgba(255,125,0,0.12) 0%, transparent 45%);
-  }
-  .hero-bg::after {
-    content: '📖';
-    font-size: clamp(6rem, 20vw, 13rem);
-    position: absolute; right: -1rem; bottom: -1rem;
-    opacity: 0.06; pointer-events: none; line-height: 1;
-  }
+/* Aviso sem série */
+.aviso-serie{background:#fff7ed;border:1.5px solid #fde68a;color:#b45309;border-radius:16px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;font-weight:700;font-size:.875rem;}
 
-  /* Card de matéria */
-  .materia-card {
-    background: white; border-radius: 1.25rem; overflow: hidden;
-    box-shadow: 0 4px 20px rgba(22,93,255,0.07);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-  }
-  .materia-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(22,93,255,0.14); }
+/* Grade */
+.grade{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;}
 
-  /* Aviso status */
-  .aviso-teste    { background:#eff4ff; color:#165DFF; border:1.5px solid #c7d9ff; }
-  .aviso-ativo    { background:#f0fdf4; color:#00B42A; border:1.5px solid #bbf7d0; }
-  .aviso-expirado { background:#fff1f1; color:#F53F3F; border:1.5px solid #fecaca; }
+/* Card matéria */
+.card-mat{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 2px 14px rgba(0,0,0,.08);transition:transform .2s,box-shadow .2s;}
+.card-mat:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.14);}
+.card-mat-topo{height:130px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;}
+.card-mat-corpo{padding:1.25rem;}
+.card-mat-titulo{font-size:1.05rem;font-weight:900;margin-bottom:.4rem;}
+.card-mat-desc{font-size:.8rem;color:#6b7280;line-height:1.55;margin-bottom:1rem;}
+.card-mat-serie{display:inline-flex;align-items:center;gap:.35rem;font-size:.75rem;font-weight:800;padding:.3rem .75rem;border-radius:999px;margin-bottom:1rem;}
+.btn-acessar{display:block;width:100%;text-align:center;padding:.75rem;border-radius:12px;color:#fff;font-family:'Nunito',sans-serif;font-weight:900;font-size:.875rem;text-decoration:none;border:none;cursor:pointer;transition:opacity .2s;}
+.btn-acessar:hover{opacity:.88;}
+
+/* Complementares */
+.complementares{background:#fff;border-radius:20px;padding:1.75rem;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-top:2rem;}
+.comp-titulo{font-size:1.1rem;font-weight:900;margin-bottom:1.25rem;}
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.comp-item{background:#F0F4FF;border-radius:14px;padding:1.1rem;}
+.comp-item h4{font-weight:900;font-size:.9rem;display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;}
+.comp-item h4 i{color:#165DFF;}
+.comp-item p{font-size:.78rem;color:#6b7280;line-height:1.55;margin-bottom:.75rem;}
+.comp-item a{color:#165DFF;font-size:.78rem;font-weight:900;text-decoration:none;}
+.comp-item a:hover{text-decoration:underline;}
+
+@media(max-width:900px){.grade{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:768px){
+  aside{transform:translateX(-100%);}
+  aside.aberto{transform:translateX(0);}
+  .btn-menu{display:block;}
+  main{margin-left:0;padding:1.5rem 1rem;}
+  .grade{grid-template-columns:repeat(2,1fr);gap:1rem;}
+  .comp-grid{grid-template-columns:1fr;}
+}
+@media(max-width:480px){.grade{grid-template-columns:1fr;}}
 </style>
 </head>
-<body class="min-h-screen font-sans text-escuro flex">
+<body>
 
-<!-- CABEÇALHO -->
-<header class="fixed top-0 left-0 right-0 bg-primario text-white py-4 px-4 z-20 shadow-lg">
-  <div class="flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <button class="md:hidden text-white text-xl p-1" onclick="toggleMenu()">
-        <i class="fa fa-bars"></i>
-      </button>
-      <i class="fa fa-graduation-cap text-2xl"></i>
-      <h1 class="text-lg md:text-xl font-bold">Plataforma de Estudos</h1>
-    </div>
-    <div class="flex items-center gap-3">
-      <span id="nomeUsuario" class="font-semibold text-sm hidden sm:inline"></span>
-      <button onclick="sairDaConta()" class="bg-white text-primario px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-blue-50 transition-colors">
-        Sair
-      </button>
-    </div>
+<header>
+  <div class="header-esq">
+    <button class="btn-menu" onclick="toggleMenu()"><i class="fa fa-bars"></i></button>
+    <i class="fa fa-graduation-cap" style="font-size:1.4rem"></i>
+    <h1>Plataforma de Estudos</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem">
+    <span id="nomeHeader"></span>
+    <button class="btn-sair" onclick="sairDaConta()">Sair</button>
   </div>
 </header>
 
-<!-- MENU LATERAL -->
-<aside id="menuLateral" class="menu-lateral fixed top-16 left-0 w-64 h-[calc(100vh-4rem)] bg-white border-r border-gray-100 pt-6 z-30 overflow-y-auto -translate-x-full md:translate-x-0 shadow-xl md:shadow-none">
-  <nav class="px-4">
-    <ul class="space-y-1">
-      <li><a href="inicio.html"     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-home w-5 text-center"></i> Início</a></li>
-      <li><a href="materias.html"   class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primario/10 text-primario font-bold text-sm"><i class="fa fa-book w-5 text-center"></i> Matérias</a></li>
-      <li><a href="atividades.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-tasks w-5 text-center"></i> Atividades</a></li>
-      <li><a href="desempenho.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-bar-chart w-5 text-center"></i> Meu Desempenho</a></li>
-      <li><a href="assinatura.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-credit-card w-5 text-center"></i> Assinatura</a></li>
-      <li><a href="perfil.html"     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-user w-5 text-center"></i> Perfil</a></li>
-      <li><a href="pais.html"       class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-primario/10 transition-colors text-gray-600 hover:text-primario font-semibold text-sm"><i class="fa fa-users w-5 text-center"></i> Pais / Responsáveis</a></li>
-    </ul>
-  </nav>
+<aside id="menuLateral">
+  <nav><ul>
+    <li><a href="inicio.html"><i class="fa fa-home"></i> Início</a></li>
+    <li><a href="materias.html" class="ativo"><i class="fa fa-book"></i> Matérias</a></li>
+    <li><a href="atividades.html"><i class="fa fa-tasks"></i> Atividades</a></li>
+    <li><a href="desempenho.html"><i class="fa fa-bar-chart"></i> Meu Desempenho</a></li>
+    <li><a href="nivel.html"><i class="fa fa-star"></i> Meu Nível</a></li>
+    <li><a href="assinatura.html"><i class="fa fa-credit-card"></i> Assinatura</a></li>
+    <li><a href="perfil.html"><i class="fa fa-user"></i> Perfil</a></li>
+    <li><a href="pais.html"><i class="fa fa-users"></i> Pais / Responsáveis</a></li>
+    <li><a href="configuracoes.html"><i class="fa fa-cog"></i> Configurações</a></li>
+  </ul></nav>
 </aside>
+<div class="fundo-menu" id="fundoMenu" onclick="toggleMenu()"></div>
 
-<div id="fundoMenu" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden" onclick="toggleMenu()"></div>
+<main>
+  <div class="titulo-pg">Matérias de Estudo</div>
+  <div class="sub-pg">Conteúdos personalizados para a sua série</div>
 
-<!-- CONTEÚDO -->
-<main class="w-full md:ml-64 mt-16 pb-16">
+  <div id="bannerSerie"></div>
 
-  <!-- Hero -->
-  <div class="hero-bg text-white px-4 sm:px-8 py-8 sm:py-12 anim-1">
-    <div class="max-w-4xl relative z-10">
-      <p class="text-blue-200 text-sm font-bold uppercase tracking-widest mb-2">Explore o conhecimento 🎓</p>
-      <h2 class="text-[clamp(1.8rem,6vw,3rem)] font-black leading-tight mb-2">
-        Matérias de Estudo
-      </h2>
-      <p class="text-blue-100 text-sm sm:text-base max-w-xl mb-6">
-        Escolha uma matéria para acessar conteúdos, exercícios e materiais de apoio.
-      </p>
-      <!-- Aviso de status -->
-      <div id="avisoStatus" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold"></div>
-    </div>
-  </div>
+  <div class="grade" id="gradeMateria"></div>
 
-  <div class="px-3 sm:px-6 md:px-8 pt-8 max-w-5xl mx-auto">
-
-    <!-- Grade de Matérias -->
-    <div class="mb-10 anim-2">
-      <div class="flex items-center gap-3 mb-5">
-        <div class="w-1 h-7 bg-primario rounded-full"></div>
-        <h3 class="text-lg sm:text-xl font-black">Todas as Matérias</h3>
+  <div class="complementares">
+    <div class="comp-titulo">Conteúdos Complementares</div>
+    <div class="comp-grid">
+      <div class="comp-item">
+        <h4><i class="fa fa-video-camera"></i> Aulas em Vídeo</h4>
+        <p>Assista a aulas explicativas com professores especializados em cada matéria.</p>
+        <a href="#">Ver aulas <i class="fa fa-arrow-right"></i></a>
       </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-
-        <!-- Matemática -->
-        <div id="matematica" class="materia-card">
-          <div class="h-32 bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
-            <i class="fa fa-calculator text-white text-5xl opacity-90"></i>
-          </div>
-          <div class="p-5">
-            <span class="text-xs font-black text-primario bg-blue-50 px-2 py-0.5 rounded-full">Matemática</span>
-            <h4 class="font-black text-base mt-2 mb-1">Matemática</h4>
-            <p class="text-gray-500 text-xs mb-3 leading-relaxed">Números, operações, geometria, equações e resolução de problemas.</p>
-            <div class="flex flex-wrap gap-1.5 mb-4">
-              <span class="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full text-xs font-bold">5º ao 9º Ano</span>
-              <span class="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full text-xs font-bold">Ensino Médio</span>
-            </div>
-            <a href="atividades.html?materia=matematica" class="flex items-center justify-center gap-1.5 w-full bg-primario text-white py-2 px-4 rounded-xl font-black text-xs hover:bg-blue-700 transition-colors">
-              Acessar Matéria <i class="fa fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Língua Portuguesa -->
-        <div id="portugues" class="materia-card">
-          <div class="h-32 bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center">
-            <i class="fa fa-book text-white text-5xl opacity-90"></i>
-          </div>
-          <div class="p-5">
-            <span class="text-xs font-black text-red-600 bg-red-50 px-2 py-0.5 rounded-full">Português</span>
-            <h4 class="font-black text-base mt-2 mb-1">Língua Portuguesa</h4>
-            <p class="text-gray-500 text-xs mb-3 leading-relaxed">Gramática, interpretação de textos, produção textual e literatura.</p>
-            <div class="flex flex-wrap gap-1.5 mb-4">
-              <span class="px-2 py-0.5 bg-red-50 text-red-600 rounded-full text-xs font-bold">5º ao 9º Ano</span>
-              <span class="px-2 py-0.5 bg-red-50 text-red-600 rounded-full text-xs font-bold">Ensino Médio</span>
-            </div>
-            <a href="portugues_5ano.html" class="flex items-center justify-center gap-1.5 w-full bg-primario text-white py-2 px-4 rounded-xl font-black text-xs hover:bg-blue-700 transition-colors">
-              Acessar Matéria <i class="fa fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Ciências -->
-        <div id="ciencias" class="materia-card">
-          <div class="h-32 bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center">
-            <i class="fa fa-flask text-white text-5xl opacity-90"></i>
-          </div>
-          <div class="p-5">
-            <span class="text-xs font-black text-sucesso bg-green-50 px-2 py-0.5 rounded-full">Ciências</span>
-            <h4 class="font-black text-base mt-2 mb-1">Ciências</h4>
-            <p class="text-gray-500 text-xs mb-3 leading-relaxed">Biologia, química, física, corpo humano e meio ambiente.</p>
-            <div class="flex flex-wrap gap-1.5 mb-4">
-              <span class="px-2 py-0.5 bg-green-50 text-green-600 rounded-full text-xs font-bold">5º ao 9º Ano</span>
-              <span class="px-2 py-0.5 bg-green-50 text-green-600 rounded-full text-xs font-bold">Ensino Médio</span>
-            </div>
-            <a href="atividades.html?materia=ciencias" class="flex items-center justify-center gap-1.5 w-full bg-primario text-white py-2 px-4 rounded-xl font-black text-xs hover:bg-blue-700 transition-colors">
-              Acessar Matéria <i class="fa fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- História -->
-        <div id="historia" class="materia-card">
-          <div class="h-32 bg-gradient-to-r from-amber-500 to-amber-600 flex items-center justify-center">
-            <i class="fa fa-history text-white text-5xl opacity-90"></i>
-          </div>
-          <div class="p-5">
-            <span class="text-xs font-black text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">História</span>
-            <h4 class="font-black text-base mt-2 mb-1">História</h4>
-            <p class="text-gray-500 text-xs mb-3 leading-relaxed">Brasil, história mundial, períodos históricos e acontecimentos.</p>
-            <div class="flex flex-wrap gap-1.5 mb-4">
-              <span class="px-2 py-0.5 bg-amber-50 text-amber-600 rounded-full text-xs font-bold">5º ao 9º Ano</span>
-              <span class="px-2 py-0.5 bg-amber-50 text-amber-600 rounded-full text-xs font-bold">Ensino Médio</span>
-            </div>
-            <a href="atividades.html?materia=historia" class="flex items-center justify-center gap-1.5 w-full bg-primario text-white py-2 px-4 rounded-xl font-black text-xs hover:bg-blue-700 transition-colors">
-              Acessar Matéria <i class="fa fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Geografia -->
-        <div id="geografia" class="materia-card">
-          <div class="h-32 bg-gradient-to-r from-emerald-500 to-emerald-600 flex items-center justify-center">
-            <i class="fa fa-globe text-white text-5xl opacity-90"></i>
-          </div>
-          <div class="p-5">
-            <span class="text-xs font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Geografia</span>
-            <h4 class="font-black text-base mt-2 mb-1">Geografia</h4>
-            <p class="text-gray-500 text-xs mb-3 leading-relaxed">Relevo, clima, vegetação, regiões do Brasil e economia mundial.</p>
-            <div class="flex flex-wrap gap-1.5 mb-4">
-              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold">5º ao 9º Ano</span>
-              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold">Ensino Médio</span>
-            </div>
-            <a href="atividades.html?materia=geografia" class="flex items-center justify-center gap-1.5 w-full bg-primario text-white py-2 px-4 rounded-xl font-black text-xs hover:bg-blue-700 transition-colors">
-              Acessar Matéria <i class="fa fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Inglês -->
-        <div id="ingles" class="materia-card">
-          <div class="h-32 bg-gradient-to-r from-purple-500 to-purple-600 flex items-center justify-center">
-            <i class="fa fa-language text-white text-5xl opacity-90"></i>
-          </div>
-          <div class="p-5">
-            <span class="text-xs font-black text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full">Inglês</span>
-            <h4 class="font-black text-base mt-2 mb-1">Inglês</h4>
-            <p class="text-gray-500 text-xs mb-3 leading-relaxed">Vocabulário, gramática, leitura e conversação básica.</p>
-            <div class="flex flex-wrap gap-1.5 mb-4">
-              <span class="px-2 py-0.5 bg-purple-50 text-purple-600 rounded-full text-xs font-bold">5º ao 9º Ano</span>
-              <span class="px-2 py-0.5 bg-purple-50 text-purple-600 rounded-full text-xs font-bold">Ensino Médio</span>
-            </div>
-            <a href="atividades.html?materia=ingles" class="flex items-center justify-center gap-1.5 w-full bg-primario text-white py-2 px-4 rounded-xl font-black text-xs hover:bg-blue-700 transition-colors">
-              Acessar Matéria <i class="fa fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-        </div>
-
+      <div class="comp-item">
+        <h4><i class="fa fa-file-text"></i> Materiais de Apoio</h4>
+        <p>Acesse resumos, mapas mentais e fichas de estudo para revisar o conteúdo.</p>
+        <a href="#">Ver materiais <i class="fa fa-arrow-right"></i></a>
       </div>
     </div>
-
-    <!-- Conteúdos Complementares -->
-    <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm mb-4 anim-3">
-      <div class="flex items-center gap-3 mb-6">
-        <div class="w-1 h-7 bg-primario rounded-full"></div>
-        <h3 class="text-lg sm:text-xl font-black">Conteúdos Complementares</h3>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div class="p-5 bg-blue-50 rounded-xl">
-          <div class="w-10 h-10 bg-primario/10 rounded-xl flex items-center justify-center mb-3">
-            <i class="fa fa-video-camera text-primario text-lg"></i>
-          </div>
-          <h4 class="font-black text-base mb-1">Aulas em Vídeo</h4>
-          <p class="text-gray-500 text-xs mb-3 leading-relaxed">Assista a aulas explicativas com professores especializados.</p>
-          <a href="#" class="text-primario font-black text-xs flex items-center gap-1 hover:gap-2 transition-all">
-            Ver aulas <i class="fa fa-arrow-right text-xs"></i>
-          </a>
-        </div>
-        <div class="p-5 bg-blue-50 rounded-xl">
-          <div class="w-10 h-10 bg-primario/10 rounded-xl flex items-center justify-center mb-3">
-            <i class="fa fa-file-text text-primario text-lg"></i>
-          </div>
-          <h4 class="font-black text-base mb-1">Materiais de Apoio</h4>
-          <p class="text-gray-500 text-xs mb-3 leading-relaxed">Acesse resumos, mapas mentais e fichas de estudo prontas.</p>
-          <a href="#" class="text-primario font-black text-xs flex items-center gap-1 hover:gap-2 transition-all">
-            Ver materiais <i class="fa fa-arrow-right text-xs"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-
   </div>
 </main>
 
 <script>
-  function toggleMenu() {
-    document.getElementById('menuLateral').classList.toggle('-translate-x-full');
-    document.getElementById('fundoMenu').classList.toggle('hidden');
+// ── Mapeamento de séries ──────────────────────────────
+const labelSerie = {
+  '5ano':'5º Ano','6ano':'6º Ano','7ano':'7º Ano',
+  '8ano':'8º Ano','9ano':'9º Ano',
+  '1medio':'1º Ano do Médio','2medio':'2º Ano do Médio','3medio':'3º Ano do Médio'
+};
+
+// ── Matérias com séries ───────────────────────────────
+const materias = [
+  {
+    id:'matematica', nome:'Matemática', emoji:'📐',
+    cor:'linear-gradient(135deg,#2563EB,#1e40af)', corBtn:'#2563EB',
+    corBadge:'#eff6ff', corBadgeTxt:'#1d4ed8',
+    desc:'Números, operações, geometria, equações, proporções e resolução de problemas.',
+    series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
+    link:'atividades_matematica.html'
+  },
+  {
+    id:'portugues', nome:'Língua Portuguesa', emoji:'📖',
+    cor:'linear-gradient(135deg,#DC2626,#991b1b)', corBtn:'#DC2626',
+    corBadge:'#fff1f0', corBadgeTxt:'#b91c1c',
+    desc:'Gramática, interpretação de textos, produção textual e literatura.',
+    series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
+    link:'atividades_portugues.html'
+  },
+  {
+    id:'ciencias', nome:'Ciências', emoji:'🔬',
+    cor:'linear-gradient(135deg,#16A34A,#14532d)', corBtn:'#16A34A',
+    corBadge:'#f0fdf4', corBadgeTxt:'#15803d',
+    desc:'Biologia, corpo humano, meio ambiente, seres vivos e ecossistemas.',
+    series:['5ano','6ano','7ano','8ano','9ano'],
+    link:'atividades_ciencias.html'
+  },
+  {
+    id:'historia', nome:'História', emoji:'🏛️',
+    cor:'linear-gradient(135deg,#D97706,#92400e)', corBtn:'#D97706',
+    corBadge:'#fff7ed', corBadgeTxt:'#b45309',
+    desc:'História do Brasil, períodos históricos e acontecimentos importantes.',
+    series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
+    link:'atividades_historia.html'
+  },
+  {
+    id:'geografia', nome:'Geografia', emoji:'🌍',
+    cor:'linear-gradient(135deg,#059669,#064e3b)', corBtn:'#059669',
+    corBadge:'#ecfdf5', corBadgeTxt:'#047857',
+    desc:'Relevo, clima, vegetação, população, economia e regiões do Brasil.',
+    series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
+    link:'atividades_geografia.html'
+  },
+  {
+    id:'ingles', nome:'Inglês', emoji:'🇺🇸',
+    cor:'linear-gradient(135deg,#7C3AED,#4c1d95)', corBtn:'#7C3AED',
+    corBadge:'#f5f3ff', corBadgeTxt:'#6d28d9',
+    desc:'Vocabulário, gramática, compreensão de textos e expressões em inglês.',
+    series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
+    link:'atividades_ingles.html'
+  },
+];
+
+function toggleMenu() {
+  document.getElementById('menuLateral').classList.toggle('aberto');
+  document.getElementById('fundoMenu').style.display =
+    document.getElementById('menuLateral').classList.contains('aberto') ? 'block' : 'none';
+}
+function sairDaConta() { localStorage.removeItem('usuarioLogado'); window.location.href = 'login.html'; }
+
+window.addEventListener('DOMContentLoaded', () => {
+  const u = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
+  if (!u.nome) { window.location.href = 'login.html'; return; }
+  document.getElementById('nomeHeader').textContent = u.nome;
+
+  const serie  = u.serie || '';
+  const label  = labelSerie[serie] || '';
+  const banner = document.getElementById('bannerSerie');
+  const grade  = document.getElementById('gradeMateria');
+
+  // Banner da série
+  if (label) {
+    banner.innerHTML = `
+      <div class="banner-serie">
+        <i class="fa fa-graduation-cap"></i>
+        Exibindo conteúdos para: <strong>${label}</strong> — só as matérias disponíveis para você aparecem aqui.
+      </div>`;
+  } else {
+    banner.innerHTML = `
+      <div class="aviso-serie">
+        <i class="fa fa-exclamation-triangle"></i>
+        Série não informada no cadastro. Acesse seu <a href="perfil.html" style="color:#92400e;text-decoration:underline">perfil</a> para atualizar.
+      </div>`;
   }
 
-  function sairDaConta() {
-    localStorage.removeItem('usuarioLogado');
-    window.location.href = 'login.html';
+  // Filtrar e renderizar matérias
+  const filtradas = serie ? materias.filter(m => m.series.includes(serie)) : materias;
+
+  if (filtradas.length === 0) {
+    grade.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#9ca3af;font-weight:700">Nenhuma matéria disponível para sua série.</div>`;
+    return;
   }
 
-  function verificarAcesso() {
-    const salvo = localStorage.getItem('usuarioLogado');
-    if (!salvo) { window.location.href = 'login.html'; return; }
-
-    const u = JSON.parse(salvo);
-    document.getElementById('nomeUsuario').textContent = u.nome;
-
-    const agora   = new Date();
-    const fimTeste = new Date(u.dataFimTeste);
-    const aviso   = document.getElementById('avisoStatus');
-
-    if (u.statusAssinatura === 'ativa') {
-      aviso.className = 'inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold aviso-ativo';
-      aviso.innerHTML = '<i class="fa fa-check-circle"></i> Assinatura ativa — acesso total ao conteúdo!';
-    } else if (agora < fimTeste) {
-      const dias = Math.ceil((fimTeste - agora) / (1000 * 60 * 60 * 24));
-      aviso.className = 'inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold aviso-teste';
-      aviso.innerHTML = `<i class="fa fa-gift"></i> Período de teste — faltam <strong>${dias} dia${dias !== 1 ? 's' : ''}</strong>`;
-    } else {
-      aviso.className = 'inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold aviso-expirado';
-      aviso.innerHTML = '<i class="fa fa-lock"></i> Teste expirado — <a href="assinatura.html" class="underline font-black">assine para continuar</a>';
-    }
-  }
-
-  window.onload = verificarAcesso;
+  filtradas.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'card-mat';
+    card.innerHTML = `
+      <div class="card-mat-topo" style="background:${m.cor}">${m.emoji}</div>
+      <div class="card-mat-corpo">
+        <div class="card-mat-titulo">${m.nome}</div>
+        <div class="card-mat-desc">${m.desc}</div>
+        <div class="card-mat-serie" style="background:${m.corBadge};color:${m.corBadgeTxt}">
+          <i class="fa fa-graduation-cap"></i> ${label || 'Todas as séries'}
+        </div>
+        <a href="${m.link}" class="btn-acessar" style="background:${m.corBtn}">
+          <i class="fa fa-arrow-right"></i> Acessar Matéria
+        </a>
+      </div>`;
+    grade.appendChild(card);
+  });
+});
 </script>
-
 </body>
 </html>

@@ -171,7 +171,7 @@ main{margin-left:256px;margin-top:64px;padding:2rem 1.5rem;width:100%;max-width:
   <div class="lista">
 
     <!-- Atividade 1 -->
-    <div class="card-atv">
+    <div class="card-atv" data-serie="5ano">
       <div class="faixa"></div>
       <div class="card-corpo">
         <div class="atv-titulo">Operações Básicas</div>
@@ -186,7 +186,7 @@ main{margin-left:256px;margin-top:64px;padding:2rem 1.5rem;width:100%;max-width:
     </div>
 
     <!-- Atividade 2 -->
-    <div class="card-atv">
+    <div class="card-atv" data-serie="6ano">
       <div class="faixa"></div>
       <div class="card-corpo">
         <div class="atv-titulo">Frações e Decimais</div>
@@ -201,7 +201,7 @@ main{margin-left:256px;margin-top:64px;padding:2rem 1.5rem;width:100%;max-width:
     </div>
 
     <!-- Atividade 3 -->
-    <div class="card-atv">
+    <div class="card-atv" data-serie="7ano">
       <div class="faixa"></div>
       <div class="card-corpo">
         <div class="atv-titulo">Geometria e Álgebra</div>
@@ -261,6 +261,13 @@ main{margin-left:256px;margin-top:64px;padding:2rem 1.5rem;width:100%;max-width:
 </div>
 
 <script>
+// ── Mapeamento de séries ──────────────────────────────
+const labelSerie = {
+  '5ano':'5º Ano','6ano':'6º Ano','7ano':'7º Ano',
+  '8ano':'8º Ano','9ano':'9º Ano',
+  '1medio':'1º Ano do Médio','2medio':'2º Ano do Médio','3medio':'3º Ano do Médio'
+};
+
 // ── Atividades ────────────────────────────────────────
 const atividades = [
   {
@@ -322,6 +329,48 @@ window.addEventListener('DOMContentLoaded', () => {
   const u = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
   if (!u.nome) { window.location.href = 'login.html'; return; }
   document.getElementById('nomeUsuario').textContent = u.nome;
+
+  const serie = u.serie || '';
+
+  // Filtrar atividades pela série do aluno
+  const cards = document.querySelectorAll('.card-atv');
+  const seriesAtv = ['5ano', '6ano', '7ano'];
+  let algumVisivel = false;
+
+  cards.forEach((card, i) => {
+    const serieAtv = seriesAtv[i];
+    // Mostrar se não tem série definida OU se a série bate OU séries próximas (±1)
+    const ordemSeries = ['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'];
+    const idxAluno = ordemSeries.indexOf(serie);
+    const idxAtv   = ordemSeries.indexOf(serieAtv);
+    const visivel  = !serie || Math.abs(idxAluno - idxAtv) <= 1;
+
+    if (visivel) {
+      card.style.display = 'block';
+      algumVisivel = true;
+    } else {
+      card.style.display = 'none';
+    }
+  });
+
+  // Se nenhuma atividade visível
+  if (!algumVisivel) {
+    document.querySelector('.lista').innerHTML = `
+      <div style="text-align:center;padding:3rem 1rem;color:#9ca3af">
+        <i class="fa fa-inbox" style="font-size:3rem;display:block;margin-bottom:1rem"></i>
+        <p style="font-weight:800;font-size:1.1rem">Nenhuma atividade para sua série ainda</p>
+        <p style="font-size:.85rem;margin-top:.5rem">Em breve teremos atividades de Matemática para o ${labelSerie[serie] || 'seu ano'}!</p>
+      </div>`;
+  }
+
+  // Banner da série no cabeçalho
+  if (serie) {
+    const cab = document.querySelector('.cab');
+    const banner = document.createElement('div');
+    banner.style.cssText = 'background:#eff6ff;border:1.5px solid #bfdbfe;color:#1d4ed8;border-radius:12px;padding:.6rem 1rem;font-size:.8rem;font-weight:800;display:flex;align-items:center;gap:.5rem;margin-top:.75rem;';
+    banner.innerHTML = `<i class="fa fa-graduation-cap"></i> Exibindo atividades para: <strong>${labelSerie[serie]}</strong>`;
+    cab.after(banner);
+  }
 });
 
 function toggleMenu() {
