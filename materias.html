@@ -141,7 +141,7 @@ const materias = [
     corBadge:'#eff6ff', corBadgeTxt:'#1d4ed8',
     desc:'Números, operações, geometria, equações, proporções e resolução de problemas.',
     series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
-    link:'atividades_matematica.html'
+    linkBase:'matematica'
   },
   {
     id:'portugues', nome:'Língua Portuguesa', emoji:'📖',
@@ -149,7 +149,7 @@ const materias = [
     corBadge:'#fff1f0', corBadgeTxt:'#b91c1c',
     desc:'Gramática, interpretação de textos, produção textual e literatura.',
     series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
-    link:'atividades_portugues.html'
+    linkBase:'portugues'
   },
   {
     id:'ciencias', nome:'Ciências', emoji:'🔬',
@@ -157,7 +157,7 @@ const materias = [
     corBadge:'#f0fdf4', corBadgeTxt:'#15803d',
     desc:'Biologia, corpo humano, meio ambiente, seres vivos e ecossistemas.',
     series:['5ano','6ano','7ano','8ano','9ano'],
-    link:'atividades_ciencias.html'
+    linkBase:'ciencias'
   },
   {
     id:'historia', nome:'História', emoji:'🏛️',
@@ -165,7 +165,7 @@ const materias = [
     corBadge:'#fff7ed', corBadgeTxt:'#b45309',
     desc:'História do Brasil, períodos históricos e acontecimentos importantes.',
     series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
-    link:'atividades_historia.html'
+    linkBase:'historia'
   },
   {
     id:'geografia', nome:'Geografia', emoji:'🌍',
@@ -173,7 +173,7 @@ const materias = [
     corBadge:'#ecfdf5', corBadgeTxt:'#047857',
     desc:'Relevo, clima, vegetação, população, economia e regiões do Brasil.',
     series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
-    link:'atividades_geografia.html'
+    linkBase:'geografia'
   },
   {
     id:'ingles', nome:'Inglês', emoji:'🇺🇸',
@@ -181,7 +181,7 @@ const materias = [
     corBadge:'#f5f3ff', corBadgeTxt:'#6d28d9',
     desc:'Vocabulário, gramática, compreensão de textos e expressões em inglês.',
     series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
-    link:'atividades_ingles.html'
+    linkBase:'ingles'
   },
 ];
 
@@ -226,6 +226,9 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   filtradas.forEach(m => {
+    // Gera link específico para a série: ex. portugues_8ano.html
+    const link = serie ? `${m.linkBase}_${serie}.html` : `atividades_${m.linkBase}.html`;
+
     const card = document.createElement('div');
     card.className = 'card-mat';
     card.innerHTML = `
@@ -236,7 +239,7 @@ window.addEventListener('DOMContentLoaded', () => {
         <div class="card-mat-serie" style="background:${m.corBadge};color:${m.corBadgeTxt}">
           <i class="fa fa-graduation-cap"></i> ${label || 'Todas as séries'}
         </div>
-        <a href="${m.link}" class="btn-acessar" style="background:${m.corBtn}">
+        <a href="${link}" class="btn-acessar" style="background:${m.corBtn}">
           <i class="fa fa-arrow-right"></i> Acessar Matéria
         </a>
       </div>`;
