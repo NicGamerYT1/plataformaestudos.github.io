@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Português 9º Ano - Plataforma de Estudos</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#F0F4FF;color:#1D2129;min-height:100vh;display:flex;}
+header{position:fixed;top:0;left:0;right:0;background:#DC2626;color:#fff;padding:1rem;z-index:20;box-shadow:0 4px 16px rgba(220,38,38,.35);display:flex;align-items:center;justify-content:space-between;}
+.header-esq{display:flex;align-items:center;gap:.75rem;}
+.header-esq h1{font-size:1.1rem;font-weight:900;}
+.btn-menu{background:none;border:none;color:#fff;font-size:1.25rem;cursor:pointer;padding:.25rem;display:none;}
+.btn-sair{background:#fff;color:#DC2626;border:none;padding:.4rem .85rem;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:900;cursor:pointer;}
+#nomeHeader{font-size:.85rem;font-weight:700;}
+aside{position:fixed;top:64px;left:0;width:256px;height:calc(100vh - 64px);background:#fff;border-right:1px solid #f0f0f0;padding:1.5rem 1rem;overflow-y:auto;z-index:15;transition:transform .3s ease;}
+aside nav ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+aside nav a{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;border-radius:12px;text-decoration:none;color:#6b7280;font-weight:700;font-size:.875rem;transition:all .2s;}
+aside nav a:hover{background:rgba(220,38,38,.08);color:#DC2626;}
+aside nav a.ativo{background:rgba(220,38,38,.1);color:#DC2626;font-weight:900;}
+aside nav a i{width:18px;text-align:center;}
+.fundo-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:14;}
+main{margin-left:256px;margin-top:64px;padding:2rem 2rem 3rem;width:100%;max-width:900px;}
+.btn-voltar{display:inline-flex;align-items:center;gap:.5rem;background:#fff;border:2px solid #e5e7eb;color:#6b7280;padding:.55rem 1.1rem;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;margin-bottom:1.75rem;transition:all .2s;text-decoration:none;}
+.btn-voltar:hover{border-color:#DC2626;color:#DC2626;}
+.hero-mat{background:linear-gradient(135deg,#DC2626,#7f1d1d);border-radius:24px;padding:2rem;color:#fff;margin-bottom:2rem;position:relative;overflow:hidden;}
+.hero-mat::before{content:'📖';font-size:8rem;position:absolute;right:-1rem;bottom:-1.5rem;opacity:.1;line-height:1;}
+.hero-mat-serie{font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.1em;opacity:.7;margin-bottom:.4rem;}
+.hero-mat-titulo{font-size:1.75rem;font-weight:900;margin-bottom:.5rem;}
+.hero-mat-desc{font-size:.9rem;opacity:.8;max-width:480px;line-height:1.6;}
+.hero-mat-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.25rem;}
+.chip{background:rgba(255,255,255,.2);border-radius:999px;padding:.3rem .875rem;font-size:.75rem;font-weight:800;}
+.tabs{display:flex;gap:.5rem;margin-bottom:1.75rem;background:#fff;border-radius:14px;padding:.4rem;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow-x:auto;}
+.tab{padding:.6rem 1.1rem;border-radius:10px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;color:#6b7280;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.tab.ativo{background:#DC2626;color:#fff;box-shadow:0 4px 12px rgba(220,38,38,.3);}
+.tab:hover:not(.ativo){background:#fff1f0;color:#DC2626;}
+.tab-conteudo{display:none;}
+.tab-conteudo.ativo{display:block;}
+.topico{background:#fff;border-radius:20px;padding:1.75rem;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:1.25rem;}
+.topico-cabecalho{display:flex;align-items:center;gap:.875rem;margin-bottom:1.25rem;cursor:pointer;}
+.topico-num{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#DC2626,#ef4444);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;flex-shrink:0;}
+.topico-titulo{font-size:1rem;font-weight:900;}
+.topico-seta{margin-left:auto;color:#9ca3af;transition:transform .3s;}
+.topico.aberto .topico-seta{transform:rotate(180deg);}
+.topico-corpo{display:none;border-top:1px solid #f3f4f6;padding-top:1.25rem;margin-top:.25rem;}
+.topico.aberto .topico-corpo{display:block;}
+.secao-titulo{font-size:.8rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#DC2626;margin:1rem 0 .5rem;}
+.secao-titulo:first-child{margin-top:0;}
+p{font-size:.9rem;line-height:1.75;color:#374151;margin-bottom:.75rem;}
+.destaque{background:#fff1f0;border-left:4px solid #DC2626;border-radius:0 12px 12px 0;padding:.875rem 1rem;margin:.875rem 0;font-size:.875rem;font-weight:700;color:#991b1b;}
+.exemplo{background:#f8faff;border:1.5px solid #dbeafe;border-radius:12px;padding:.875rem 1rem;margin:.875rem 0;font-size:.875rem;color:#1e40af;}
+.exemplo strong{font-weight:900;}
+ul.lista,ol.lista{padding-left:1.25rem;margin:.5rem 0 .875rem;}
+ul.lista li,ol.lista li{font-size:.875rem;line-height:1.7;color:#374151;margin-bottom:.35rem;}
+.tabela-wrap{overflow-x:auto;margin:.875rem 0;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th{background:#DC2626;color:#fff;padding:.6rem .875rem;font-weight:900;text-align:left;}
+td{padding:.6rem .875rem;border-bottom:1px solid #f3f4f6;color:#374151;font-weight:600;}
+tr:nth-child(even) td{background:#fff5f5;}
+.exercicio{background:#fff;border-radius:16px;border:2px solid #e5e7eb;padding:1.25rem;margin-bottom:1rem;}
+.ex-num{font-size:.72rem;font-weight:900;color:#DC2626;text-transform:uppercase;margin-bottom:.4rem;}
+.ex-enunciado{font-size:.9rem;font-weight:700;margin-bottom:.875rem;line-height:1.6;}
+.ex-opcoes{display:flex;flex-direction:column;gap:.5rem;}
+.ex-opcao{display:flex;align-items:center;gap:.75rem;padding:.65rem .875rem;border:2px solid #e5e7eb;border-radius:10px;cursor:pointer;font-size:.85rem;font-weight:700;background:#fff;width:100%;text-align:left;font-family:'Nunito',sans-serif;transition:all .18s;color:#1D2129;}
+.ex-opcao:hover:not(:disabled){border-color:#DC2626;background:#fff5f5;}
+.ex-letra{width:28px;height:28px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.75rem;flex-shrink:0;}
+.ex-opcao.correta{border-color:#16a34a;background:#f0fdf4;color:#16a34a;}
+.ex-opcao.correta .ex-letra{background:#16a34a;color:#fff;}
+.ex-opcao.errada{border-color:#dc2626;background:#fff1f0;color:#dc2626;}
+.ex-opcao.errada .ex-letra{background:#dc2626;color:#fff;}
+.ex-feedback{font-size:.82rem;font-weight:700;margin-top:.6rem;padding:.6rem .875rem;border-radius:10px;display:none;}
+.ex-feedback.show{display:block;}
+.ex-feedback.ok{background:#f0fdf4;color:#16a34a;}
+.ex-feedback.erro{background:#fff1f0;color:#dc2626;}
+.btn-atividades{display:inline-flex;align-items:center;gap:.5rem;background:linear-gradient(90deg,#DC2626,#ef4444);color:#fff;padding:.875rem 1.5rem;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;text-decoration:none;margin-top:1rem;transition:opacity .2s;}
+.btn-atividades:hover{opacity:.88;}
+@media(max-width:768px){
+  aside{transform:translateX(-100%);}
+  aside.aberto{transform:translateX(0);}
+  .btn-menu{display:block;}
+  main{margin-left:0;padding:1.25rem 1rem 3rem;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-esq">
+    <button class="btn-menu" onclick="toggleMenu()"><i class="fa fa-bars"></i></button>
+    <span style="font-size:1.4rem">📖</span>
+    <h1>Língua Portuguesa — 9º Ano</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem">
+    <span id="nomeHeader"></span>
+    <button class="btn-sair" onclick="sairDaConta()">Sair</button>
+  </div>
+</header>
+
+<aside id="menuLateral">
+  <nav><ul>
+    <li><a href="inicio.html"><i class="fa fa-home"></i> Início</a></li>
+    <li><a href="materias.html" class="ativo"><i class="fa fa-book"></i> Matérias</a></li>
+    <li><a href="atividades.html"><i class="fa fa-tasks"></i> Atividades</a></li>
+    <li><a href="desempenho.html"><i class="fa fa-bar-chart"></i> Meu Desempenho</a></li>
+    <li><a href="nivel.html"><i class="fa fa-star"></i> Meu Nível</a></li>
+    <li><a href="assinatura.html"><i class="fa fa-credit-card"></i> Assinatura</a></li>
+    <li><a href="perfil.html"><i class="fa fa-user"></i> Perfil</a></li>
+    <li><a href="pais.html"><i class="fa fa-users"></i> Pais / Responsáveis</a></li>
+    <li><a href="configuracoes.html"><i class="fa fa-cog"></i> Configurações</a></li>
+  </ul></nav>
+</aside>
+<div class="fundo-menu" id="fundoMenu" onclick="toggleMenu()"></div>
+
+<main>
+  <a href="materias.html" class="btn-voltar"><i class="fa fa-arrow-left"></i> Voltar para matérias</a>
+
+  <div class="hero-mat">
+    <div class="hero-mat-serie">9º Ano do Ensino Fundamental</div>
+    <div class="hero-mat-titulo">Língua Portuguesa</div>
+    <div class="hero-mat-desc">Literatura brasileira, variação linguística, redação argumentativa, concordância verbal e nominal e análise de textos.</div>
+    <div class="hero-mat-chips">
+      <span class="chip">📚 4 unidades</span>
+      <span class="chip">✏️ Exercícios práticos</span>
+      <span class="chip">🎯 9º Ano</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab ativo" onclick="mudarTab('literatura')">Literatura</button>
+    <button class="tab" onclick="mudarTab('concordancia')">Concordância</button>
+    <button class="tab" onclick="mudarTab('variacao')">Variação Linguística</button>
+    <button class="tab" onclick="mudarTab('exercicios')">Exercícios</button>
+  </div>
+
+  <!-- TAB: LITERATURA -->
+  <div class="tab-conteudo ativo" id="tab-literatura">
+
+    <div class="topico aberto">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">1</div>
+        <div class="topico-titulo">Introdução à Literatura Brasileira</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">O que é literatura?</div>
+        <p>A <strong>literatura</strong> é a arte da palavra escrita ou oral que expressa sentimentos, ideias e visões de mundo. No Brasil, ela se desenvolveu a partir do período colonial e se transformou ao longo dos séculos.</p>
+        <div class="secao-titulo">Períodos literários brasileiros</div>
+        <div class="tabela-wrap"><table>
+          <tr><th>Período</th><th>Época</th><th>Características</th></tr>
+          <tr><td>Quinhentismo</td><td>1500–1601</td><td>Textos informativos sobre o Brasil, cartas e relatos de viagem. Ex: Carta de Pero Vaz de Caminha.</td></tr>
+          <tr><td>Barroco</td><td>1601–1768</td><td>Conflito entre fé e razão, antíteses, jogo de palavras. Ex: Padre Antônio Vieira, Gregório de Matos.</td></tr>
+          <tr><td>Arcadismo</td><td>1768–1836</td><td>Retorno à natureza, simplicidade, temas bucólicos. Ex: Tomás Antônio Gonzaga.</td></tr>
+          <tr><td>Romantismo</td><td>1836–1881</td><td>Sentimentalismo, nacionalismo, idealização. Ex: José de Alencar, Castro Alves.</td></tr>
+          <tr><td>Realismo/Naturalismo</td><td>1881–1902</td><td>Crítica social, objetividade, personagens complexos. Ex: Machado de Assis, Aluísio Azevedo.</td></tr>
+          <tr><td>Pré-Modernismo</td><td>1902–1922</td><td>Transição, regionalismo, crítica social. Ex: Euclides da Cunha, Lima Barreto.</td></tr>
+          <tr><td>Modernismo</td><td>1922–1945</td><td>Ruptura com o passado, linguagem coloquial, experimentalismo. Ex: Mário de Andrade, Oswald de Andrade.</td></tr>
+        </table></div>
+        <div class="destaque">📌 A Semana de Arte Moderna de 1922 em São Paulo foi o marco do Modernismo no Brasil — uma revolução cultural que transformou a literatura, as artes plásticas e a música.</div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">2</div>
+        <div class="topico-titulo">Gêneros Literários</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Os três grandes gêneros</div>
+        <div class="tabela-wrap"><table>
+          <tr><th>Gênero</th><th>Características</th><th>Exemplos</th></tr>
+          <tr><td>Lírico</td><td>Expressão de sentimentos, subjetividade, uso do "eu poético"</td><td>Poemas, sonetos, odes</td></tr>
+          <tr><td>Épico/Narrativo</td><td>Narração de fatos, personagens, enredo, espaço e tempo</td><td>Romances, contos, crônicas</td></tr>
+          <tr><td>Dramático</td><td>Texto para ser encenado, dividido em atos e cenas</td><td>Peças teatrais, comédias, tragédias</td></tr>
+        </table></div>
+        <div class="secao-titulo">Elementos da narrativa</div>
+        <ul class="lista">
+          <li><strong>Narrador:</strong> quem conta a história (1ª ou 3ª pessoa)</li>
+          <li><strong>Personagens:</strong> seres que participam da ação (protagonista, antagonista, secundários)</li>
+          <li><strong>Enredo:</strong> sequência de acontecimentos (exposição, conflito, clímax, desfecho)</li>
+          <li><strong>Espaço:</strong> onde a história acontece</li>
+          <li><strong>Tempo:</strong> quando a história acontece (cronológico ou psicológico)</li>
+        </ul>
+        <div class="exemplo"><strong>Narrador em 1ª pessoa:</strong> "Eu caminhei pela rua deserta e senti um arrepio."<br>
+        <strong>Narrador onisciente (3ª pessoa):</strong> "Ele sabia que a decisão seria difícil, mas havia chegado a hora."</div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">3</div>
+        <div class="topico-titulo">Machado de Assis e o Realismo</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">O maior escritor brasileiro</div>
+        <p><strong>Joaquim Maria Machado de Assis</strong> (1839–1908) é considerado o maior escritor da literatura brasileira. Fundou a Academia Brasileira de Letras e escreveu em todos os gêneros literários.</p>
+        <div class="secao-titulo">Principais obras</div>
+        <ul class="lista">
+          <li><strong>Memórias Póstumas de Brás Cubas</strong> (1881) — marco do Realismo brasileiro</li>
+          <li><strong>Dom Casmurro</strong> (1899) — um dos maiores romances da língua portuguesa</li>
+          <li><strong>Quincas Borba</strong> (1891) — critica o positivismo</li>
+          <li><strong>O Alienista</strong> (conto) — sátira ao cientificismo</li>
+        </ul>
+        <div class="destaque">💡 Em "Dom Casmurro", Bentinho (Capitu) e Capitu são os personagens centrais. A questão da traição de Capitu é um dos maiores debates literários do Brasil — teria ela ou não traído Bentinho?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: CONCORDÂNCIA -->
+  <div class="tab-conteudo" id="tab-concordancia">
+
+    <div class="topico aberto">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">1</div>
+        <div class="topico-titulo">Concordância Verbal</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Regra geral</div>
+        <p>O verbo concorda em <strong>número</strong> (singular/plural) e <strong>pessoa</strong> (1ª, 2ª, 3ª) com o sujeito da oração.</p>
+        <div class="exemplo"><strong>Correto:</strong> "Os alunos <u>estudaram</u> bastante."<br>
+        <strong>Incorreto:</strong> "Os alunos <u>estudou</u> bastante."</div>
+        <div class="secao-titulo">Casos especiais</div>
+        <div class="tabela-wrap"><table>
+          <tr><th>Caso</th><th>Regra</th><th>Exemplo</th></tr>
+          <tr><td>Sujeito coletivo</td><td>Verbo no singular</td><td><em>"A multidão <u>gritou</u>."</em></td></tr>
+          <tr><td>Sujeito composto antes do verbo</td><td>Verbo no plural</td><td><em>"João e Maria <u>viajaram</u>."</em></td></tr>
+          <tr><td>Sujeito composto depois do verbo</td><td>Verbo concorda com o mais próximo ou vai ao plural</td><td><em>"<u>Chegou</u> o diretor e os professores."</em></td></tr>
+          <tr><td>Verbos impessoais (haver, fazer)</td><td>Sempre no singular</td><td><em>"<u>Há</u> muitos anos." / "<u>Faz</u> dois dias."</em></td></tr>
+          <tr><td>Pronome relativo "que"</td><td>Verbo concorda com o antecedente</td><td><em>"Fui eu que <u>fiz</u>."</em></td></tr>
+        </table></div>
+        <div class="destaque">⚠️ Atenção com "haver" no sentido de existir — é sempre impessoal e fica no singular: "Havia muitas pessoas" (não "Haviam").</div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">2</div>
+        <div class="topico-titulo">Concordância Nominal</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Regra geral</div>
+        <p>Artigos, adjetivos, pronomes e numerais concordam em <strong>gênero</strong> (masculino/feminino) e <strong>número</strong> (singular/plural) com o substantivo a que se referem.</p>
+        <div class="exemplo"><strong>Correto:</strong> "As alunas <u>dedicadas</u> passaram na prova."<br>
+        <strong>Incorreto:</strong> "As alunas <u>dedicados</u> passaram na prova."</div>
+        <div class="secao-titulo">Casos especiais</div>
+        <div class="tabela-wrap"><table>
+          <tr><th>Caso</th><th>Regra</th><th>Exemplo</th></tr>
+          <tr><td>Adjetivo após dois substantivos de gêneros diferentes</td><td>Vai para o masculino plural</td><td><em>"A mãe e o filho estavam <u>cansados</u>."</em></td></tr>
+          <tr><td>Adjetivo antes de dois substantivos</td><td>Concorda com o mais próximo</td><td><em>"<u>Bela</u> casa e jardim."</em></td></tr>
+          <tr><td>"Mesmo", "próprio", "obrigado"</td><td>Concordam com o substantivo/pronome</td><td><em>"Ela mesma fez." / "Obrigada!" (mulher)</em></td></tr>
+          <tr><td>"Bastante", "meio" (adjetivo)</td><td>Concordam com o substantivo</td><td><em>"Havia <u>bastantes</u> pessoas."</em></td></tr>
+          <tr><td>"Menos", "alerta", "pseudo"</td><td>São invariáveis</td><td><em>"As alunas estavam <u>alerta</u>."</em></td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">3</div>
+        <div class="topico-titulo">Regência Verbal e Nominal</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Regência verbal</div>
+        <p>A <strong>regência verbal</strong> estuda a relação entre o verbo e seus complementos, especialmente o uso correto das preposições.</p>
+        <div class="tabela-wrap"><table>
+          <tr><th>Verbo</th><th>Preposição</th><th>Exemplo</th></tr>
+          <tr><td>Assistir (ver)</td><td>a</td><td><em>"Assisti <u>ao</u> filme."</em></td></tr>
+          <tr><td>Visar (ter como objetivo)</td><td>a</td><td><em>"O projeto visa <u>à</u> melhoria."</em></td></tr>
+          <tr><td>Preferir</td><td>a (não "do que")</td><td><em>"Prefiro café <u>a</u> chá."</em></td></tr>
+          <tr><td>Obedecer / Desobedecer</td><td>a</td><td><em>"Obedeceu <u>aos</u> pais."</em></td></tr>
+          <tr><td>Implicar (acarretar)</td><td>sem preposição</td><td><em>"A decisão implica <u>riscos</u>."</em></td></tr>
+        </table></div>
+        <div class="destaque">💡 "Namorar" não exige preposição: "Ela namora João" (não "namora com João"). Porém na linguagem coloquial, "namorar com" é amplamente aceito.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: VARIAÇÃO LINGUÍSTICA -->
+  <div class="tab-conteudo" id="tab-variacao">
+
+    <div class="topico aberto">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">1</div>
+        <div class="topico-titulo">O que é Variação Linguística</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Língua viva e em constante mudança</div>
+        <p>A <strong>variação linguística</strong> é o fenômeno pelo qual a língua se manifesta de formas diferentes conforme fatores sociais, geográficos, históricos e situacionais. Nenhuma variação é "errada" — todas têm sua gramática e lógica interna.</p>
+        <div class="secao-titulo">Tipos de variação</div>
+        <div class="tabela-wrap"><table>
+          <tr><th>Tipo</th><th>Definição</th><th>Exemplo</th></tr>
+          <tr><td>Geográfica (diatópica)</td><td>Diferenças regionais</td><td>Nordestino diz "oxente"; paulista diz "mano"</td></tr>
+          <tr><td>Social (diastrática)</td><td>Diferenças de classe, escolaridade, profissão</td><td>Gírias de jovens vs. linguagem formal</td></tr>
+          <tr><td>Histórica (diacrônica)</td><td>Mudanças ao longo do tempo</td><td>"Vossa mercê" → "você"</td></tr>
+          <tr><td>Situacional (diafásica)</td><td>Registro formal ou informal</td><td>Fala com o chefe vs. fala com amigos</td></tr>
+        </table></div>
+        <div class="destaque">⚠️ Preconceito linguístico é a discriminação de pessoas pelo modo como falam. A língua reflete identidade cultural e deve ser respeitada em todas as suas variações.</div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">2</div>
+        <div class="topico-titulo">Norma Culta e Linguagem Coloquial</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Quando usar cada uma?</div>
+        <p>A <strong>norma culta</strong> é a variedade de prestígio social, usada em situações formais como redações, documentos e discursos oficiais. A <strong>linguagem coloquial</strong> é usada no cotidiano, em conversas informais.</p>
+        <div class="tabela-wrap"><table>
+          <tr><th>Norma culta</th><th>Linguagem coloquial</th></tr>
+          <tr><td>"Não há nada a fazer."</td><td>"Num tem nada pra fazer."</td></tr>
+          <tr><td>"Trouxe o livro para você."</td><td>"Trouxe o livro pra você."</td></tr>
+          <tr><td>"Onde você está?"</td><td>"Cadê você?"</td></tr>
+          <tr><td>"Estou muito cansado."</td><td>"Tô destruído."</td></tr>
+        </table></div>
+        <div class="secao-titulo">Gírias e neologismos</div>
+        <p>As <strong>gírias</strong> são palavras ou expressões de grupos específicos que mudam rapidamente. Os <strong>neologismos</strong> são palavras novas criadas para nomear realidades novas, como "selfie", "deletar", "tuitar".</p>
+        <div class="exemplo"><strong>Gírias:</strong> "Isso foi um baita baile!" / "Que mico!"<br>
+        <strong>Neologismos:</strong> "Vou googlar isso agora." / "Ela fez um stories."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: EXERCÍCIOS -->
+  <div class="tab-conteudo" id="tab-exercicios">
+    <div class="topico aberto">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">📝</div>
+        <div class="topico-titulo">Exercícios de Fixação</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 1 — Concordância Verbal</div>
+          <div class="ex-enunciado">Assinale a alternativa com concordância verbal correta:</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>"Haviam muitas pessoas na festa."</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">B</span>"Havia muitas pessoas na festa."</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">C</span>"Fazem dois anos que não o vejo."</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>"Os alunos chegou cedo."</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 2 — Literatura</div>
+          <div class="ex-enunciado">Qual obra marca o início do Realismo na literatura brasileira?</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>Dom Casmurro</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>Iracema</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">C</span>Memórias Póstumas de Brás Cubas</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>O Guarani</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 3 — Variação Linguística</div>
+          <div class="ex-enunciado">Qual tipo de variação linguística explica as diferenças entre o português falado no Nordeste e no Sul do Brasil?</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>Variação histórica</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>Variação social</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">C</span>Variação geográfica</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>Variação situacional</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 4 — Regência Verbal</div>
+          <div class="ex-enunciado">Qual frase usa corretamente o verbo "assistir" no sentido de "ver"?</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>"Assistimos o jogo ontem."</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">B</span>"Assistimos ao jogo ontem."</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">C</span>"Assistimos com o jogo ontem."</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>"Assistimos pelo jogo ontem."</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 5 — Gêneros Literários</div>
+          <div class="ex-enunciado">Qual das características abaixo pertence ao gênero lírico?</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>Narração de fatos com enredo e personagens</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>Texto dividido em atos e cenas para encenação</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">C</span>Expressão de sentimentos com uso do "eu poético"</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>Descrição objetiva de lugares e personagens</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <a href="atividades_portugues.html" class="btn-atividades">
+          <i class="fa fa-tasks"></i> Ver todas as atividades de Português
+        </a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+window.addEventListener('DOMContentLoaded',()=>{
+  const u=JSON.parse(localStorage.getItem('usuarioLogado')||'{}');
+  if(!u.nome){window.location.href='login.html';return;}
+  document.getElementById('nomeHeader').textContent=u.nome;
+});
+function toggleMenu(){
+  document.getElementById('menuLateral').classList.toggle('aberto');
+  document.getElementById('fundoMenu').style.display=
+    document.getElementById('menuLateral').classList.contains('aberto')?'block':'none';
+}
+function sairDaConta(){localStorage.removeItem('usuarioLogado');window.location.href='login.html';}
+function mudarTab(id){
+  const ids=['literatura','concordancia','variacao','exercicios'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('ativo',ids[i]===id));
+  document.querySelectorAll('.tab-conteudo').forEach(c=>c.classList.remove('ativo'));
+  document.getElementById('tab-'+id).classList.add('ativo');
+}
+function toggleTopico(cabecalho){
+  cabecalho.parentElement.classList.toggle('aberto');
+}
+function respEx(btn,correta){
+  const ex=btn.closest('.exercicio');
+  ex.querySelectorAll('.ex-opcao').forEach(b=>b.disabled=true);
+  const fb=ex.querySelector('.ex-feedback');
+  if(correta){
+    btn.classList.add('correta');
+    fb.className='ex-feedback show ok';
+    fb.textContent='✅ Correto! Muito bem!';
+  } else {
+    btn.classList.add('errada');
+    ex.querySelectorAll('.ex-opcao').forEach(b=>{
+      if(b.onclick.toString().includes('true'))b.classList.add('correta');
+    });
+    fb.className='ex-feedback show erro';
+    fb.textContent='❌ Incorreto! Veja a resposta destacada em verde.';
+  }
+}
+</script>
+</body>
+</html>

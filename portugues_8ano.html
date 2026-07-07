@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Português 8º Ano - Plataforma de Estudos</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#F0F4FF;color:#1D2129;min-height:100vh;display:flex;}
+header{position:fixed;top:0;left:0;right:0;background:#DC2626;color:#fff;padding:1rem;z-index:20;box-shadow:0 4px 16px rgba(220,38,38,.35);display:flex;align-items:center;justify-content:space-between;}
+.header-esq{display:flex;align-items:center;gap:.75rem;}
+.header-esq h1{font-size:1.1rem;font-weight:900;}
+.btn-menu{background:none;border:none;color:#fff;font-size:1.25rem;cursor:pointer;padding:.25rem;display:none;}
+.btn-sair{background:#fff;color:#DC2626;border:none;padding:.4rem .85rem;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:900;cursor:pointer;}
+#nomeHeader{font-size:.85rem;font-weight:700;}
+aside{position:fixed;top:64px;left:0;width:256px;height:calc(100vh - 64px);background:#fff;border-right:1px solid #f0f0f0;padding:1.5rem 1rem;overflow-y:auto;z-index:15;transition:transform .3s ease;}
+aside nav ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+aside nav a{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;border-radius:12px;text-decoration:none;color:#6b7280;font-weight:700;font-size:.875rem;transition:all .2s;}
+aside nav a:hover{background:rgba(220,38,38,.08);color:#DC2626;}
+aside nav a.ativo{background:rgba(220,38,38,.1);color:#DC2626;font-weight:900;}
+aside nav a i{width:18px;text-align:center;}
+.fundo-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:14;}
+main{margin-left:256px;margin-top:64px;padding:2rem 2rem 3rem;width:100%;max-width:900px;}
+
+/* Voltar */
+.btn-voltar{display:inline-flex;align-items:center;gap:.5rem;background:#fff;border:2px solid #e5e7eb;color:#6b7280;padding:.55rem 1.1rem;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;margin-bottom:1.75rem;transition:all .2s;text-decoration:none;}
+.btn-voltar:hover{border-color:#DC2626;color:#DC2626;}
+
+/* Hero matéria */
+.hero-mat{background:linear-gradient(135deg,#DC2626,#7f1d1d);border-radius:24px;padding:2rem;color:#fff;margin-bottom:2rem;position:relative;overflow:hidden;}
+.hero-mat::before{content:'📖';font-size:8rem;position:absolute;right:-1rem;bottom:-1.5rem;opacity:.1;line-height:1;}
+.hero-mat-serie{font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.1em;opacity:.7;margin-bottom:.4rem;}
+.hero-mat-titulo{font-size:1.75rem;font-weight:900;margin-bottom:.5rem;}
+.hero-mat-desc{font-size:.9rem;opacity:.8;max-width:480px;line-height:1.6;}
+.hero-mat-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.25rem;}
+.chip{background:rgba(255,255,255,.2);border-radius:999px;padding:.3rem .875rem;font-size:.75rem;font-weight:800;}
+
+/* Tabs */
+.tabs{display:flex;gap:.5rem;margin-bottom:1.75rem;background:#fff;border-radius:14px;padding:.4rem;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow-x:auto;}
+.tab{padding:.6rem 1.1rem;border-radius:10px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;color:#6b7280;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.tab.ativo{background:#DC2626;color:#fff;box-shadow:0 4px 12px rgba(220,38,38,.3);}
+.tab:hover:not(.ativo){background:#fff1f0;color:#DC2626;}
+
+/* Conteúdo tab */
+.tab-conteudo{display:none;}
+.tab-conteudo.ativo{display:block;}
+
+/* Card de tópico */
+.topico{background:#fff;border-radius:20px;padding:1.75rem;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:1.25rem;}
+.topico-cabecalho{display:flex;align-items:center;gap:.875rem;margin-bottom:1.25rem;cursor:pointer;}
+.topico-num{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#DC2626,#ef4444);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;flex-shrink:0;}
+.topico-titulo{font-size:1rem;font-weight:900;}
+.topico-seta{margin-left:auto;color:#9ca3af;transition:transform .3s;}
+.topico.aberto .topico-seta{transform:rotate(180deg);}
+.topico-corpo{display:none;border-top:1px solid #f3f4f6;padding-top:1.25rem;margin-top:.25rem;}
+.topico.aberto .topico-corpo{display:block;}
+
+/* Conteúdo do tópico */
+.secao-titulo{font-size:.8rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#DC2626;margin:1rem 0 .5rem;}
+.secao-titulo:first-child{margin-top:0;}
+p{font-size:.9rem;line-height:1.75;color:#374151;margin-bottom:.75rem;}
+.destaque{background:#fff1f0;border-left:4px solid #DC2626;border-radius:0 12px 12px 0;padding:.875rem 1rem;margin:.875rem 0;font-size:.875rem;font-weight:700;color:#991b1b;}
+.exemplo{background:#f8faff;border:1.5px solid #dbeafe;border-radius:12px;padding:.875rem 1rem;margin:.875rem 0;font-size:.875rem;color:#1e40af;}
+.exemplo strong{font-weight:900;}
+ul.lista,ol.lista{padding-left:1.25rem;margin:.5rem 0 .875rem;}
+ul.lista li,ol.lista li{font-size:.875rem;line-height:1.7;color:#374151;margin-bottom:.35rem;}
+
+/* Tabela */
+.tabela-wrap{overflow-x:auto;margin:.875rem 0;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th{background:#DC2626;color:#fff;padding:.6rem .875rem;font-weight:900;text-align:left;}
+td{padding:.6rem .875rem;border-bottom:1px solid #f3f4f6;color:#374151;font-weight:600;}
+tr:nth-child(even) td{background:#fff5f5;}
+
+/* Exercícios */
+.exercicio{background:#fff;border-radius:16px;border:2px solid #e5e7eb;padding:1.25rem;margin-bottom:1rem;}
+.ex-num{font-size:.72rem;font-weight:900;color:#DC2626;text-transform:uppercase;margin-bottom:.4rem;}
+.ex-enunciado{font-size:.9rem;font-weight:700;margin-bottom:.875rem;line-height:1.6;}
+.ex-opcoes{display:flex;flex-direction:column;gap:.5rem;}
+.ex-opcao{display:flex;align-items:center;gap:.75rem;padding:.65rem .875rem;border:2px solid #e5e7eb;border-radius:10px;cursor:pointer;font-size:.85rem;font-weight:700;background:#fff;width:100%;text-align:left;font-family:'Nunito',sans-serif;transition:all .18s;color:#1D2129;}
+.ex-opcao:hover:not(:disabled){border-color:#DC2626;background:#fff5f5;}
+.ex-letra{width:28px;height:28px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.75rem;flex-shrink:0;}
+.ex-opcao.correta{border-color:#16a34a;background:#f0fdf4;color:#16a34a;}
+.ex-opcao.correta .ex-letra{background:#16a34a;color:#fff;}
+.ex-opcao.errada{border-color:#dc2626;background:#fff1f0;color:#dc2626;}
+.ex-opcao.errada .ex-letra{background:#dc2626;color:#fff;}
+.ex-feedback{font-size:.82rem;font-weight:700;margin-top:.6rem;padding:.6rem .875rem;border-radius:10px;display:none;}
+.ex-feedback.show{display:block;}
+.ex-feedback.ok{background:#f0fdf4;color:#16a34a;}
+.ex-feedback.erro{background:#fff1f0;color:#dc2626;}
+
+/* Btn atividades */
+.btn-atividades{display:inline-flex;align-items:center;gap:.5rem;background:linear-gradient(90deg,#DC2626,#ef4444);color:#fff;padding:.875rem 1.5rem;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;text-decoration:none;margin-top:1rem;transition:opacity .2s;}
+.btn-atividades:hover{opacity:.88;}
+
+@media(max-width:768px){
+  aside{transform:translateX(-100%);}
+  aside.aberto{transform:translateX(0);}
+  .btn-menu{display:block;}
+  main{margin-left:0;padding:1.25rem 1rem 3rem;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-esq">
+    <button class="btn-menu" onclick="toggleMenu()"><i class="fa fa-bars"></i></button>
+    <span style="font-size:1.4rem">📖</span>
+    <h1>Língua Portuguesa — 8º Ano</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem">
+    <span id="nomeHeader"></span>
+    <button class="btn-sair" onclick="sairDaConta()">Sair</button>
+  </div>
+</header>
+
+<aside id="menuLateral">
+  <nav><ul>
+    <li><a href="inicio.html"><i class="fa fa-home"></i> Início</a></li>
+    <li><a href="materias.html" class="ativo"><i class="fa fa-book"></i> Matérias</a></li>
+    <li><a href="atividades.html"><i class="fa fa-tasks"></i> Atividades</a></li>
+    <li><a href="desempenho.html"><i class="fa fa-bar-chart"></i> Meu Desempenho</a></li>
+    <li><a href="nivel.html"><i class="fa fa-star"></i> Meu Nível</a></li>
+    <li><a href="assinatura.html"><i class="fa fa-credit-card"></i> Assinatura</a></li>
+    <li><a href="perfil.html"><i class="fa fa-user"></i> Perfil</a></li>
+    <li><a href="pais.html"><i class="fa fa-users"></i> Pais / Responsáveis</a></li>
+    <li><a href="configuracoes.html"><i class="fa fa-cog"></i> Configurações</a></li>
+  </ul></nav>
+</aside>
+<div class="fundo-menu" id="fundoMenu" onclick="toggleMenu()"></div>
+
+<main>
+  <a href="materias.html" class="btn-voltar"><i class="fa fa-arrow-left"></i> Voltar para matérias</a>
+
+  <div class="hero-mat">
+    <div class="hero-mat-serie">8º Ano do Ensino Fundamental</div>
+    <div class="hero-mat-titulo">Língua Portuguesa</div>
+    <div class="hero-mat-desc">Gramática avançada, sintaxe, figuras de linguagem, coesão textual e produção de textos argumentativos.</div>
+    <div class="hero-mat-chips">
+      <span class="chip">📚 4 unidades</span>
+      <span class="chip">✏️ Exercícios práticos</span>
+      <span class="chip">🎯 8º Ano</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab ativo" onclick="mudarTab('sintaxe')">Sintaxe</button>
+    <button class="tab" onclick="mudarTab('figuras')">Figuras de Linguagem</button>
+    <button class="tab" onclick="mudarTab('coesao')">Coesão e Coerência</button>
+    <button class="tab" onclick="mudarTab('exercicios')">Exercícios</button>
+  </div>
+
+  <!-- TAB: SINTAXE -->
+  <div class="tab-conteudo ativo" id="tab-sintaxe">
+
+    <div class="topico aberto">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">1</div>
+        <div class="topico-titulo">Sujeito e Predicado</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">O que é sujeito?</div>
+        <p>O <strong>sujeito</strong> é o termo da oração sobre o qual o predicado declara algo. Geralmente é um substantivo, pronome ou locução substantiva que concorda com o verbo em número e pessoa.</p>
+        <div class="destaque">💡 Dica: Para encontrar o sujeito, pergunte ao verbo "quem?" ou "o quê?"</div>
+        <div class="secao-titulo">Tipos de sujeito</div>
+        <div class="tabela-wrap"><table>
+          <tr><th>Tipo</th><th>Definição</th><th>Exemplo</th></tr>
+          <tr><td>Simples</td><td>Tem apenas um núcleo</td><td><em>O aluno estudou.</em></td></tr>
+          <tr><td>Composto</td><td>Tem dois ou mais núcleos</td><td><em>João e Maria viajaram.</em></td></tr>
+          <tr><td>Oculto (elíptico)</td><td>Está implícito no verbo</td><td><em>Estudei bastante.</em> (eu)</td></tr>
+          <tr><td>Indeterminado</td><td>Não se pode identificar</td><td><em>Venderam o carro.</em></td></tr>
+          <tr><td>Inexistente</td><td>Verbos impessoais</td><td><em>Choveu muito.</em></td></tr>
+        </table></div>
+        <div class="secao-titulo">Predicado</div>
+        <p>O <strong>predicado</strong> é tudo aquilo que se declara sobre o sujeito. Pode ser verbal, nominal ou verbo-nominal.</p>
+        <div class="exemplo"><strong>Verbal:</strong> "O atleta <u>correu rapidamente</u>." — núcleo é o verbo<br>
+        <strong>Nominal:</strong> "A professora <u>é competente</u>." — núcleo é o predicativo<br>
+        <strong>Verbo-nominal:</strong> "Ela <u>chegou cansada</u>." — dois núcleos</div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">2</div>
+        <div class="topico-titulo">Complementos Verbais</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Objeto Direto e Indireto</div>
+        <p>Os <strong>complementos verbais</strong> completam o sentido dos verbos transitivos.</p>
+        <div class="tabela-wrap"><table>
+          <tr><th>Complemento</th><th>Preposição</th><th>Exemplo</th></tr>
+          <tr><td>Objeto direto</td><td>Sem preposição</td><td><em>Comprei <u>um livro</u>.</em></td></tr>
+          <tr><td>Objeto indireto</td><td>Com preposição</td><td><em>Gosto <u>de música</u>.</em></td></tr>
+        </table></div>
+        <div class="destaque">⚠️ Atenção: verbos bitransitivos exigem os dois complementos ao mesmo tempo. Ex: "Dei <u>o presente</u> (OD) <u>ao amigo</u> (OI)."</div>
+        <div class="secao-titulo">Adjunto Adnominal e Adverbial</div>
+        <p>O <strong>adjunto adnominal</strong> modifica um substantivo. O <strong>adjunto adverbial</strong> modifica um verbo, adjetivo ou advérbio.</p>
+        <div class="exemplo"><strong>Adnominal:</strong> "A <u>bela</u> casa foi vendida."<br>
+        <strong>Adverbial:</strong> "Estudei <u>muito</u> ontem."</div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">3</div>
+        <div class="topico-titulo">Período Composto</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Coordenação e Subordinação</div>
+        <p>No <strong>período composto</strong>, há duas ou mais orações. Elas se relacionam por coordenação (orações independentes) ou subordinação (uma depende da outra).</p>
+        <div class="tabela-wrap"><table>
+          <tr><th>Tipo</th><th>Conjunção</th><th>Exemplo</th></tr>
+          <tr><td>Coordenada aditiva</td><td>e, nem</td><td><em>Estudei e passei.</em></td></tr>
+          <tr><td>Coordenada adversativa</td><td>mas, porém</td><td><em>Estudei, mas não passei.</em></td></tr>
+          <tr><td>Subordinada causal</td><td>porque, pois</td><td><em>Passei porque estudei.</em></td></tr>
+          <tr><td>Subordinada condicional</td><td>se, caso</td><td><em>Se estudar, passará.</em></td></tr>
+          <tr><td>Subordinada concessiva</td><td>embora, mesmo que</td><td><em>Embora cansado, estudou.</em></td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: FIGURAS DE LINGUAGEM -->
+  <div class="tab-conteudo" id="tab-figuras">
+    <div class="topico aberto">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">1</div>
+        <div class="topico-titulo">Figuras de Palavras</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Metáfora e Comparação</div>
+        <p>A <strong>metáfora</strong> é uma comparação implícita, sem conectivo comparativo. A <strong>comparação (símile)</strong> usa conectivos como "como", "tal qual", "assim como".</p>
+        <div class="exemplo"><strong>Metáfora:</strong> "Aquele menino é um leão em campo."<br>
+        <strong>Comparação:</strong> "Ele luta como um leão."</div>
+        <div class="secao-titulo">Metonímia</div>
+        <p>A <strong>metonímia</strong> é a substituição de uma palavra por outra com a qual tem relação de proximidade ou contiguidade.</p>
+        <ul class="lista">
+          <li>Autor pela obra: <em>"Estou lendo <u>Machado de Assis</u>."</em></li>
+          <li>Continente pelo conteúdo: <em>"Tomei um <u>copo</u> d'água."</em></li>
+          <li>Parte pelo todo: <em>"Não havia uma <u>alma</u> na rua."</em></li>
+        </ul>
+        <div class="secao-titulo">Outras Figuras</div>
+        <div class="tabela-wrap"><table>
+          <tr><th>Figura</th><th>Definição</th><th>Exemplo</th></tr>
+          <tr><td>Antítese</td><td>Ideias opostas juntas</td><td><em>"Guerra e paz"</em></td></tr>
+          <tr><td>Hipérbole</td><td>Exagero expressivo</td><td><em>"Chorei um rio de lágrimas."</em></td></tr>
+          <tr><td>Ironia</td><td>Diz o oposto do que pensa</td><td><em>"Que dia lindo!" (chovendo)</em></td></tr>
+          <tr><td>Eufemismo</td><td>Suaviza ideia desagradável</td><td><em>"Ele partiu para sempre."</em></td></tr>
+          <tr><td>Personificação</td><td>Atribui qualidades humanas a seres</td><td><em>"O vento sussurrou."</em></td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">2</div>
+        <div class="topico-titulo">Figuras de Construção</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Principais figuras de construção</div>
+        <div class="tabela-wrap"><table>
+          <tr><th>Figura</th><th>Definição</th><th>Exemplo</th></tr>
+          <tr><td>Anáfora</td><td>Repetição de palavra no início</td><td><em>"Quero paz, quero amor, quero vida."</em></td></tr>
+          <tr><td>Elipse</td><td>Omissão de termo subentendido</td><td><em>"Na sala, silêncio." (havia)</em></td></tr>
+          <tr><td>Inversão (hipérbato)</td><td>Alteração da ordem direta</td><td><em>"Das estrelas, a beleza eu admiro."</em></td></tr>
+          <tr><td>Paralelismo</td><td>Estruturas sintáticas repetidas</td><td><em>"Vim, vi, venci."</em></td></tr>
+          <tr><td>Zeugma</td><td>Omissão de verbo já citado</td><td><em>"Eu prefiro café; ela, chá."</em></td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: COESÃO E COERÊNCIA -->
+  <div class="tab-conteudo" id="tab-coesao">
+    <div class="topico aberto">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">1</div>
+        <div class="topico-titulo">Coesão Textual</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">O que é coesão?</div>
+        <p>A <strong>coesão textual</strong> é a ligação entre as partes do texto por meio de elementos linguísticos que garantem a sequência lógica das ideias.</p>
+        <div class="secao-titulo">Mecanismos de Coesão</div>
+        <div class="tabela-wrap"><table>
+          <tr><th>Mecanismo</th><th>Como funciona</th><th>Exemplo</th></tr>
+          <tr><td>Referência</td><td>Usa pronomes para retomar termos</td><td><em>"João chegou. <u>Ele</u> estava cansado."</em></td></tr>
+          <tr><td>Substituição</td><td>Troca um termo por outro</td><td><em>"Comprei o livro. A <u>obra</u> é ótima."</em></td></tr>
+          <tr><td>Elipse</td><td>Omite termo já citado</td><td><em>"Ele comeu e (ele) dormiu."</em></td></tr>
+          <tr><td>Conjunção</td><td>Liga orações com conectivos</td><td><em>"Estudei, <u>porém</u> reprovei."</em></td></tr>
+          <tr><td>Coesão lexical</td><td>Usa sinônimos e hiperônimos</td><td><em>"O cachorro latiu. O <u>animal</u> estava nervoso."</em></td></tr>
+        </table></div>
+        <div class="destaque">💡 Conectivos importantes: portanto, porém, entretanto, ademais, além disso, todavia, contudo, visto que, uma vez que, embora.</div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">2</div>
+        <div class="topico-titulo">Coerência e Texto Argumentativo</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Coerência textual</div>
+        <p>A <strong>coerência</strong> é a relação lógica e semântica entre as ideias do texto. Um texto coerente não tem contradições e segue uma linha de raciocínio clara.</p>
+        <div class="secao-titulo">Estrutura do texto argumentativo</div>
+        <ul class="lista">
+          <li><strong>Introdução:</strong> apresenta o tema e a tese (ponto de vista).</li>
+          <li><strong>Desenvolvimento:</strong> argumentos que sustentam a tese com dados, exemplos e comparações.</li>
+          <li><strong>Conclusão:</strong> retoma a tese e propõe uma solução ou reflexão final.</li>
+        </ul>
+        <div class="exemplo"><strong>Tese:</strong> "O uso excessivo de redes sociais prejudica a saúde mental dos jovens."<br>
+        <strong>Argumento:</strong> "Segundo pesquisas da USP, adolescentes que passam mais de 4 horas por dia em redes sociais têm maior índice de ansiedade."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: EXERCÍCIOS -->
+  <div class="tab-conteudo" id="tab-exercicios">
+    <div class="topico aberto">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">📝</div>
+        <div class="topico-titulo">Exercícios de Fixação</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 1 — Sintaxe</div>
+          <div class="ex-enunciado">Em "O professor explicou a matéria aos alunos", qual é o objeto indireto?</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>O professor</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>explicou</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">C</span>a matéria</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">D</span>aos alunos</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 2 — Figuras de Linguagem</div>
+          <div class="ex-enunciado">"Chorei um oceano de lágrimas." Que figura de linguagem está presente?</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>Metáfora</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>Ironia</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">C</span>Hipérbole</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>Eufemismo</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 3 — Coesão</div>
+          <div class="ex-enunciado">Qual conectivo indica corretamente uma relação de oposição?</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>Portanto</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">B</span>Entretanto</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">C</span>Porque</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>Além disso</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 4 — Período Composto</div>
+          <div class="ex-enunciado">"Embora estivesse cansado, terminou o trabalho." A oração subordinada é:</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>Causal</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>Condicional</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">C</span>Concessiva</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>Consecutiva</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 5 — Sujeito</div>
+          <div class="ex-enunciado">Qual das frases tem sujeito indeterminado?</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>Eu fui ao mercado.</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>Choveu muito hoje.</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">C</span>Venderam o apartamento.</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>O carro quebrou.</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <a href="atividades_portugues.html" class="btn-atividades">
+          <i class="fa fa-tasks"></i> Ver todas as atividades de Português
+        </a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+window.addEventListener('DOMContentLoaded',()=>{
+  const u=JSON.parse(localStorage.getItem('usuarioLogado')||'{}');
+  if(!u.nome){window.location.href='login.html';return;}
+  document.getElementById('nomeHeader').textContent=u.nome;
+});
+function toggleMenu(){
+  document.getElementById('menuLateral').classList.toggle('aberto');
+  document.getElementById('fundoMenu').style.display=
+    document.getElementById('menuLateral').classList.contains('aberto')?'block':'none';
+}
+function sairDaConta(){localStorage.removeItem('usuarioLogado');window.location.href='login.html';}
+function mudarTab(id){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const ids=['sintaxe','figuras','coesao','exercicios'];
+    t.classList.toggle('ativo',ids[i]===id);
+  });
+  document.querySelectorAll('.tab-conteudo').forEach(c=>c.classList.remove('ativo'));
+  document.getElementById('tab-'+id).classList.add('ativo');
+}
+function toggleTopico(cabecalho){
+  cabecalho.parentElement.classList.toggle('aberto');
+}
+function respEx(btn,correta){
+  const ex=btn.closest('.exercicio');
+  ex.querySelectorAll('.ex-opcao').forEach(b=>b.disabled=true);
+  const fb=ex.querySelector('.ex-feedback');
+  if(correta){
+    btn.classList.add('correta');
+    fb.className='ex-feedback show ok';
+    fb.textContent='✅ Correto! Muito bem!';
+  } else {
+    btn.classList.add('errada');
+    ex.querySelectorAll('.ex-opcao').forEach(b=>{
+      if(b.onclick.toString().includes('true'))b.classList.add('correta');
+    });
+    fb.className='ex-feedback show erro';
+    fb.textContent='❌ Incorreto! Veja a resposta destacada em verde.';
+  }
+}
+</script>
+</body>
+</html>

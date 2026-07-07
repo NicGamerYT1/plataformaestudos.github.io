@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matemática 8º Ano - Plataforma de Estudos</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#F0F4FF;color:#1D2129;min-height:100vh;display:flex;}
+header{position:fixed;top:0;left:0;right:0;background:#2563EB;color:#fff;padding:1rem;z-index:20;box-shadow:0 4px 16px rgba(37,99,235,.35);display:flex;align-items:center;justify-content:space-between;}
+.header-esq{display:flex;align-items:center;gap:.75rem;}
+.header-esq h1{font-size:1.1rem;font-weight:900;}
+.btn-menu{background:none;border:none;color:#fff;font-size:1.25rem;cursor:pointer;padding:.25rem;display:none;}
+.btn-sair{background:#fff;color:#2563EB;border:none;padding:.4rem .85rem;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:900;cursor:pointer;}
+#nomeHeader{font-size:.85rem;font-weight:700;}
+aside{position:fixed;top:64px;left:0;width:256px;height:calc(100vh - 64px);background:#fff;border-right:1px solid #f0f0f0;padding:1.5rem 1rem;overflow-y:auto;z-index:15;transition:transform .3s ease;}
+aside nav ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+aside nav a{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;border-radius:12px;text-decoration:none;color:#6b7280;font-weight:700;font-size:.875rem;transition:all .2s;}
+aside nav a:hover{background:rgba(37,99,235,.08);color:#2563EB;}
+aside nav a.ativo{background:rgba(37,99,235,.1);color:#2563EB;font-weight:900;}
+aside nav a i{width:18px;text-align:center;}
+.fundo-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:14;}
+main{margin-left:256px;margin-top:64px;padding:2rem 2rem 3rem;width:100%;max-width:900px;}
+.btn-voltar{display:inline-flex;align-items:center;gap:.5rem;background:#fff;border:2px solid #e5e7eb;color:#6b7280;padding:.55rem 1.1rem;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;margin-bottom:1.75rem;transition:all .2s;text-decoration:none;}
+.btn-voltar:hover{border-color:#2563EB;color:#2563EB;}
+.hero-mat{background:linear-gradient(135deg,#2563EB,#1e3a8a);border-radius:24px;padding:2rem;color:#fff;margin-bottom:2rem;position:relative;overflow:hidden;}
+.hero-mat::before{content:'📐';font-size:8rem;position:absolute;right:-1rem;bottom:-1.5rem;opacity:.1;line-height:1;}
+.hero-mat-serie{font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.1em;opacity:.7;margin-bottom:.4rem;}
+.hero-mat-titulo{font-size:1.75rem;font-weight:900;margin-bottom:.5rem;}
+.hero-mat-desc{font-size:.9rem;opacity:.8;max-width:480px;line-height:1.6;}
+.hero-mat-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.25rem;}
+.chip{background:rgba(255,255,255,.2);border-radius:999px;padding:.3rem .875rem;font-size:.75rem;font-weight:800;}
+.tabs{display:flex;gap:.5rem;margin-bottom:1.75rem;background:#fff;border-radius:14px;padding:.4rem;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow-x:auto;}
+.tab{padding:.6rem 1.1rem;border-radius:10px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;color:#6b7280;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.tab.ativo{background:#2563EB;color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.3);}
+.tab:hover:not(.ativo){background:#eff6ff;color:#2563EB;}
+.tab-conteudo{display:none;}
+.tab-conteudo.ativo{display:block;}
+.topico{background:#fff;border-radius:20px;padding:1.75rem;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:1.25rem;}
+.topico-cabecalho{display:flex;align-items:center;gap:.875rem;margin-bottom:1.25rem;cursor:pointer;}
+.topico-num{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#2563EB,#3b82f6);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;flex-shrink:0;}
+.topico-titulo{font-size:1rem;font-weight:900;}
+.topico-seta{margin-left:auto;color:#9ca3af;transition:transform .3s;}
+.topico.aberto .topico-seta{transform:rotate(180deg);}
+.topico-corpo{display:none;border-top:1px solid #f3f4f6;padding-top:1.25rem;margin-top:.25rem;}
+.topico.aberto .topico-corpo{display:block;}
+.secao-titulo{font-size:.8rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#2563EB;margin:1rem 0 .5rem;}
+.secao-titulo:first-child{margin-top:0;}
+p{font-size:.9rem;line-height:1.75;color:#374151;margin-bottom:.75rem;}
+.destaque{background:#eff6ff;border-left:4px solid #2563EB;border-radius:0 12px 12px 0;padding:.875rem 1rem;margin:.875rem 0;font-size:.875rem;font-weight:700;color:#1e40af;}
+.formula{background:#1e3a8a;color:#fff;border-radius:12px;padding:1rem 1.25rem;margin:.875rem 0;font-size:1rem;font-weight:900;text-align:center;letter-spacing:.03em;}
+.formula span{color:#93c5fd;font-size:.8rem;display:block;margin-top:.3rem;font-weight:700;}
+.exemplo{background:#f8faff;border:1.5px solid #dbeafe;border-radius:12px;padding:.875rem 1rem;margin:.875rem 0;font-size:.875rem;color:#1e40af;}
+.exemplo strong{font-weight:900;}
+ul.lista,ol.lista{padding-left:1.25rem;margin:.5rem 0 .875rem;}
+ul.lista li,ol.lista li{font-size:.875rem;line-height:1.7;color:#374151;margin-bottom:.35rem;}
+.tabela-wrap{overflow-x:auto;margin:.875rem 0;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th{background:#2563EB;color:#fff;padding:.6rem .875rem;font-weight:900;text-align:left;}
+td{padding:.6rem .875rem;border-bottom:1px solid #f3f4f6;color:#374151;font-weight:600;}
+tr:nth-child(even) td{background:#f0f7ff;}
+.exercicio{background:#fff;border-radius:16px;border:2px solid #e5e7eb;padding:1.25rem;margin-bottom:1rem;}
+.ex-num{font-size:.72rem;font-weight:900;color:#2563EB;text-transform:uppercase;margin-bottom:.4rem;}
+.ex-enunciado{font-size:.9rem;font-weight:700;margin-bottom:.875rem;line-height:1.6;}
+.ex-opcoes{display:flex;flex-direction:column;gap:.5rem;}
+.ex-opcao{display:flex;align-items:center;gap:.75rem;padding:.65rem .875rem;border:2px solid #e5e7eb;border-radius:10px;cursor:pointer;font-size:.85rem;font-weight:700;background:#fff;width:100%;text-align:left;font-family:'Nunito',sans-serif;transition:all .18s;color:#1D2129;}
+.ex-opcao:hover:not(:disabled){border-color:#2563EB;background:#eff6ff;}
+.ex-letra{width:28px;height:28px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.75rem;flex-shrink:0;}
+.ex-opcao.correta{border-color:#16a34a;background:#f0fdf4;color:#16a34a;}
+.ex-opcao.correta .ex-letra{background:#16a34a;color:#fff;}
+.ex-opcao.errada{border-color:#dc2626;background:#fff1f0;color:#dc2626;}
+.ex-opcao.errada .ex-letra{background:#dc2626;color:#fff;}
+.ex-feedback{font-size:.82rem;font-weight:700;margin-top:.6rem;padding:.6rem .875rem;border-radius:10px;display:none;}
+.ex-feedback.show{display:block;}
+.ex-feedback.ok{background:#f0fdf4;color:#16a34a;}
+.ex-feedback.erro{background:#fff1f0;color:#dc2626;}
+.btn-atividades{display:inline-flex;align-items:center;gap:.5rem;background:linear-gradient(90deg,#2563EB,#3b82f6);color:#fff;padding:.875rem 1.5rem;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:.9rem;text-decoration:none;margin-top:1rem;transition:opacity .2s;}
+.btn-atividades:hover{opacity:.88;}
+@media(max-width:768px){
+  aside{transform:translateX(-100%);}
+  aside.aberto{transform:translateX(0);}
+  .btn-menu{display:block;}
+  main{margin-left:0;padding:1.25rem 1rem 3rem;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-esq">
+    <button class="btn-menu" onclick="toggleMenu()"><i class="fa fa-bars"></i></button>
+    <span style="font-size:1.4rem">📐</span>
+    <h1>Matemática — 8º Ano</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem">
+    <span id="nomeHeader"></span>
+    <button class="btn-sair" onclick="sairDaConta()">Sair</button>
+  </div>
+</header>
+
+<aside id="menuLateral">
+  <nav><ul>
+    <li><a href="inicio.html"><i class="fa fa-home"></i> Início</a></li>
+    <li><a href="materias.html" class="ativo"><i class="fa fa-book"></i> Matérias</a></li>
+    <li><a href="atividades.html"><i class="fa fa-tasks"></i> Atividades</a></li>
+    <li><a href="desempenho.html"><i class="fa fa-bar-chart"></i> Meu Desempenho</a></li>
+    <li><a href="nivel.html"><i class="fa fa-star"></i> Meu Nível</a></li>
+    <li><a href="assinatura.html"><i class="fa fa-credit-card"></i> Assinatura</a></li>
+    <li><a href="perfil.html"><i class="fa fa-user"></i> Perfil</a></li>
+    <li><a href="pais.html"><i class="fa fa-users"></i> Pais / Responsáveis</a></li>
+    <li><a href="configuracoes.html"><i class="fa fa-cog"></i> Configurações</a></li>
+  </ul></nav>
+</aside>
+<div class="fundo-menu" id="fundoMenu" onclick="toggleMenu()"></div>
+
+<main>
+  <a href="materias.html" class="btn-voltar"><i class="fa fa-arrow-left"></i> Voltar para matérias</a>
+
+  <div class="hero-mat">
+    <div class="hero-mat-serie">8º Ano do Ensino Fundamental</div>
+    <div class="hero-mat-titulo">Matemática</div>
+    <div class="hero-mat-desc">Potenciação, radiciação, equações do 2º grau, geometria espacial, funções e estatística.</div>
+    <div class="hero-mat-chips">
+      <span class="chip">📐 4 unidades</span>
+      <span class="chip">✏️ Exercícios práticos</span>
+      <span class="chip">🎯 8º Ano</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab ativo" onclick="mudarTab('algebra')">Álgebra</button>
+    <button class="tab" onclick="mudarTab('geometria')">Geometria</button>
+    <button class="tab" onclick="mudarTab('estatistica')">Estatística</button>
+    <button class="tab" onclick="mudarTab('exercicios')">Exercícios</button>
+  </div>
+
+  <!-- TAB: ÁLGEBRA -->
+  <div class="tab-conteudo ativo" id="tab-algebra">
+
+    <div class="topico aberto">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">1</div>
+        <div class="topico-titulo">Potenciação e Radiciação</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Potenciação</div>
+        <p>A <strong>potenciação</strong> é a multiplicação de um número por ele mesmo várias vezes. O número que se multiplica é a <strong>base</strong> e quantas vezes se multiplica é o <strong>expoente</strong>.</p>
+        <div class="formula">aⁿ = a × a × a × ... × a (n vezes)<span>Exemplo: 2⁵ = 2×2×2×2×2 = 32</span></div>
+        <div class="secao-titulo">Propriedades da Potenciação</div>
+        <div class="tabela-wrap"><table>
+          <tr><th>Propriedade</th><th>Fórmula</th><th>Exemplo</th></tr>
+          <tr><td>Produto de mesma base</td><td>aᵐ × aⁿ = aᵐ⁺ⁿ</td><td>2³ × 2² = 2⁵ = 32</td></tr>
+          <tr><td>Quociente de mesma base</td><td>aᵐ ÷ aⁿ = aᵐ⁻ⁿ</td><td>3⁵ ÷ 3² = 3³ = 27</td></tr>
+          <tr><td>Potência de potência</td><td>(aᵐ)ⁿ = aᵐˣⁿ</td><td>(2³)² = 2⁶ = 64</td></tr>
+          <tr><td>Expoente zero</td><td>a⁰ = 1</td><td>5⁰ = 1</td></tr>
+          <tr><td>Expoente negativo</td><td>a⁻ⁿ = 1/aⁿ</td><td>2⁻³ = 1/8</td></tr>
+        </table></div>
+        <div class="secao-titulo">Radiciação</div>
+        <p>A <strong>radiciação</strong> é a operação inversa da potenciação. A raiz enésima de um número é o valor que, elevado a n, resulta naquele número.</p>
+        <div class="formula">ⁿ√a = b ↔ bⁿ = a<span>Exemplo: ³√27 = 3, pois 3³ = 27</span></div>
+        <div class="destaque">💡 Raiz quadrada de números negativos não existe nos números reais. Ex: √(−4) não existe em ℝ.</div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">2</div>
+        <div class="topico-titulo">Equação do 2º Grau</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Forma geral</div>
+        <p>Uma <strong>equação do 2º grau</strong> é uma equação polinomial em que a variável aparece com o expoente 2. Sua forma geral é:</p>
+        <div class="formula">ax² + bx + c = 0 (a ≠ 0)<span>onde a, b e c são coeficientes reais</span></div>
+        <div class="secao-titulo">Fórmula de Bhaskara</div>
+        <p>Para encontrar as raízes (soluções) da equação, usamos a <strong>Fórmula de Bhaskara</strong>:</p>
+        <div class="formula">x = (−b ± √Δ) ÷ 2a<span>onde Δ = b² − 4ac (discriminante)</span></div>
+        <div class="secao-titulo">Análise pelo discriminante Δ</div>
+        <div class="tabela-wrap"><table>
+          <tr><th>Valor de Δ</th><th>Número de raízes</th><th>Tipo</th></tr>
+          <tr><td>Δ > 0</td><td>Duas raízes reais distintas</td><td>x₁ ≠ x₂</td></tr>
+          <tr><td>Δ = 0</td><td>Uma raiz real (dupla)</td><td>x₁ = x₂</td></tr>
+          <tr><td>Δ &lt; 0</td><td>Nenhuma raiz real</td><td>Raízes complexas</td></tr>
+        </table></div>
+        <div class="exemplo"><strong>Exemplo:</strong> x² − 5x + 6 = 0 → a=1, b=−5, c=6<br>
+        Δ = (−5)² − 4(1)(6) = 25 − 24 = 1<br>
+        x = (5 ± √1) ÷ 2 → x₁ = 3 e x₂ = 2</div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">3</div>
+        <div class="topico-titulo">Sistemas de Equações</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">O que é um sistema?</div>
+        <p>Um <strong>sistema de equações</strong> é um conjunto de duas ou mais equações com as mesmas variáveis, cujas soluções devem satisfazer todas as equações simultaneamente.</p>
+        <div class="secao-titulo">Métodos de resolução</div>
+        <div class="tabela-wrap"><table>
+          <tr><th>Método</th><th>Como funciona</th></tr>
+          <tr><td>Substituição</td><td>Isola uma variável em uma equação e substitui na outra</td></tr>
+          <tr><td>Adição (ou eliminação)</td><td>Soma as equações para eliminar uma variável</td></tr>
+          <tr><td>Comparação</td><td>Iguala as expressões das duas equações para a mesma variável</td></tr>
+        </table></div>
+        <div class="exemplo"><strong>Exemplo (substituição):</strong><br>
+        x + y = 10 e x − y = 2<br>
+        Da 1ª: x = 10 − y<br>
+        Substituindo na 2ª: (10−y) − y = 2 → 10 − 2y = 2 → y = 4<br>
+        Logo: x = 10 − 4 = 6 ✓</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: GEOMETRIA -->
+  <div class="tab-conteudo" id="tab-geometria">
+
+    <div class="topico aberto">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">1</div>
+        <div class="topico-titulo">Teorema de Pitágoras</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">O teorema</div>
+        <p>O <strong>Teorema de Pitágoras</strong> afirma que em todo triângulo retângulo, o quadrado da hipotenusa é igual à soma dos quadrados dos catetos.</p>
+        <div class="formula">a² = b² + c²<span>a = hipotenusa | b e c = catetos</span></div>
+        <div class="destaque">💡 A hipotenusa é sempre o lado oposto ao ângulo reto (90°) e é o maior lado do triângulo retângulo.</div>
+        <div class="secao-titulo">Ternas pitagóricas</div>
+        <p>São conjuntos de três números inteiros que satisfazem o Teorema de Pitágoras:</p>
+        <ul class="lista">
+          <li>(3, 4, 5) → 3² + 4² = 9 + 16 = 25 = 5²</li>
+          <li>(5, 12, 13) → 5² + 12² = 25 + 144 = 169 = 13²</li>
+          <li>(8, 15, 17) → 8² + 15² = 64 + 225 = 289 = 17²</li>
+        </ul>
+        <div class="exemplo"><strong>Exemplo:</strong> Um triângulo tem catetos 6 e 8. Qual é a hipotenusa?<br>
+        a² = 6² + 8² = 36 + 64 = 100 → a = √100 = <strong>10</strong></div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">2</div>
+        <div class="topico-titulo">Geometria Espacial</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Sólidos geométricos</div>
+        <p>Os <strong>sólidos geométricos</strong> são figuras tridimensionais que ocupam lugar no espaço. Os principais são: cubo, paralelepípedo, pirâmide, cilindro, cone e esfera.</p>
+        <div class="tabela-wrap"><table>
+          <tr><th>Sólido</th><th>Volume</th><th>Área total</th></tr>
+          <tr><td>Cubo (aresta a)</td><td>V = a³</td><td>A = 6a²</td></tr>
+          <tr><td>Paralelepípedo (a×b×c)</td><td>V = a×b×c</td><td>A = 2(ab+bc+ac)</td></tr>
+          <tr><td>Cilindro (r, h)</td><td>V = π×r²×h</td><td>A = 2πr(r+h)</td></tr>
+          <tr><td>Cone (r, h, g)</td><td>V = (π×r²×h)/3</td><td>A = πr(r+g)</td></tr>
+          <tr><td>Esfera (r)</td><td>V = (4/3)×π×r³</td><td>A = 4πr²</td></tr>
+          <tr><td>Pirâmide (Ab, h)</td><td>V = (Ab×h)/3</td><td>Ab + Al</td></tr>
+        </table></div>
+        <div class="exemplo"><strong>Exemplo:</strong> Volume de um cubo de aresta 5 cm:<br>
+        V = 5³ = 125 cm³</div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">3</div>
+        <div class="topico-titulo">Semelhança de Triângulos</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">O que é semelhança?</div>
+        <p>Dois triângulos são <strong>semelhantes</strong> quando têm os mesmos ângulos e os lados correspondentes são proporcionais.</p>
+        <div class="secao-titulo">Casos de semelhança</div>
+        <ul class="lista">
+          <li><strong>AA (Ângulo-Ângulo):</strong> dois ângulos iguais</li>
+          <li><strong>LAL (Lado-Ângulo-Lado):</strong> dois lados proporcionais e o ângulo entre eles igual</li>
+          <li><strong>LLL (Lado-Lado-Lado):</strong> os três lados proporcionais</li>
+        </ul>
+        <div class="formula">a/a' = b/b' = c/c' = k<span>k = razão de semelhança</span></div>
+        <div class="destaque">💡 Relação entre áreas de figuras semelhantes: A/A' = k² (razão ao quadrado). Para volumes: V/V' = k³.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: ESTATÍSTICA -->
+  <div class="tab-conteudo" id="tab-estatistica">
+
+    <div class="topico aberto">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">1</div>
+        <div class="topico-titulo">Medidas de Tendência Central</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Média, Moda e Mediana</div>
+        <div class="tabela-wrap"><table>
+          <tr><th>Medida</th><th>Definição</th><th>Cálculo</th></tr>
+          <tr><td>Média aritmética</td><td>Soma dos valores dividida pela quantidade</td><td>(x₁+x₂+...+xₙ)/n</td></tr>
+          <tr><td>Moda</td><td>Valor que aparece com maior frequência</td><td>Valor mais repetido</td></tr>
+          <tr><td>Mediana</td><td>Valor central do conjunto ordenado</td><td>Meio do rol ordenado</td></tr>
+        </table></div>
+        <div class="exemplo"><strong>Dados:</strong> 4, 7, 7, 8, 10, 12, 15<br>
+        <strong>Média:</strong> (4+7+7+8+10+12+15)/7 = 63/7 = <strong>9</strong><br>
+        <strong>Moda:</strong> <strong>7</strong> (aparece 2 vezes)<br>
+        <strong>Mediana:</strong> <strong>8</strong> (elemento central do rol)</div>
+        <div class="destaque">💡 Se o conjunto tiver número par de elementos, a mediana é a média dos dois valores centrais.</div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">2</div>
+        <div class="topico-titulo">Gráficos e Tabelas</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">Tipos de gráficos</div>
+        <div class="tabela-wrap"><table>
+          <tr><th>Tipo</th><th>Melhor usado para</th><th>Características</th></tr>
+          <tr><td>Barras</td><td>Comparar categorias</td><td>Barras verticais ou horizontais</td></tr>
+          <tr><td>Linhas</td><td>Mostrar evolução no tempo</td><td>Pontos conectados por linhas</td></tr>
+          <tr><td>Setores (pizza)</td><td>Mostrar proporções do todo</td><td>Círculo dividido em fatias</td></tr>
+          <tr><td>Histograma</td><td>Distribuição de frequências</td><td>Barras sem espaço entre si</td></tr>
+        </table></div>
+        <div class="secao-titulo">Leitura de tabelas</div>
+        <p>Uma <strong>tabela de frequências</strong> organiza dados em colunas: valores, frequência absoluta (quantas vezes aparece) e frequência relativa (porcentagem do total).</p>
+        <div class="exemplo"><strong>Exemplo de tabela:</strong><br>
+        Nota 7 → freq. absoluta: 5 → freq. relativa: 5/20 = 25%<br>
+        Nota 8 → freq. absoluta: 8 → freq. relativa: 8/20 = 40%<br>
+        Nota 9 → freq. absoluta: 7 → freq. relativa: 7/20 = 35%</div>
+      </div>
+    </div>
+
+    <div class="topico">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">3</div>
+        <div class="topico-titulo">Probabilidade</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+        <div class="secao-titulo">O que é probabilidade?</div>
+        <p>A <strong>probabilidade</strong> mede a chance de um evento ocorrer. Varia entre 0 (impossível) e 1 (certo).</p>
+        <div class="formula">P(E) = n(E) / n(Ω)<span>n(E) = casos favoráveis | n(Ω) = total de casos possíveis</span></div>
+        <div class="secao-titulo">Tipos de eventos</div>
+        <ul class="lista">
+          <li><strong>Evento impossível:</strong> P = 0 (Ex: tirar 7 num dado de 6 faces)</li>
+          <li><strong>Evento certo:</strong> P = 1 (Ex: tirar número ≤ 6 num dado de 6 faces)</li>
+          <li><strong>Eventos complementares:</strong> P(E) + P(Ē) = 1</li>
+        </ul>
+        <div class="exemplo"><strong>Exemplo:</strong> Qual a probabilidade de tirar número par num dado?<br>
+        Casos favoráveis: {2, 4, 6} → n(E) = 3<br>
+        Total de casos: {1,2,3,4,5,6} → n(Ω) = 6<br>
+        P = 3/6 = <strong>1/2 = 50%</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: EXERCÍCIOS -->
+  <div class="tab-conteudo" id="tab-exercicios">
+    <div class="topico aberto">
+      <div class="topico-cabecalho" onclick="toggleTopico(this)">
+        <div class="topico-num">📝</div>
+        <div class="topico-titulo">Exercícios de Fixação</div>
+        <i class="fa fa-chevron-down topico-seta"></i>
+      </div>
+      <div class="topico-corpo">
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 1 — Potenciação</div>
+          <div class="ex-enunciado">Quanto é 2³ × 2⁴?</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>2⁷ = 128</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>2¹² = 4096</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">C</span>2⁷ = 128</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>4⁷ = 16384</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 2 — Equação do 2º grau</div>
+          <div class="ex-enunciado">Quais são as raízes de x² − 5x + 6 = 0?</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>x = 1 e x = 6</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">B</span>x = 2 e x = 3</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">C</span>x = −2 e x = −3</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>x = 5 e x = 1</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 3 — Teorema de Pitágoras</div>
+          <div class="ex-enunciado">Um triângulo retângulo tem catetos 9 cm e 12 cm. Qual é a hipotenusa?</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>13 cm</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>14 cm</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">C</span>15 cm</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>16 cm</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 4 — Estatística</div>
+          <div class="ex-enunciado">Qual é a média dos valores: 5, 8, 10, 7, 10?</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>7</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">B</span>8</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">C</span>9</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>10</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <div class="exercicio">
+          <div class="ex-num">Questão 5 — Probabilidade</div>
+          <div class="ex-enunciado">Qual a probabilidade de tirar um número ímpar num dado de 6 faces?</div>
+          <div class="ex-opcoes">
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>1/6</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>1/3</button>
+            <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">C</span>1/2</button>
+            <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>2/3</button>
+          </div>
+          <div class="ex-feedback"></div>
+        </div>
+
+        <a href="atividades_matematica.html" class="btn-atividades">
+          <i class="fa fa-tasks"></i> Ver todas as atividades de Matemática
+        </a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+window.addEventListener('DOMContentLoaded',()=>{
+  const u=JSON.parse(localStorage.getItem('usuarioLogado')||'{}');
+  if(!u.nome){window.location.href='login.html';return;}
+  document.getElementById('nomeHeader').textContent=u.nome;
+});
+function toggleMenu(){
+  document.getElementById('menuLateral').classList.toggle('aberto');
+  document.getElementById('fundoMenu').style.display=
+    document.getElementById('menuLateral').classList.contains('aberto')?'block':'none';
+}
+function sairDaConta(){localStorage.removeItem('usuarioLogado');window.location.href='login.html';}
+function mudarTab(id){
+  const ids=['algebra','geometria','estatistica','exercicios'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('ativo',ids[i]===id));
+  document.querySelectorAll('.tab-conteudo').forEach(c=>c.classList.remove('ativo'));
+  document.getElementById('tab-'+id).classList.add('ativo');
+}
+function toggleTopico(cab){cab.parentElement.classList.toggle('aberto');}
+function respEx(btn,correta){
+  const ex=btn.closest('.exercicio');
+  ex.querySelectorAll('.ex-opcao').forEach(b=>b.disabled=true);
+  const fb=ex.querySelector('.ex-feedback');
+  if(correta){
+    btn.classList.add('correta');
+    fb.className='ex-feedback show ok';
+    fb.textContent='✅ Correto! Muito bem!';
+  } else {
+    btn.classList.add('errada');
+    ex.querySelectorAll('.ex-opcao').forEach(b=>{
+      if(b.onclick.toString().includes('true'))b.classList.add('correta');
+    });
+    fb.className='ex-feedback show erro';
+    fb.textContent='❌ Incorreto! Veja a resposta destacada em verde.';
+  }
+}
+</script>
+</body>
+</html>
