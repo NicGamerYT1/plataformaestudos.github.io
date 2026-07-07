@@ -9,6 +9,8 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Nunito',sans-serif;background:#F0F4FF;color:#1D2129;min-height:100vh;display:flex;}
+
+/* ── Header ── */
 header{position:fixed;top:0;left:0;right:0;background:#165DFF;color:#fff;padding:1rem;z-index:20;box-shadow:0 4px 16px rgba(22,93,255,.3);display:flex;align-items:center;justify-content:space-between;}
 .header-esq{display:flex;align-items:center;gap:.75rem;}
 .header-esq h1{font-size:1.1rem;font-weight:900;}
@@ -16,6 +18,8 @@ header{position:fixed;top:0;left:0;right:0;background:#165DFF;color:#fff;padding
 .btn-sair{background:#fff;color:#165DFF;border:none;padding:.4rem .85rem;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:900;cursor:pointer;}
 .btn-sair:hover{background:#eff6ff;}
 #nomeHeader{font-size:.85rem;font-weight:700;}
+
+/* ── Menu lateral ── */
 aside{position:fixed;top:64px;left:0;width:256px;height:calc(100vh - 64px);background:#fff;border-right:1px solid #f0f0f0;padding:1.5rem 1rem;overflow-y:auto;z-index:15;transition:transform .3s ease;box-shadow:2px 0 8px rgba(0,0,0,.04);}
 aside nav ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
 aside nav a{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;border-radius:12px;text-decoration:none;color:#6b7280;font-weight:700;font-size:.875rem;transition:all .2s;}
@@ -23,33 +27,68 @@ aside nav a:hover{background:rgba(22,93,255,.08);color:#165DFF;}
 aside nav a.ativo{background:rgba(22,93,255,.1);color:#165DFF;font-weight:900;}
 aside nav a i{width:18px;text-align:center;}
 .fundo-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:14;}
-main{margin-left:256px;margin-top:64px;padding:2.5rem 2rem;width:100%;}
+
+/* ── Main ── */
+main{margin-left:256px;margin-top:64px;padding:2.5rem 2rem 3rem;width:100%;}
 .titulo-pg{font-size:1.75rem;font-weight:900;margin-bottom:.35rem;}
 .sub-pg{color:#6b7280;font-size:.9rem;margin-bottom:.75rem;}
 
-/* Banner série */
+/* ── Banner série ── */
 .banner-serie{background:linear-gradient(135deg,#165DFF,#0a3dbf);color:#fff;border-radius:16px;padding:1rem 1.5rem;display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;font-weight:800;font-size:.9rem;}
 .banner-serie i{font-size:1.2rem;opacity:.8;}
-
-/* Aviso sem série */
 .aviso-serie{background:#fff7ed;border:1.5px solid #fde68a;color:#b45309;border-radius:16px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;font-weight:700;font-size:.875rem;}
 
-/* Grade */
-.grade{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;}
+/* ── Grade ── */
+.grade{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1000px;}
 
-/* Card matéria */
-.card-mat{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 2px 14px rgba(0,0,0,.08);transition:transform .2s,box-shadow .2s;}
-.card-mat:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.14);}
-.card-mat-topo{height:130px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;}
-.card-mat-corpo{padding:1.25rem;}
-.card-mat-titulo{font-size:1.05rem;font-weight:900;margin-bottom:.4rem;}
-.card-mat-desc{font-size:.8rem;color:#6b7280;line-height:1.55;margin-bottom:1rem;}
-.card-mat-serie{display:inline-flex;align-items:center;gap:.35rem;font-size:.75rem;font-weight:800;padding:.3rem .75rem;border-radius:999px;margin-bottom:1rem;}
-.btn-acessar{display:block;width:100%;text-align:center;padding:.75rem;border-radius:12px;color:#fff;font-family:'Nunito',sans-serif;font-weight:900;font-size:.875rem;text-decoration:none;border:none;cursor:pointer;transition:opacity .2s;}
-.btn-acessar:hover{opacity:.88;}
+/* ── Card matéria (novo design) ── */
+.card-mat{
+  border-radius:24px;overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,.1);
+  transition:transform .22s ease,box-shadow .22s ease;
+  background:#fff;cursor:pointer;
+  text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;
+}
+.card-mat:hover{transform:translateY(-6px);box-shadow:0 16px 48px rgba(0,0,0,.18);}
 
-/* Complementares */
-.complementares{background:#fff;border-radius:20px;padding:1.75rem;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-top:2rem;}
+/* Topo colorido com emoji e padrão */
+.card-mat-topo{
+  height:160px;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;flex-shrink:0;
+}
+.card-mat-topo::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:150px;height:150px;border-radius:50%;
+  background:rgba(255,255,255,.12);
+}
+.card-mat-topo::after{
+  content:'';position:absolute;bottom:-30px;left:-30px;
+  width:110px;height:110px;border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+.card-mat-emoji{
+  font-size:3.5rem;position:relative;z-index:1;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,.2));
+}
+
+/* Corpo */
+.card-mat-corpo{padding:1.4rem 1.5rem 1.5rem;display:flex;flex-direction:column;flex:1;}
+.card-mat-nome{font-size:1.1rem;font-weight:900;margin-bottom:.4rem;}
+.card-mat-desc{color:#6b7280;font-size:.82rem;line-height:1.6;margin-bottom:1rem;flex:1;}
+.card-mat-serie{display:inline-flex;align-items:center;gap:.35rem;font-size:.75rem;font-weight:800;padding:.3rem .75rem;border-radius:999px;margin-bottom:1rem;align-self:flex-start;}
+
+.btn-acessar{
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  width:100%;padding:.8rem;border-radius:14px;border:none;
+  color:#fff;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:900;
+  cursor:pointer;transition:opacity .2s,transform .15s;text-decoration:none;
+}
+.btn-acessar:hover{opacity:.9;transform:scale(1.01);}
+.btn-acessar:active{transform:scale(.98);}
+
+/* ── Complementares ── */
+.complementares{background:#fff;border-radius:20px;padding:1.75rem;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-top:2rem;max-width:1000px;}
 .comp-titulo{font-size:1.1rem;font-weight:900;margin-bottom:1.25rem;}
 .comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
 .comp-item{background:#F0F4FF;border-radius:14px;padding:1.1rem;}
@@ -59,12 +98,13 @@ main{margin-left:256px;margin-top:64px;padding:2.5rem 2rem;width:100%;}
 .comp-item a{color:#165DFF;font-size:.78rem;font-weight:900;text-decoration:none;}
 .comp-item a:hover{text-decoration:underline;}
 
-@media(max-width:900px){.grade{grid-template-columns:repeat(2,1fr);}}
+/* ── Responsivo ── */
+@media(max-width:960px){.grade{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:768px){
   aside{transform:translateX(-100%);}
   aside.aberto{transform:translateX(0);}
   .btn-menu{display:block;}
-  main{margin-left:0;padding:1.5rem 1rem;}
+  main{margin-left:0;padding:1.5rem 1rem 3rem;}
   .grade{grid-template-columns:repeat(2,1fr);gap:1rem;}
   .comp-grid{grid-template-columns:1fr;}
 }
@@ -105,7 +145,6 @@ main{margin-left:256px;margin-top:64px;padding:2.5rem 2rem;width:100%;}
   <div class="sub-pg">Conteúdos personalizados para a sua série</div>
 
   <div id="bannerSerie"></div>
-
   <div class="grade" id="gradeMateria"></div>
 
   <div class="complementares">
@@ -126,18 +165,17 @@ main{margin-left:256px;margin-top:64px;padding:2.5rem 2rem;width:100%;}
 </main>
 
 <script>
-// ── Mapeamento de séries ──────────────────────────────
 const labelSerie = {
   '5ano':'5º Ano','6ano':'6º Ano','7ano':'7º Ano',
   '8ano':'8º Ano','9ano':'9º Ano',
   '1medio':'1º Ano do Médio','2medio':'2º Ano do Médio','3medio':'3º Ano do Médio'
 };
 
-// ── Matérias com séries ───────────────────────────────
 const materias = [
   {
     id:'matematica', nome:'Matemática', emoji:'📐',
-    cor:'linear-gradient(135deg,#2563EB,#1e40af)', corBtn:'#2563EB',
+    cor:'linear-gradient(145deg,#2563EB,#1e40af)',
+    corBtn:'linear-gradient(90deg,#2563EB,#3b82f6)',
     corBadge:'#eff6ff', corBadgeTxt:'#1d4ed8',
     desc:'Números, operações, geometria, equações, proporções e resolução de problemas.',
     series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
@@ -145,7 +183,8 @@ const materias = [
   },
   {
     id:'portugues', nome:'Língua Portuguesa', emoji:'📖',
-    cor:'linear-gradient(135deg,#DC2626,#991b1b)', corBtn:'#DC2626',
+    cor:'linear-gradient(145deg,#DC2626,#991b1b)',
+    corBtn:'linear-gradient(90deg,#DC2626,#ef4444)',
     corBadge:'#fff1f0', corBadgeTxt:'#b91c1c',
     desc:'Gramática, interpretação de textos, produção textual e literatura.',
     series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
@@ -153,7 +192,8 @@ const materias = [
   },
   {
     id:'ciencias', nome:'Ciências', emoji:'🔬',
-    cor:'linear-gradient(135deg,#16A34A,#14532d)', corBtn:'#16A34A',
+    cor:'linear-gradient(145deg,#16A34A,#14532d)',
+    corBtn:'linear-gradient(90deg,#16A34A,#22c55e)',
     corBadge:'#f0fdf4', corBadgeTxt:'#15803d',
     desc:'Biologia, corpo humano, meio ambiente, seres vivos e ecossistemas.',
     series:['5ano','6ano','7ano','8ano','9ano'],
@@ -161,7 +201,8 @@ const materias = [
   },
   {
     id:'historia', nome:'História', emoji:'🏛️',
-    cor:'linear-gradient(135deg,#D97706,#92400e)', corBtn:'#D97706',
+    cor:'linear-gradient(145deg,#D97706,#92400e)',
+    corBtn:'linear-gradient(90deg,#D97706,#f59e0b)',
     corBadge:'#fff7ed', corBadgeTxt:'#b45309',
     desc:'História do Brasil, períodos históricos e acontecimentos importantes.',
     series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
@@ -169,7 +210,8 @@ const materias = [
   },
   {
     id:'geografia', nome:'Geografia', emoji:'🌍',
-    cor:'linear-gradient(135deg,#059669,#064e3b)', corBtn:'#059669',
+    cor:'linear-gradient(145deg,#059669,#064e3b)',
+    corBtn:'linear-gradient(90deg,#059669,#10b981)',
     corBadge:'#ecfdf5', corBadgeTxt:'#047857',
     desc:'Relevo, clima, vegetação, população, economia e regiões do Brasil.',
     series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
@@ -177,7 +219,8 @@ const materias = [
   },
   {
     id:'ingles', nome:'Inglês', emoji:'🇺🇸',
-    cor:'linear-gradient(135deg,#7C3AED,#4c1d95)', corBtn:'#7C3AED',
+    cor:'linear-gradient(145deg,#7C3AED,#4c1d95)',
+    corBtn:'linear-gradient(90deg,#7C3AED,#a855f7)',
     corBadge:'#f5f3ff', corBadgeTxt:'#6d28d9',
     desc:'Vocabulário, gramática, compreensão de textos e expressões em inglês.',
     series:['5ano','6ano','7ano','8ano','9ano','1medio','2medio','3medio'],
@@ -185,59 +228,57 @@ const materias = [
   },
 ];
 
-function toggleMenu() {
+function toggleMenu(){
   document.getElementById('menuLateral').classList.toggle('aberto');
-  document.getElementById('fundoMenu').style.display =
-    document.getElementById('menuLateral').classList.contains('aberto') ? 'block' : 'none';
+  document.getElementById('fundoMenu').style.display=
+    document.getElementById('menuLateral').classList.contains('aberto')?'block':'none';
 }
-function sairDaConta() { localStorage.removeItem('usuarioLogado'); window.location.href = 'login.html'; }
+function sairDaConta(){localStorage.removeItem('usuarioLogado');window.location.href='login.html';}
 
-window.addEventListener('DOMContentLoaded', () => {
-  const u = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
-  if (!u.nome) { window.location.href = 'login.html'; return; }
-  document.getElementById('nomeHeader').textContent = u.nome;
+window.addEventListener('DOMContentLoaded',()=>{
+  const u=JSON.parse(localStorage.getItem('usuarioLogado')||'{}');
+  if(!u.nome){window.location.href='login.html';return;}
+  document.getElementById('nomeHeader').textContent=u.nome;
 
-  const serie  = u.serie || '';
-  const label  = labelSerie[serie] || '';
-  const banner = document.getElementById('bannerSerie');
-  const grade  = document.getElementById('gradeMateria');
+  const serie=u.serie||'';
+  const label=labelSerie[serie]||'';
+  const banner=document.getElementById('bannerSerie');
+  const grade=document.getElementById('gradeMateria');
 
-  // Banner da série
-  if (label) {
-    banner.innerHTML = `
+  if(label){
+    banner.innerHTML=`
       <div class="banner-serie">
         <i class="fa fa-graduation-cap"></i>
-        Exibindo conteúdos para: <strong>${label}</strong> — só as matérias disponíveis para você aparecem aqui.
+        Exibindo conteúdos para: <strong>${label}</strong> — personalizados para você.
       </div>`;
   } else {
-    banner.innerHTML = `
+    banner.innerHTML=`
       <div class="aviso-serie">
         <i class="fa fa-exclamation-triangle"></i>
-        Série não informada no cadastro. Acesse seu <a href="perfil.html" style="color:#92400e;text-decoration:underline">perfil</a> para atualizar.
+        Série não informada. Acesse seu <a href="perfil.html" style="color:#92400e;text-decoration:underline">perfil</a> para atualizar.
       </div>`;
   }
 
-  // Filtrar e renderizar matérias
-  const filtradas = serie ? materias.filter(m => m.series.includes(serie)) : materias;
+  const filtradas=serie?materias.filter(m=>m.series.includes(serie)):materias;
 
-  if (filtradas.length === 0) {
-    grade.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#9ca3af;font-weight:700">Nenhuma matéria disponível para sua série.</div>`;
+  if(filtradas.length===0){
+    grade.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#9ca3af;font-weight:700">Nenhuma matéria disponível para sua série.</div>`;
     return;
   }
 
-  filtradas.forEach(m => {
-    // Gera link específico para a série: ex. portugues_8ano.html
-    const link = serie ? `${m.linkBase}_${serie}.html` : `atividades_${m.linkBase}.html`;
-
-    const card = document.createElement('div');
-    card.className = 'card-mat';
-    card.innerHTML = `
-      <div class="card-mat-topo" style="background:${m.cor}">${m.emoji}</div>
+  filtradas.forEach(m=>{
+    const link=serie?`${m.linkBase}_${serie}.html`:`atividades_${m.linkBase}.html`;
+    const card=document.createElement('div');
+    card.className='card-mat';
+    card.innerHTML=`
+      <div class="card-mat-topo" style="background:${m.cor}">
+        <span class="card-mat-emoji">${m.emoji}</span>
+      </div>
       <div class="card-mat-corpo">
-        <div class="card-mat-titulo">${m.nome}</div>
+        <div class="card-mat-nome">${m.nome}</div>
         <div class="card-mat-desc">${m.desc}</div>
         <div class="card-mat-serie" style="background:${m.corBadge};color:${m.corBadgeTxt}">
-          <i class="fa fa-graduation-cap"></i> ${label || 'Todas as séries'}
+          <i class="fa fa-graduation-cap"></i> ${label||'Todas as séries'}
         </div>
         <a href="${link}" class="btn-acessar" style="background:${m.corBtn}">
           <i class="fa fa-arrow-right"></i> Acessar Matéria
