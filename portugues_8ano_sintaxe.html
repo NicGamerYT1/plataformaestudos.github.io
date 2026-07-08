@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sintaxe da Oração - Português 8º Ano</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#F0F4FF;color:#1D2129;min-height:100vh;display:flex;}
+header{position:fixed;top:0;left:0;right:0;background:#DC2626;color:#fff;padding:1rem;z-index:20;box-shadow:0 4px 16px rgba(220,38,38,.35);display:flex;align-items:center;justify-content:space-between;}
+.header-esq{display:flex;align-items:center;gap:.75rem;}
+.header-esq h1{font-size:1.1rem;font-weight:900;}
+.btn-menu{background:none;border:none;color:#fff;font-size:1.25rem;cursor:pointer;padding:.25rem;display:none;}
+.btn-sair{background:#fff;color:#DC2626;border:none;padding:.4rem .85rem;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:900;cursor:pointer;}
+#nomeHeader{font-size:.85rem;font-weight:700;}
+aside{position:fixed;top:64px;left:0;width:256px;height:calc(100vh - 64px);background:#fff;border-right:1px solid #f0f0f0;padding:1.5rem 1rem;overflow-y:auto;z-index:15;transition:transform .3s ease;}
+aside nav ul{list-style:none;display:flex;flex-direction:column;gap:4px;}
+aside nav a{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;border-radius:12px;text-decoration:none;color:#6b7280;font-weight:700;font-size:.875rem;transition:all .2s;}
+aside nav a:hover{background:rgba(220,38,38,.08);color:#DC2626;}
+aside nav a.ativo{background:rgba(220,38,38,.1);color:#DC2626;font-weight:900;}
+aside nav a i{width:18px;text-align:center;}
+.fundo-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:14;}
+main{margin-left:256px;margin-top:64px;padding:2rem 2rem 4rem;width:100%;max-width:900px;}
+
+/* Navegação tópico */
+.nav-topico{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:.75rem;}
+.btn-voltar{display:inline-flex;align-items:center;gap:.5rem;background:#fff;border:2px solid #e5e7eb;color:#6b7280;padding:.55rem 1.1rem;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;transition:all .2s;text-decoration:none;}
+.btn-voltar:hover{border-color:#DC2626;color:#DC2626;}
+.nav-chips{display:flex;gap:.5rem;}
+.nav-chip{font-size:.72rem;font-weight:800;padding:.3rem .75rem;border-radius:999px;}
+
+/* Hero tópico */
+.hero-topico{background:linear-gradient(135deg,#DC2626,#7f1d1d);border-radius:24px;padding:2rem;color:#fff;margin-bottom:2rem;position:relative;overflow:hidden;}
+.hero-topico::before{content:'📝';font-size:8rem;position:absolute;right:-1rem;bottom:-1.5rem;opacity:.08;line-height:1;pointer-events:none;}
+.hero-breadcrumb{font-size:.72rem;opacity:.65;font-weight:700;margin-bottom:.5rem;}
+.hero-breadcrumb span{opacity:1;font-weight:900;}
+.hero-titulo{font-size:1.6rem;font-weight:900;margin-bottom:.5rem;}
+.hero-desc{font-size:.875rem;opacity:.8;line-height:1.65;max-width:520px;}
+
+/* Seções de conteúdo */
+.secao{background:#fff;border-radius:20px;padding:1.75rem;box-shadow:0 2px 14px rgba(0,0,0,.07);margin-bottom:1.5rem;}
+.secao-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid #f3f4f6;}
+.secao-icone{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.secao-titulo{font-size:1rem;font-weight:900;}
+
+/* Conteúdo textual */
+p{font-size:.9rem;line-height:1.8;color:#374151;margin-bottom:.875rem;}
+p:last-child{margin-bottom:0;}
+h4{font-size:.9rem;font-weight:900;color:#1D2129;margin:1.25rem 0 .5rem;}
+h4:first-child{margin-top:0;}
+.destaque{background:#fff1f0;border-left:4px solid #DC2626;border-radius:0 12px 12px 0;padding:.875rem 1rem;margin:1rem 0;font-size:.875rem;font-weight:700;color:#991b1b;line-height:1.6;}
+.exemplo-box{background:#f8faff;border:1.5px solid #dbeafe;border-radius:14px;padding:1rem 1.25rem;margin:1rem 0;}
+.exemplo-label{font-size:.7rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#2563eb;margin-bottom:.5rem;}
+.exemplo-txt{font-size:.875rem;color:#1e40af;line-height:1.7;font-weight:600;}
+.exemplo-txt u{text-decoration-color:#DC2626;text-decoration-thickness:2px;}
+ul.lista,ol.lista{padding-left:1.4rem;margin:.5rem 0 1rem;}
+ul.lista li,ol.lista li{font-size:.875rem;line-height:1.75;color:#374151;margin-bottom:.4rem;}
+ul.lista li strong,ol.lista li strong{color:#1D2129;}
+
+/* Tabela */
+.tabela-wrap{overflow-x:auto;margin:1rem 0;border-radius:14px;border:1px solid #e5e7eb;}
+table{width:100%;border-collapse:collapse;font-size:.84rem;}
+th{background:#DC2626;color:#fff;padding:.7rem 1rem;font-weight:900;text-align:left;}
+th:first-child{border-radius:14px 0 0 0;}
+th:last-child{border-radius:0 14px 0 0;}
+td{padding:.65rem 1rem;border-bottom:1px solid #f3f4f6;color:#374151;font-weight:600;}
+tr:last-child td{border-bottom:none;}
+tr:nth-child(even) td{background:#fff5f5;}
+
+/* Vídeo */
+.video-wrap{position:relative;padding-bottom:56.25%;height:0;border-radius:16px;overflow:hidden;background:#000;}
+.video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+.video-dica{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:.75rem 1rem;margin-top:.875rem;font-size:.8rem;font-weight:700;color:#16a34a;display:flex;align-items:center;gap:.5rem;}
+
+/* Exercícios */
+.exercicio{border:2px solid #f3f4f6;border-radius:16px;padding:1.25rem;margin-bottom:1rem;transition:border-color .2s;}
+.exercicio:last-child{margin-bottom:0;}
+.ex-num{font-size:.7rem;font-weight:900;color:#DC2626;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;}
+.ex-enunciado{font-size:.9rem;font-weight:800;margin-bottom:1rem;line-height:1.6;color:#1D2129;}
+.ex-opcoes{display:flex;flex-direction:column;gap:.5rem;}
+.ex-opcao{display:flex;align-items:center;gap:.75rem;padding:.7rem 1rem;border:2px solid #e5e7eb;border-radius:12px;cursor:pointer;font-size:.875rem;font-weight:700;background:#fff;width:100%;text-align:left;font-family:'Nunito',sans-serif;transition:all .18s;color:#1D2129;}
+.ex-opcao:hover:not(:disabled){border-color:#DC2626;background:#fff5f5;}
+.ex-letra{width:30px;height:30px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.78rem;flex-shrink:0;transition:all .18s;}
+.ex-opcao.correta{border-color:#16a34a !important;background:#f0fdf4;color:#16a34a;}
+.ex-opcao.correta .ex-letra{background:#16a34a;color:#fff;}
+.ex-opcao.errada{border-color:#dc2626 !important;background:#fff1f0;color:#dc2626;}
+.ex-opcao.errada .ex-letra{background:#dc2626;color:#fff;}
+.ex-feedback{font-size:.83rem;font-weight:700;margin-top:.65rem;padding:.65rem 1rem;border-radius:10px;display:none;line-height:1.5;}
+.ex-feedback.show{display:block;}
+.ex-feedback.ok{background:#f0fdf4;color:#16a34a;}
+.ex-feedback.erro{background:#fff1f0;color:#dc2626;}
+
+/* Navegação próximo/anterior */
+.nav-final{display:flex;justify-content:space-between;align-items:center;margin-top:2.5rem;gap:1rem;flex-wrap:wrap;}
+.btn-nav{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 1.4rem;border-radius:14px;font-family:'Nunito',sans-serif;font-weight:900;font-size:.875rem;text-decoration:none;transition:opacity .2s,transform .15s;border:none;cursor:pointer;}
+.btn-nav:hover{opacity:.88;transform:scale(1.02);}
+.btn-nav-anterior{background:#f3f4f6;color:#374151;}
+.btn-nav-proximo{background:linear-gradient(90deg,#DC2626,#ef4444);color:#fff;}
+
+@media(max-width:768px){
+  aside{transform:translateX(-100%);}
+  aside.aberto{transform:translateX(0);}
+  .btn-menu{display:block;}
+  main{margin-left:0;padding:1.25rem 1rem 4rem;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-esq">
+    <button class="btn-menu" onclick="toggleMenu()"><i class="fa fa-bars"></i></button>
+    <span style="font-size:1.4rem">📝</span>
+    <h1>Sintaxe da Oração</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:.75rem">
+    <span id="nomeHeader"></span>
+    <button class="btn-sair" onclick="sairDaConta()">Sair</button>
+  </div>
+</header>
+
+<aside id="menuLateral">
+  <nav><ul>
+    <li><a href="inicio.html"><i class="fa fa-home"></i> Início</a></li>
+    <li><a href="materias.html" class="ativo"><i class="fa fa-book"></i> Matérias</a></li>
+    <li><a href="atividades.html"><i class="fa fa-tasks"></i> Atividades</a></li>
+    <li><a href="desempenho.html"><i class="fa fa-bar-chart"></i> Meu Desempenho</a></li>
+    <li><a href="nivel.html"><i class="fa fa-star"></i> Meu Nível</a></li>
+    <li><a href="assinatura.html"><i class="fa fa-credit-card"></i> Assinatura</a></li>
+    <li><a href="perfil.html"><i class="fa fa-user"></i> Perfil</a></li>
+    <li><a href="pais.html"><i class="fa fa-users"></i> Pais / Responsáveis</a></li>
+    <li><a href="configuracoes.html"><i class="fa fa-cog"></i> Configurações</a></li>
+  </ul></nav>
+</aside>
+<div class="fundo-menu" id="fundoMenu" onclick="toggleMenu()"></div>
+
+<main>
+  <div class="nav-topico">
+    <a href="portugues_8ano.html" class="btn-voltar"><i class="fa fa-arrow-left"></i> Voltar aos tópicos</a>
+    <div class="nav-chips">
+      <span class="nav-chip" style="background:#fff1f0;color:#DC2626">Gramática</span>
+      <span class="nav-chip" style="background:#f0fdf4;color:#16a34a">Médio</span>
+      <span class="nav-chip" style="background:#eff6ff;color:#2563eb">Tópico 1 de 4</span>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero-topico">
+    <div class="hero-breadcrumb">Português 8º Ano → <span>Sintaxe da Oração</span></div>
+    <div class="hero-titulo">Sintaxe da Oração</div>
+    <div class="hero-desc">Aprenda a identificar e analisar os termos essenciais, integrantes e acessórios da oração com exemplos e exercícios.</div>
+  </div>
+
+  <!-- ── SEÇÃO 1: TEORIA ── -->
+  <div class="secao">
+    <div class="secao-header">
+      <div class="secao-icone" style="background:#fff1f0;color:#DC2626"><i class="fa fa-book"></i></div>
+      <div class="secao-titulo">Conteúdo Teórico</div>
+    </div>
+
+    <h4>O que é sintaxe?</h4>
+    <p>A <strong>sintaxe</strong> é o campo da gramática que estuda a organização das palavras nas frases e orações, analisando a função de cada termo dentro da estrutura da língua. Na sintaxe da oração, identificamos dois grandes grupos: os <strong>termos essenciais</strong> (sujeito e predicado) e os <strong>termos integrantes</strong> (complementos e agentes da passiva) e <strong>acessórios</strong> (adjuntos e apostos).</p>
+
+    <h4>Sujeito</h4>
+    <p>O <strong>sujeito</strong> é o ser sobre o qual se faz uma declaração. Para encontrá-lo, perguntamos ao verbo "quem?" ou "o quê?".</p>
+    <div class="tabela-wrap"><table>
+      <tr><th>Tipo</th><th>Definição</th><th>Exemplo</th></tr>
+      <tr><td><strong>Simples</strong></td><td>Um único núcleo</td><td><em>O aluno estudou muito.</em></td></tr>
+      <tr><td><strong>Composto</strong></td><td>Dois ou mais núcleos</td><td><em>João e Maria viajaram.</em></td></tr>
+      <tr><td><strong>Oculto/Elíptico</strong></td><td>Implícito no verbo</td><td><em>Estudei bastante. (eu)</em></td></tr>
+      <tr><td><strong>Indeterminado</strong></td><td>Não identificável</td><td><em>Venderam o apartamento.</em></td></tr>
+      <tr><td><strong>Inexistente</strong></td><td>Verbos impessoais</td><td><em>Choveu muito hoje.</em></td></tr>
+    </table></div>
+    <div class="destaque">💡 Verbos como "chover", "nevar", "anoitecer" e "fazer" (tempo) são impessoais — não têm sujeito. "Haver" no sentido de existir também é impessoal: <em>"Havia muitas pessoas"</em> (não "haviam").</div>
+
+    <h4>Predicado</h4>
+    <p>O <strong>predicado</strong> é tudo que se declara sobre o sujeito. Classifica-se em três tipos:</p>
+    <ul class="lista">
+      <li><strong>Verbal:</strong> núcleo é um verbo de ação. Ex: <em>"O atleta <u>correu</u> rapidamente."</em></li>
+      <li><strong>Nominal:</strong> núcleo é um predicativo (adjetivo ou substantivo). Ex: <em>"A sala <u>estava limpa</u>."</em></li>
+      <li><strong>Verbo-nominal:</strong> dois núcleos — verbo e predicativo. Ex: <em>"Ela <u>chegou cansada</u>."</em></li>
+    </ul>
+
+    <h4>Complementos Verbais</h4>
+    <p>Os <strong>complementos verbais</strong> completam o sentido dos verbos transitivos.</p>
+    <div class="exemplo-box">
+      <div class="exemplo-label">Objeto Direto (sem preposição)</div>
+      <div class="exemplo-txt">"Comprei <u>um livro</u> ontem." → O quê comprei? Um livro.</div>
+    </div>
+    <div class="exemplo-box">
+      <div class="exemplo-label">Objeto Indireto (com preposição)</div>
+      <div class="exemplo-txt">"Gosto <u>de música</u>." → Gosto de quê? De música.</div>
+    </div>
+    <div class="destaque">⚠️ Verbos bitransitivos exigem os dois complementos: <em>"Dei <u>o presente</u> (OD) <u>ao amigo</u> (OI)."</em></div>
+
+    <h4>Adjuntos</h4>
+    <p>O <strong>adjunto adnominal</strong> modifica um substantivo (artigos, adjetivos, pronomes adjetivos). O <strong>adjunto adverbial</strong> modifica um verbo, adjetivo ou advérbio, indicando circunstâncias de tempo, lugar, modo, etc.</p>
+    <div class="exemplo-box">
+      <div class="exemplo-label">Exemplos comparativos</div>
+      <div class="exemplo-txt">
+        Adnominal: "A <u>bela</u> cidade foi visitada." (modifica o substantivo "cidade")<br>
+        Adverbial: "Estudei <u>muito</u> ontem." (modifica o verbo "estudei")
+      </div>
+    </div>
+
+    <h4>Aposto e Vocativo</h4>
+    <p>O <strong>aposto</strong> é um termo que explica, especifica ou resume um outro termo da oração. O <strong>vocativo</strong> é o termo usado para chamar ou interpelar alguém, sempre separado por vírgulas.</p>
+    <div class="exemplo-box">
+      <div class="exemplo-label">Exemplos</div>
+      <div class="exemplo-txt">
+        Aposto: "Brasília, <u>a capital do Brasil</u>, é uma cidade planejada."<br>
+        Vocativo: "<u>Ana</u>, venha aqui!"
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SEÇÃO 2: VÍDEO ── -->
+  <div class="secao">
+    <div class="secao-header">
+      <div class="secao-icone" style="background:#fff7ed;color:#d97706"><i class="fa fa-play-circle"></i></div>
+      <div class="secao-titulo">Vídeo Aula — Sintaxe da Oração</div>
+    </div>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/videoseries?list=PLOptmC6KW3siP0MM3a-9G5OLx2SH3LtFk"
+        title="Sintaxe da Oração" allowfullscreen loading="lazy"></iframe>
+    </div>
+    <div class="video-dica"><i class="fa fa-lightbulb-o"></i> Assista ao vídeo e depois tente resolver os exercícios abaixo sem consultar o conteúdo!</div>
+  </div>
+
+  <!-- ── SEÇÃO 3: EXERCÍCIOS ── -->
+  <div class="secao">
+    <div class="secao-header">
+      <div class="secao-icone" style="background:#f0fdf4;color:#16a34a"><i class="fa fa-pencil"></i></div>
+      <div class="secao-titulo">Exercícios de Fixação</div>
+    </div>
+
+    <div class="exercicio">
+      <div class="ex-num">Questão 1</div>
+      <div class="ex-enunciado">Em "O professor explicou a matéria aos alunos", qual é o objeto indireto?</div>
+      <div class="ex-opcoes">
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>O professor</button>
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>explicou</button>
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">C</span>a matéria</button>
+        <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">D</span>aos alunos</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+
+    <div class="exercicio">
+      <div class="ex-num">Questão 2</div>
+      <div class="ex-enunciado">Qual das frases abaixo apresenta sujeito indeterminado?</div>
+      <div class="ex-opcoes">
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>Eu fui ao mercado cedo.</button>
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>Choveu muito ontem.</button>
+        <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">C</span>Venderam o apartamento do centro.</button>
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>O carro quebrou na estrada.</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+
+    <div class="exercicio">
+      <div class="ex-num">Questão 3</div>
+      <div class="ex-enunciado">Em "Ela chegou cansada ao trabalho", o predicado é:</div>
+      <div class="ex-opcoes">
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>Verbal</button>
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>Nominal</button>
+        <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">C</span>Verbo-nominal</button>
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>Não tem predicado</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+
+    <div class="exercicio">
+      <div class="ex-num">Questão 4</div>
+      <div class="ex-enunciado">"Brasília, a capital do Brasil, é uma cidade moderna." O termo "a capital do Brasil" é:</div>
+      <div class="ex-opcoes">
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>Adjunto adnominal</button>
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>Objeto direto</button>
+        <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">C</span>Aposto</button>
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>Predicativo do sujeito</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+
+    <div class="exercicio">
+      <div class="ex-num">Questão 5</div>
+      <div class="ex-enunciado">Qual verbo exige objeto indireto?</div>
+      <div class="ex-opcoes">
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">A</span>Correr</button>
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">B</span>Comprar</button>
+        <button class="ex-opcao" onclick="respEx(this,true)"><span class="ex-letra">C</span>Gostar</button>
+        <button class="ex-opcao" onclick="respEx(this,false)"><span class="ex-letra">D</span>Comer</button>
+      </div>
+      <div class="ex-feedback"></div>
+    </div>
+  </div>
+
+  <!-- Navegação final -->
+  <div class="nav-final">
+    <a href="portugues_8ano.html" class="btn-nav btn-nav-anterior">
+      <i class="fa fa-list"></i> Ver todos os tópicos
+    </a>
+    <a href="portugues_8ano_figuras.html" class="btn-nav btn-nav-proximo">
+      Próximo: Figuras de Linguagem <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+</main>
+
+<script>
+window.addEventListener('DOMContentLoaded',()=>{
+  const u=JSON.parse(localStorage.getItem('usuarioLogado')||'{}');
+  if(!u.nome){window.location.href='login.html';return;}
+  document.getElementById('nomeHeader').textContent=u.nome;
+});
+function toggleMenu(){
+  document.getElementById('menuLateral').classList.toggle('aberto');
+  document.getElementById('fundoMenu').style.display=
+    document.getElementById('menuLateral').classList.contains('aberto')?'block':'none';
+}
+function sairDaConta(){localStorage.removeItem('usuarioLogado');window.location.href='login.html';}
+function respEx(btn,correta){
+  const ex=btn.closest('.exercicio');
+  ex.querySelectorAll('.ex-opcao').forEach(b=>b.disabled=true);
+  const fb=ex.querySelector('.ex-feedback');
+  if(correta){
+    btn.classList.add('correta');
+    fb.className='ex-feedback show ok';
+    fb.textContent='✅ Correto! Muito bem!';
+  } else {
+    btn.classList.add('errada');
+    ex.querySelectorAll('.ex-opcao').forEach(b=>{
+      if(b.onclick.toString().includes('true'))b.classList.add('correta');
+    });
+    fb.className='ex-feedback show erro';
+    fb.textContent='❌ Incorreto! Veja a resposta destacada em verde.';
+  }
+}
+</script>
+</body>
+</html>
